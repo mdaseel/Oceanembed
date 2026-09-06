@@ -1,0 +1,118 @@
+2026-09-04T20:36:07 INFO    ======================================================================
+2026-09-04T20:36:07 INFO    Phase 6A.5 PO.DAAC acquisition (OPeNDAP server-side subset) products=['oscar', 'ccmp'] years=[2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+2026-09-04T20:36:07 INFO    SKIP  oscar 2015  (ok (365 timesteps))
+2026-09-04T20:36:07 INFO    GET   oscar 2016  short_name=OSCAR_L4_OC_FINAL_V2.0 vars=['u', 'v'] time=2016-01-01..2016-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:36:12 INFO          366 granules; lat[375:483] lon[176:424]
+2026-09-04T20:36:43 INFO          100/366  (34s)
+2026-09-04T20:37:11 INFO          200/366  (61s)
+2026-09-04T20:37:37 INFO          300/366  (88s)
+2026-09-04T20:38:01 INFO    OK    oscar 2016  71.5 MB in 112s (ok (366 timesteps)) [vs ~11.6 GB if unsubsetted]
+2026-09-04T20:38:01 INFO    GET   oscar 2017  short_name=OSCAR_L4_OC_FINAL_V2.0 vars=['u', 'v'] time=2017-01-01..2017-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:38:05 INFO          365 granules; lat[375:483] lon[176:424]
+2026-09-04T20:38:33 INFO          100/365  (30s)
+2026-09-04T20:38:57 INFO          200/365  (54s)
+2026-09-04T20:39:27 INFO          300/365  (84s)
+2026-09-04T20:39:47 INFO    OK    oscar 2017  71.3 MB in 104s (ok (365 timesteps)) [vs ~11.6 GB if unsubsetted]
+2026-09-04T20:39:47 INFO    GET   oscar 2018  short_name=OSCAR_L4_OC_FINAL_V2.0 vars=['u', 'v'] time=2018-01-01..2018-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:39:51 INFO          365 granules; lat[375:483] lon[176:424]
+2026-09-04T20:40:21 INFO          100/365  (30s)
+2026-09-04T20:40:45 INFO          200/365  (54s)
+2026-09-04T20:41:10 INFO          300/365  (79s)
+2026-09-04T20:41:32 INFO    OK    oscar 2018  71.3 MB in 102s (ok (365 timesteps)) [vs ~11.6 GB if unsubsetted]
+2026-09-04T20:41:32 INFO    GET   oscar 2019  short_name=OSCAR_L4_OC_FINAL_V2.0 vars=['u', 'v'] time=2019-01-01..2019-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:41:37 INFO          365 granules; lat[375:483] lon[176:424]
+2026-09-04T20:42:03 INFO          100/365  (28s)
+2026-09-04T20:42:29 INFO          200/365  (54s)
+2026-09-04T20:42:52 INFO          300/365  (77s)
+2026-09-04T20:43:14 INFO    OK    oscar 2019  71.3 MB in 99s (ok (365 timesteps)) [vs ~11.6 GB if unsubsetted]
+2026-09-04T20:43:14 INFO    GET   oscar 2020  short_name=OSCAR_L4_OC_FINAL_V2.0 vars=['u', 'v'] time=2020-01-01..2020-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:43:19 INFO          366 granules; lat[375:483] lon[176:424]
+2026-09-04T20:43:45 INFO          100/366  (28s)
+2026-09-04T20:44:10 INFO          200/366  (53s)
+2026-09-04T20:44:35 INFO          300/366  (78s)
+2026-09-04T20:44:56 INFO    OK    oscar 2020  71.5 MB in 99s (ok (366 timesteps)) [vs ~11.6 GB if unsubsetted]
+2026-09-04T20:44:56 INFO    GET   oscar 2021  short_name=OSCAR_L4_OC_FINAL_V2.0 vars=['u', 'v'] time=2021-01-01..2021-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:45:00 INFO          365 granules; lat[375:483] lon[176:424]
+2026-09-04T20:45:26 INFO          100/365  (27s)
+2026-09-04T20:45:52 INFO          200/365  (53s)
+2026-09-04T20:46:17 INFO          300/365  (78s)
+2026-09-04T20:46:38 INFO    OK    oscar 2021  71.3 MB in 99s (ok (365 timesteps)) [vs ~11.6 GB if unsubsetted]
+2026-09-04T20:46:38 INFO    GET   oscar 2022  short_name=OSCAR_L4_OC_FINAL_V2.0 vars=['u', 'v'] time=2022-01-01..2022-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:46:42 INFO          365 granules; lat[375:483] lon[176:424]
+2026-09-04T20:47:10 INFO          100/365  (30s)
+2026-09-04T20:47:34 INFO          200/365  (54s)
+2026-09-04T20:48:00 INFO          300/365  (80s)
+2026-09-04T20:48:24 INFO    OK    oscar 2022  71.8 MB in 103s (ok (365 timesteps)) [vs ~11.6 GB if unsubsetted]
+2026-09-04T20:48:24 INFO    GET   oscar 2023  short_name=OSCAR_L4_OC_FINAL_V2.0 vars=['u', 'v'] time=2023-01-01..2023-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:48:29 INFO          365 granules; lat[375:483] lon[176:424]
+2026-09-04T20:48:57 INFO          100/365  (30s)
+2026-09-04T20:49:23 INFO          200/365  (56s)
+2026-09-04T20:49:50 INFO          300/365  (83s)
+2026-09-04T20:50:22 INFO    ======================================================================
+2026-09-04T20:50:22 INFO    Phase 6A.5 PO.DAAC acquisition (OPeNDAP server-side subset) products=['oscar', 'ccmp'] years=[2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+2026-09-04T20:50:22 INFO    SKIP  oscar 2015  (ok (365 timesteps))
+2026-09-04T20:50:22 INFO    SKIP  o2026-09-04T20:50:45 INFO          100/350  (30s)
+2026-09-04T20:51:14 INFO          200/350  (59s)
+2026-09-04T20:51:41 INFO          300/350  (86s)
+2026-09-04T20:51:59 INFO    OK    oscar 2024  69.6 MB in 105s (ok (350 timesteps)) [vs ~11.1 GB if unsubsetted]
+2026-09-04T20:51:59 INFO    GET   ccmp 2015  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2015-01-01..2015-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:52:03 INFO          365 granules; lat[376:483] lon[176:423]
+2026-09-04T20:52:40 INFO          100/365  (39s)
+2026-09-04T20:53:17 INFO          200/365  (75s)
+2026-09-04T20:53:51 INFO          300/365  (110s)
+2026-09-04T20:54:33 INFO    OK    ccmp 2015  287.4 MB in 152s (ok (1460 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T20:54:33 INFO    GET   ccmp 2016  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2016-01-01..2016-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:54:37 INFO          366 granules; lat[376:483] lon[176:423]
+2026-09-04T20:55:15 INFO          100/366  (39s)
+2026-09-04T20:55:51 INFO          200/366  (75s)
+2026-09-04T20:56:28 INFO          300/366  (112s)
+2026-09-04T20:57:16 INFO    OK    ccmp 2016  288.0 MB in 160s (ok (1464 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T20:57:16 INFO    GET   ccmp 2017  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2017-01-01..2017-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:57:21 INFO          365 granules; lat[376:483] lon[176:423]
+2026-09-04T20:57:55 INFO          100/365  (36s)
+2026-09-04T20:58:29 INFO          200/365  (70s)
+2026-09-04T20:59:02 INFO          300/365  (103s)
+2026-09-04T20:59:45 INFO    OK    ccmp 2017  287.2 MB in 147s (ok (1460 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T20:59:45 INFO    GET   ccmp 2018  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2018-01-01..2018-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T20:59:49 INFO          365 granules; lat[376:483] lon[176:423]
+2026-09-04T21:00:26 INFO          100/365  (38s)
+2026-09-04T21:01:01 INFO          200/365  (74s)
+2026-09-04T21:01:35 INFO          300/365  (107s)
+2026-09-04T21:02:21 INFO    OK    ccmp 2018  287.4 MB in 153s (ok (1460 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T21:02:21 INFO    GET   ccmp 2019  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2019-01-01..2019-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T21:02:24 INFO          365 granules; lat[376:483] lon[176:423]
+2026-09-04T21:02:59 INFO          100/365  (36s)
+2026-09-04T21:03:33 INFO          200/365  (71s)
+2026-09-04T21:04:10 INFO          300/365  (107s)
+2026-09-04T21:04:53 INFO    OK    ccmp 2019  287.3 MB in 150s (ok (1460 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T21:04:53 INFO    GET   ccmp 2020  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2020-01-01..2020-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T21:04:57 INFO          366 granules; lat[376:483] lon[176:423]
+2026-09-04T21:05:30 INFO          100/366  (36s)
+2026-09-04T21:06:03 INFO          200/366  (68s)
+2026-09-04T21:06:37 INFO          300/366  (103s)
+2026-09-04T21:07:21 INFO    OK    ccmp 2020  288.0 MB in 146s (ok (1464 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T21:07:21 INFO    GET   ccmp 2021  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2021-01-01..2021-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T21:07:25 INFO          365 granules; lat[376:483] lon[176:423]
+2026-09-04T21:08:00 INFO          100/365  (36s)
+2026-09-04T21:08:33 INFO          200/365  (70s)
+2026-09-04T21:09:08 INFO          300/365  (105s)
+2026-09-04T21:09:52 INFO    OK    ccmp 2021  287.3 MB in 148s (ok (1460 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T21:09:52 INFO    GET   ccmp 2022  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2022-01-01..2022-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T21:09:55 INFO          365 granules; lat[376:483] lon[176:423]
+2026-09-04T21:10:33 INFO          100/365  (40s)
+2026-09-04T21:11:09 INFO          200/365  (75s)
+2026-09-04T21:11:43 INFO          300/365  (110s)
+2026-09-04T21:12:27 INFO    OK    ccmp 2022  287.5 MB in 153s (ok (1460 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T21:12:27 INFO    GET   ccmp 2023  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2023-01-01..2023-12-31 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T21:12:30 INFO          365 granules; lat[376:483] lon[176:423]
+2026-09-04T21:13:11 INFO          100/365  (43s)
+2026-09-04T21:13:44 INFO          200/365  (75s)
+2026-09-04T21:14:20 INFO          300/365  (112s)
+2026-09-04T21:15:02 INFO    OK    ccmp 2023  287.2 MB in 153s (ok (1460 timesteps)) [vs ~11.7 GB if unsubsetted]
+2026-09-04T21:15:02 INFO    GET   ccmp 2024  short_name=CCMP_WINDS_10M6HR_L4_V3.1 vars=['uwnd', 'vwnd'] time=2024-01-01..2024-12-15 box=lat[4.0,31.0] lon[44.0,106.0] method=OPeNDAP-DAP4-server-side-subset
+2026-09-04T21:15:06 INFO          350 granules; lat[376:483] lon[176:423]
+2026-09-04T21:15:41 INFO          100/350  (37s)
+2026-09-04T21:16:16 INFO          200/350  (72s)
+2026-09-04T21:16:49 INFO          300/350  (105s)
+2026-09-04T21:17:33 INFO    OK    ccmp 2024  275.3 MB in 149s (ok (1400 timesteps)) [vs ~11.2 GB if unsubsetted]
+2026-09-04T21:17:33 INFO    DONE  ok=19 skipped=1 failed=0

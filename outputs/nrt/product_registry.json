@@ -1,0 +1,356 @@
+{
+  "metadata_retrieved": "2026-09-05",
+  "verified_against": "live Copernicus Marine and NASA CMR catalogues",
+  "frozen_grid": {
+    "lat": [
+      5.0,
+      30.0,
+      101
+    ],
+    "lon": [
+      45.0,
+      105.0,
+      241
+    ],
+    "resolution_deg": 0.25,
+    "download_pad_deg": 1.0,
+    "edge_handling": "internal zero-pad by patch//2 with mask 0; NO external halo was used in training"
+  },
+  "provenance_caveat": "The seven channels are not seven independent raw satellite measurements. SST and wind are blended L4 analyses, SLA is a multi-mission altimetry analysis, currents are diagnostically derived from SSH+wind+SST, and the training SSS is a multi-observation L4 analysis.",
+  "products": {
+    "sst_reference": {
+      "channel": "sst",
+      "role": "reference",
+      "provider": "Copernicus Marine",
+      "product_id": "SST_GLO_SST_L4_REP_OBSERVATIONS_010_011",
+      "dataset_id": "METOFFICE-GLO-SST-L4-REP-OBS-SST",
+      "doi": "10.48670/moi-00168",
+      "variables": [
+        "analysed_sst"
+      ],
+      "cf_standard_name": "sea_surface_temperature",
+      "units": "kelvin",
+      "target_units": "degC",
+      "conversion": "minus 273.15",
+      "spatial_resolution_deg": 0.05,
+      "temporal_resolution": "daily",
+      "processing_level": "L4",
+      "coverage": "gap-free",
+      "source_type": "blended L4 analysis (satellite + in-situ)",
+      "temporal_extent": [
+        "1981-10-01",
+        "2026-03-31"
+      ],
+      "auth": "copernicusmarine login",
+      "access": "copernicusmarine.subset",
+      "doc": "https://data.marine.copernicus.eu/product/SST_GLO_SST_L4_REP_OBSERVATIONS_010_011"
+    },
+    "sst_nrt": {
+      "channel": "sst",
+      "role": "nrt",
+      "provider": "Copernicus Marine",
+      "product_id": "SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001",
+      "dataset_id": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
+      "doi": "10.48670/moi-00165",
+      "variables": [
+        "analysed_sst"
+      ],
+      "cf_standard_name": "sea_surface_temperature",
+      "units": "kelvin",
+      "target_units": "degC",
+      "conversion": "minus 273.15",
+      "spatial_resolution_deg": 0.05,
+      "temporal_resolution": "daily",
+      "processing_level": "L4",
+      "coverage": "gap-free",
+      "source_type": "blended L4 analysis (satellite + in-situ)",
+      "temporal_extent": [
+        "2024-01-17",
+        "2026-09-04"
+      ],
+      "auth": "copernicusmarine login",
+      "access": "copernicusmarine.subset",
+      "doc": "https://data.marine.copernicus.eu/product/SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001"
+    },
+    "sss_reference": {
+      "channel": "sss",
+      "role": "reference",
+      "provider": "Copernicus Marine",
+      "product_id": "MULTIOBS_GLO_PHY_S_SURFACE_MYNRT_015_013",
+      "dataset_id": "cmems_obs-mob_glo_phy-sss_my_multi_P1D",
+      "doi": "10.48670/moi-00051",
+      "variables": [
+        "sos"
+      ],
+      "cf_standard_name": "sea_surface_salinity",
+      "units": "1e-3 (PSU)",
+      "target_units": "PSU",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.125,
+      "temporal_resolution": "daily",
+      "processing_level": "L4",
+      "coverage": "gap-free",
+      "source_type": "multi-observation L4 analysis",
+      "temporal_extent": [
+        "1993-01-01",
+        "2024-12-15"
+      ],
+      "auth": "copernicusmarine login",
+      "access": "copernicusmarine.subset",
+      "doc": "https://data.marine.copernicus.eu/product/MULTIOBS_GLO_PHY_S_SURFACE_MYNRT_015_013"
+    },
+    "sss_nrt_smos": {
+      "channel": "sss",
+      "role": "nrt_candidate_1",
+      "provider": "Copernicus Marine",
+      "product_id": "MULTIOBS_GLO_PHY_SSS_L3_MYNRT_015_014",
+      "dataset_id": "cmems_obs-mob_glo_phy-sss_mynrt_smos-asc_P1D",
+      "doi": "10.48670/mds-00368",
+      "variables": [
+        "Sea_Surface_Salinity",
+        "Sea_Surface_Salinity_QC",
+        "Sea_Surface_Salinity_Error"
+      ],
+      "cf_standard_name": "sea_surface_salinity",
+      "units": "0.001 (PSU)",
+      "target_units": "PSU",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.2,
+      "temporal_resolution": "daily (ascending pass)",
+      "processing_level": "L3",
+      "coverage": "gappy (swath-derived)",
+      "source_type": "single-mission L3 (SMOS CATDS qualified)",
+      "temporal_extent": [
+        "2010-01-12",
+        "2026-09-03"
+      ],
+      "auth": "copernicusmarine login",
+      "access": "copernicusmarine.subset",
+      "doc": "https://data.marine.copernicus.eu/product/MULTIOBS_GLO_PHY_SSS_L3_MYNRT_015_014"
+    },
+    "sss_nrt_smap": {
+      "channel": "sss",
+      "role": "nrt_candidate_2",
+      "provider": "NASA PO.DAAC",
+      "product_id": "SMAP_RSS_L2_SSS_NRT_V6",
+      "dataset_id": "SMAP_RSS_L2_SSS_NRT_V6",
+      "doi": null,
+      "variables": [
+        "sss_smap",
+        "iqc_flag"
+      ],
+      "cf_standard_name": "sea_surface_salinity",
+      "units": "PSU",
+      "target_units": "PSU",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.25,
+      "temporal_resolution": "orbital swath (~12-15 granules/day)",
+      "processing_level": "L2C",
+      "coverage": "swath, not gap-free",
+      "source_type": "single-mission L2 orbital retrieval",
+      "temporal_extent": [
+        "2024-01-01",
+        "2026-09-04"
+      ],
+      "auth": "earthaccess login",
+      "access": "earthaccess / OPeNDAP",
+      "doc": "https://podaac.jpl.nasa.gov/dataset/SMAP_RSS_L2_SSS_NRT_V6"
+    },
+    "sla_reference": {
+      "channel": "sla",
+      "role": "reference",
+      "provider": "Copernicus Marine / C3S",
+      "product_id": "SEALEVEL_GLO_PHY_CLIMATE_L4_MY_008_057",
+      "dataset_id": "c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D",
+      "doi": "10.48670/moi-00145",
+      "variables": [
+        "sla"
+      ],
+      "cf_standard_name": "sea_surface_height_above_sea_level",
+      "units": "m",
+      "target_units": "m",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.25,
+      "temporal_resolution": "daily",
+      "processing_level": "L4",
+      "coverage": "gap-free",
+      "source_type": "two-satellite stable altimetry analysis",
+      "temporal_extent": [
+        "1993-01-01",
+        "2026-01-16"
+      ],
+      "auth": "copernicusmarine login",
+      "access": "copernicusmarine.subset",
+      "doc": "https://data.marine.copernicus.eu/product/SEALEVEL_GLO_PHY_CLIMATE_L4_MY_008_057"
+    },
+    "sla_nrt": {
+      "channel": "sla",
+      "role": "nrt",
+      "provider": "Copernicus Marine",
+      "product_id": "SEALEVEL_GLO_PHY_L4_NRT_008_046",
+      "dataset_id": "cmems_obs-sl_glo_phy-ssh_nrt_allsat-l4-duacs-0.125deg_P1D",
+      "doi": "10.48670/moi-00149",
+      "variables": [
+        "sla"
+      ],
+      "cf_standard_name": "sea_surface_height_above_sea_level",
+      "units": "m",
+      "target_units": "m",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.125,
+      "temporal_resolution": "daily",
+      "processing_level": "L4",
+      "coverage": "gap-free",
+      "source_type": "all-satellite NRT altimetry analysis",
+      "temporal_extent": [
+        "2024-07-01",
+        "2026-09-05"
+      ],
+      "auth": "copernicusmarine login",
+      "access": "copernicusmarine.subset",
+      "doc": "https://data.marine.copernicus.eu/product/SEALEVEL_GLO_PHY_L4_NRT_008_046",
+      "note": "ALL-satellite constellation and 0.125 deg, versus the two-satellite 0.25 deg stable climate record used for training"
+    },
+    "currents_reference": {
+      "channel": "currents",
+      "role": "reference",
+      "provider": "NASA PO.DAAC",
+      "product_id": "OSCAR_L4_OC_FINAL_V2.0",
+      "dataset_id": "OSCAR_L4_OC_FINAL_V2.0",
+      "doi": "10.5067/OSCAR-25F20",
+      "variables": [
+        "u",
+        "v"
+      ],
+      "cf_standard_name": "eastward/northward_sea_water_velocity",
+      "units": "m s-1",
+      "target_units": "m s-1",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.25,
+      "temporal_resolution": "daily",
+      "processing_level": "L4",
+      "coverage": "gap-free (ocean)",
+      "source_type": "DIAGNOSTIC: derived from SSH gradients, wind and SST - not a direct measurement; represents the upper ~30 m average",
+      "temporal_extent": [
+        "1993-01-01",
+        "~2025 (about one year latency)"
+      ],
+      "auth": "earthaccess login",
+      "access": "OPeNDAP DAP4 server-side subset",
+      "doc": "https://podaac.jpl.nasa.gov/dataset/OSCAR_L4_OC_FINAL_V2.0"
+    },
+    "currents_nrt": {
+      "channel": "currents",
+      "role": "nrt",
+      "provider": "NASA PO.DAAC",
+      "product_id": "OSCAR_L4_OC_NRT_V2.0",
+      "dataset_id": "OSCAR_L4_OC_NRT_V2.0",
+      "doi": null,
+      "variables": [
+        "u",
+        "v"
+      ],
+      "cf_standard_name": "eastward/northward_sea_water_velocity",
+      "units": "m s-1",
+      "target_units": "m s-1",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.25,
+      "temporal_resolution": "daily",
+      "processing_level": "L4",
+      "coverage": "gap-free (ocean)",
+      "source_type": "DIAGNOSTIC, same formulation as Final but NRT inputs",
+      "temporal_extent": [
+        "2024-01-01",
+        "2026-09-04"
+      ],
+      "auth": "earthaccess login",
+      "access": "OPeNDAP DAP4 server-side subset",
+      "doc": "https://podaac.jpl.nasa.gov/dataset/OSCAR_L4_OC_NRT_V2.0"
+    },
+    "wind_reference": {
+      "channel": "wind",
+      "role": "reference",
+      "provider": "NASA PO.DAAC / RSS",
+      "product_id": "CCMP_WINDS_10M6HR_L4_V3.1",
+      "dataset_id": "CCMP_WINDS_10M6HR_L4_V3.1",
+      "doi": "10.5067/CCMP-6HW10M-L4V31",
+      "variables": [
+        "uwnd",
+        "vwnd"
+      ],
+      "cf_standard_name": "eastward_wind / northward_wind",
+      "units": "m s-1",
+      "target_units": "m s-1",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.25,
+      "temporal_resolution": "6-hourly",
+      "aggregation": "daily mean of U and V INDEPENDENTLY (never speed/direction)",
+      "processing_level": "L4",
+      "coverage": "gap-free",
+      "source_type": "blend of satellite retrievals and ERA5 reanalysis",
+      "temporal_extent": [
+        "1993-01-01",
+        "~2025"
+      ],
+      "auth": "earthaccess login",
+      "access": "OPeNDAP DAP4 server-side subset",
+      "doc": "https://podaac.jpl.nasa.gov/dataset/CCMP_WINDS_10M6HR_L4_V3.1"
+    },
+    "wind_nrt": {
+      "channel": "wind",
+      "role": "nrt",
+      "provider": "Copernicus Marine",
+      "product_id": "WIND_GLO_PHY_L4_NRT_012_004",
+      "dataset_id": "cmems_obs-wind_glo_phy_nrt_l4_0.125deg_PT1H",
+      "doi": "10.48670/moi-00305",
+      "variables": [
+        "eastward_wind",
+        "northward_wind"
+      ],
+      "cf_standard_name": "eastward_wind / northward_wind",
+      "units": "m s-1",
+      "target_units": "m s-1",
+      "conversion": "none",
+      "spatial_resolution_deg": 0.125,
+      "temporal_resolution": "hourly",
+      "aggregation": "daily mean of U and V INDEPENDENTLY (never speed/direction)",
+      "processing_level": "L4",
+      "coverage": "gap-free",
+      "source_type": "L4 analysis blending scatterometer retrievals with ECMWF",
+      "temporal_extent": [
+        "2024-06-13",
+        "2026-09-04"
+      ],
+      "auth": "copernicusmarine login",
+      "access": "copernicusmarine.subset",
+      "doc": "https://data.marine.copernicus.eu/product/WIND_GLO_PHY_L4_NRT_012_004",
+      "note": "hourly 0.125 deg from a different production system than 6-hourly 0.25 deg CCMP; both must be aggregated to a daily U/V mean"
+    }
+  },
+  "pairs": {
+    "sst": [
+      "sst_reference",
+      "sst_nrt"
+    ],
+    "sss_smos": [
+      "sss_reference",
+      "sss_nrt_smos"
+    ],
+    "sss_smap": [
+      "sss_reference",
+      "sss_nrt_smap"
+    ],
+    "sla": [
+      "sla_reference",
+      "sla_nrt"
+    ],
+    "currents": [
+      "currents_reference",
+      "currents_nrt"
+    ],
+    "wind": [
+      "wind_reference",
+      "wind_nrt"
+    ]
+  }
+}

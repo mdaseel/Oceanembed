@@ -1,0 +1,72 @@
+# OceanEmbed - Phase 6B-C (L3) temporal memory ablation.
+# Phase 6A/6A.5/6B-A/6B-B configs are NOT modified; this file only adds L3.
+phase: "6B-C"
+l3_version: "6C.1"
+
+frozen:
+  l2_checkpoint: "outputs/models/phase6b_l2_final.pt"
+  encoder_trainable: false
+  note: >
+    The L2 spatial encoder is loaded verbatim from the checkpoint and frozen.
+    Patch size, dilations, latent width and the terminal ReLU are historical
+    results and are not revisited here.
+
+# Pre-registered BEFORE any L3 result was seen.
+windows:
+  control_1d: 1
+  hist_3d: 3
+  hist_7d: 7
+max_history_days: 7
+
+# Common target dates so every window is scored on an identical sample
+# population. The first 6 days of each split are sacrificed so that history
+# for a target date never crosses a split boundary.
+common_dates:
+  train:      {start: "2015-01-07", end: "2020-12-31"}
+  validation: {start: "2021-01-07", end: "2021-12-31"}
+  test:       {start: "2022-01-07", end: "2024-12-15"}
+  history_stays_within_split: true
+
+temporal:
+  module: gru
+  layers: 1
+  input_size: 32          # must equal the frozen L2 latent width
+  hidden_size: 32
+  batch_first: true
+  note: >
+    One small GRU, identical parameters for every window length, so 1D/3D/7D
+    have exactly the same trainable parameter count and differ only in how
+    much history they see.
+
+decoder:
+  structure_from: l2
+  init_from_l2: true
+  trainable: true
+  hidden: [128, 128]
+  n_out: 15
+
+training:
+  seed: 20260905
+  optimizer: adam
+  learning_rate: 0.001
+  max_epochs: 30
+  early_stopping_patience: 5
+  lr_scheduler: reduce_on_plateau
+  lr_factor: 0.5
+  lr_patience: 2
+  identical_for_all_windows: true
+
+# Declared before running the stability study.
+stability_seeds: [20260905, 20260906, 20260907]
+stability_rule: >
+  The selected multi-day window must beat the 1-day temporal control on the
+  primary validation metric in at least 2 of 3 seeds, and must not achieve
+  that by improving one isolated depth while 0-200 m broadly degrades.
+
+primary_selection_metric: validation_masked_standardised_mse
+selection_uses_test: false
+
+cache:
+  dir: "outputs/embeddings"
+  dtype: float32
+  contains_targets: false

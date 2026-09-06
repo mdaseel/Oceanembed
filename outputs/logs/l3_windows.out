@@ -1,0 +1,60 @@
+window=1  seed=20260905
+TRAIN targets 2015-01-07..2020-12-31 n=2186 days x 11067 cells = 24,192,462
+VAL   targets 2021-01-07..2021-12-31 n=359 days x 11136 cells = 3,997,824
+trainable=29,519 (gru 6,336 + decoder 23,183)  frozen=113,152
+C:\sih2\scripts\baselines\train_l3_temporal.py:123: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\utils\tensor_numpy.cpp:219.)
+  pred = head(torch.from_numpy(seq), torch.from_numpy(ctx))
+epoch   1  train 0.09073  val 0.16246  lr 1.00e-03     55s  <- best
+epoch   2  train 0.08444  val 0.15375  lr 1.00e-03     46s  <- best
+epoch   3  train 0.08318  val 0.15511  lr 1.00e-03     46s
+epoch   4  train 0.08210  val 0.15361  lr 1.00e-03     45s  <- best
+epoch   5  train 0.08153  val 0.15269  lr 1.00e-03     45s  <- best
+epoch   6  train 0.08148  val 0.15907  lr 1.00e-03     45s
+epoch   7  train 0.08132  val 0.15500  lr 1.00e-03     40s
+epoch   8  train 0.08079  val 0.16202  lr 5.00e-04     40s
+epoch   9  train 0.08100  val 0.15390  lr 5.00e-04     40s
+epoch  10  train 0.08053  val 0.15171  lr 5.00e-04     40s  <- best
+epoch  11  train 0.07983  val 0.15969  lr 5.00e-04     40s
+epoch  12  train 0.08025  val 0.16202  lr 5.00e-04     40s
+epoch  13  train 0.07957  val 0.15974  lr 2.50e-04     40s
+epoch  14  train 0.08097  val 0.16741  lr 2.50e-04     40s
+epoch  15  train 0.08058  val 0.15825  lr 2.50e-04     40s
+early stopping after 5 epochs without improvement
+encoder unchanged: 30cfd2db9e8b6b96 == 30cfd2db9e8b6b96  OK
+best epoch 10  val 0.15171  runtime 10.7 min
+window=3  seed=20260905
+TRAIN targets 2015-01-07..2020-12-31 n=2186 days x 11067 cells = 24,192,462
+VAL   targets 2021-01-07..2021-12-31 n=359 days x 11136 cells = 3,997,824
+trainable=29,519 (gru 6,336 + decoder 23,183)  frozen=113,152
+epoch   1  train 0.08894  val 0.16378  lr 1.00e-03     79s  <- best
+epoch   2  train 0.08299  val 0.15287  lr 1.00e-03     78s  <- best
+epoch   3  train 0.08170  val 0.15143  lr 1.00e-03     79s  <- best
+epoch   4  train 0.08060  val 0.15320  lr 1.00e-03     77s
+epoch   5  train 0.08016  val 0.15147  lr 1.00e-03     80s
+epoch   6  train 0.08007  val 0.15655  lr 5.00e-04     68s
+epoch   7  train 0.08016  val 0.14724  lr 5.00e-04     67s  <- best
+epoch   8  train 0.07977  val 0.15836  lr 5.00e-04     67s
+epoch   9  train 0.07924  val 0.15372  lr 5.00e-04     69s
+epoch  10  train 0.07904  val 0.14839  lr 2.50e-04     67s
+epoch  11  train 0.07944  val 0.15881  lr 2.50e-04     68s
+epoch  12  train 0.07980  val 0.15984  lr 2.50e-04     68s
+early stopping after 5 epochs without improvement
+encoder unchanged: 30cfd2db9e8b6b96 == 30cfd2db9e8b6b96  OK
+best epoch 7  val 0.14724  runtime 14.5 min
+window=7  seed=20260905
+TRAIN targets 2015-01-07..2020-12-31 n=2186 days x 11067 cells = 24,192,462
+VAL   targets 2021-01-07..2021-12-31 n=359 days x 11136 cells = 3,997,824
+trainable=29,519 (gru 6,336 + decoder 23,183)  frozen=113,152
+epoch   1  train 0.08818  val 0.16052  lr 1.00e-03    137s  <- best
+epoch   2  train 0.08207  val 0.15433  lr 1.00e-03    134s  <- best
+epoch   3  train 0.08072  val 0.14970  lr 1.00e-03    133s  <- best
+epoch   4  train 0.07962  val 0.15364  lr 1.00e-03    145s
+epoch   5  train 0.07915  val 0.14893  lr 1.00e-03    165s  <- best
+epoch   6  train 0.07899  val 0.15794  lr 1.00e-03    170s
+epoch   7  train 0.07861  val 0.15225  lr 1.00e-03    155s
+epoch   8  train 0.07825  val 0.15726  lr 5.00e-04    160s
+epoch   9  train 0.07847  val 0.15122  lr 5.00e-04    151s
+epoch  10  train 0.07793  val 0.15074  lr 5.00e-04    155s
+early stopping after 5 epochs without improvement
+encoder unchanged: 30cfd2db9e8b6b96 == 30cfd2db9e8b6b96  OK
+best epoch 5  val 0.14893  runtime 25.1 min

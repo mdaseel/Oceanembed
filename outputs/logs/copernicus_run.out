@@ -1,0 +1,220 @@
+2026-09-04T14:30:48 INFO    ======================================================================
+2026-09-04T14:30:48 INFO    Phase 6A.5 Copernicus acquisition  2015-01-01 .. 2024-12-15
+2026-09-04T14:30:48 INFO    products=['duacs', 'sss', 'ostia', 'glorys'] years=[2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+2026-09-04T14:30:48 INFO    ----------------------------------------------------------------------
+2026-09-04T14:30:48 INFO    PRODUCT duacs  DOI 10.48670/moi-00145
+2026-09-04T14:30:48 INFO    SKIP  duacs 2015  (ok (365 timesteps))
+2026-09-04T14:30:48 INFO    GET   duacs 2016  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2016-01-01..2016-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:30:53Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:30:53Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:31:13Z - Total size of the download: 37.43 MB.
+2026-09-04T14:31:13 INFO    OK    duacs 2016  39.2 MB in 25s  (ok (366 timesteps))
+2026-09-04T14:31:13 INFO    GET   duacs 2017  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2017-01-01..2017-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:31:17Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:31:17Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:31:47Z - Total size of the download: 37.33 MB.
+2026-09-04T14:31:47 INFO    OK    duacs 2017  39.1 MB in 34s  (ok (365 timesteps))
+2026-09-04T14:31:47 INFO    GET   duacs 2018  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2018-01-01..2018-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:31:52Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:31:52Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:32:11Z - Total size of the download: 37.33 MB.
+2026-09-04T14:32:12 INFO    OK    duacs 2018  39.1 MB in 24s  (ok (365 timesteps))
+2026-09-04T14:32:12 INFO    GET   duacs 2019  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2019-01-01..2019-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:32:16Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:32:16Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:32:35Z - Total size of the download: 37.33 MB.
+2026-09-04T14:32:35 INFO    OK    duacs 2019  39.1 MB in 24s  (ok (365 timesteps))
+2026-09-04T14:32:35 INFO    GET   duacs 2020  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2020-01-01..2020-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:32:40Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:32:40Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:32:59Z - Total size of the download: 37.43 MB.
+2026-09-04T14:32:59 INFO    OK    duacs 2020  39.2 MB in 24s  (ok (366 timesteps))
+2026-09-04T14:32:59 INFO    GET   duacs 2021  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2021-01-01..2021-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:33:04Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:33:04Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:33:23Z - Total size of the download: 37.33 MB.
+2026-09-04T14:33:23 INFO    OK    duacs 2021  39.1 MB in 24s  (ok (365 timesteps))
+2026-09-04T14:33:23 INFO    GET   duacs 2022  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2022-01-01..2022-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:33:28Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:33:28Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:33:47Z - Total size of the download: 37.33 MB.
+2026-09-04T14:33:47 INFO    OK    duacs 2022  39.1 MB in 23s  (ok (365 timesteps))
+2026-09-04T14:33:47 INFO    GET   duacs 2023  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2023-01-01..2023-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:33:51Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:33:51Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:34:17Z - Total size of the download: 37.33 MB.
+2026-09-04T14:34:17 INFO    OK    duacs 2023  39.1 MB in 30s  (ok (365 timesteps))
+2026-09-04T14:34:17 INFO    GET   duacs 2024  dataset_id=c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D vars=['sla'] time=2024-01-01..2024-12-15 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:34:22Z - Selected dataset version: "202411"
+INFO - 2026-09-04T14:34:22Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:34:39Z - Total size of the download: 35.79 MB.
+2026-09-04T14:34:39 INFO    OK    duacs 2024  37.5 MB in 22s  (ok (350 timesteps))
+2026-09-04T14:34:39 INFO    ----------------------------------------------------------------------
+2026-09-04T14:34:39 INFO    PRODUCT sss  DOI 10.48670/moi-00051
+2026-09-04T14:34:39 INFO    GET   sss 2015  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2015-01-01..2015-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:34:44Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:34:44Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:35:23Z - Total size of the download: 149.27 MB.
+2026-09-04T14:35:23 INFO    OK    sss 2015  156.4 MB in 44s  (ok (365 timesteps))
+2026-09-04T14:35:23 INFO    GET   sss 2016  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2016-01-01..2016-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:35:27Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:35:27Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:36:16Z - Total size of the download: 149.68 MB.
+2026-09-04T14:36:16 INFO    OK    sss 2016  156.9 MB in 53s  (ok (366 timesteps))
+2026-09-04T14:36:16 INFO    GET   sss 2017  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2017-01-01..2017-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:36:21Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:36:21Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:37:00Z - Total size of the download: 149.27 MB.
+2026-09-04T14:37:00 INFO    OK    sss 2017  156.4 MB in 44s  (ok (365 timesteps))
+2026-09-04T14:37:00 INFO    GET   sss 2018  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2018-01-01..2018-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:37:04Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:37:04Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:37:44Z - Total size of the download: 149.27 MB.
+2026-09-04T14:37:44 INFO    OK    sss 2018  156.4 MB in 44s  (ok (365 timesteps))
+2026-09-04T14:37:44 INFO    GET   sss 2019  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2019-01-01..2019-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:37:48Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:37:48Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:38:25Z - Total size of the download: 149.27 MB.
+2026-09-04T14:38:26 INFO    OK    sss 2019  156.4 MB in 42s  (ok (365 timesteps))
+2026-09-04T14:38:26 INFO    GET   sss 2020  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2020-01-01..2020-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:38:30Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:38:30Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:39:07Z - Total size of the download: 149.68 MB.
+2026-09-04T14:39:07 INFO    OK    sss 2020  156.9 MB in 42s  (ok (366 timesteps))
+2026-09-04T14:39:07 INFO    GET   sss 2021  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2021-01-01..2021-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:39:11Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:39:11Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:40:01Z - Total size of the download: 149.27 MB.
+2026-09-04T14:40:01 INFO    OK    sss 2021  156.4 MB in 54s  (ok (365 timesteps))
+2026-09-04T14:40:01 INFO    GET   sss 2022  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2022-01-01..2022-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:40:06Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:40:06Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:40:35Z - Total size of the download: 149.27 MB.
+2026-09-04T14:40:35 INFO    OK    sss 2022  156.4 MB in 33s  (ok (365 timesteps))
+2026-09-04T14:40:35 INFO    GET   sss 2023  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2023-01-01..2023-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:40:39Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:40:39Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:41:06Z - Total size of the download: 149.27 MB.
+2026-09-04T14:41:06 INFO    OK    sss 2023  156.4 MB in 32s  (ok (365 timesteps))
+2026-09-04T14:41:06 INFO    GET   sss 2024  dataset_id=cmems_obs-mob_glo_phy-sss_my_multi_P1D vars=['sos'] time=2024-01-01..2024-12-15 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:41:11Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:41:11Z - Selected dataset part: "default"
+WARNING - 2026-09-04T14:41:11Z - Some of your subset selection [2024-01-01 00:00:00+00:00, 2024-12-15 23:59:59+00:00] for the time dimension exceed the dataset coordinates [1993-01-01 00:00:00+00:00, 2024-12-15 00:00:00+00:00]
+INFO - 2026-09-04T14:41:37Z - Total size of the download: 143.13 MB.
+2026-09-04T14:41:38 INFO    OK    sss 2024  150.0 MB in 31s  (ok (350 timesteps))
+2026-09-04T14:41:38 INFO    ----------------------------------------------------------------------
+2026-09-04T14:41:38 INFO    PRODUCT ostia  DOI 10.48670/moi-00168
+2026-09-04T14:41:38 INFO    GET   ostia 2015  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2015-01-01..2015-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:41:42Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:41:42Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:42:53Z - Total size of the download: 466.43 MB.
+2026-09-04T14:42:53 INFO    OK    ostia 2015  488.8 MB in 76s  (ok (365 timesteps))
+2026-09-04T14:42:53 INFO    GET   ostia 2016  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2016-01-01..2016-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:42:58Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:42:58Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:44:05Z - Total size of the download: 467.71 MB.
+2026-09-04T14:44:05 INFO    OK    ostia 2016  490.2 MB in 71s  (ok (366 timesteps))
+2026-09-04T14:44:05 INFO    GET   ostia 2017  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2017-01-01..2017-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:44:09Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:44:09Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:45:21Z - Total size of the download: 466.43 MB.
+2026-09-04T14:45:21 INFO    OK    ostia 2017  488.8 MB in 76s  (ok (365 timesteps))
+2026-09-04T14:45:21 INFO    GET   ostia 2018  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2018-01-01..2018-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:45:25Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:45:25Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:46:36Z - Total size of the download: 466.43 MB.
+2026-09-04T14:46:36 INFO    OK    ostia 2018  488.8 MB in 75s  (ok (365 timesteps))
+2026-09-04T14:46:36 INFO    GET   ostia 2019  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2019-01-01..2019-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:46:40Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:46:40Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:47:52Z - Total size of the download: 466.43 MB.
+2026-09-04T14:47:52 INFO    OK    ostia 2019  488.8 MB in 76s  (ok (365 timesteps))
+2026-09-04T14:47:52 INFO    GET   ostia 2020  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2020-01-01..2020-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:47:57Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:47:57Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:49:06Z - Total size of the download: 467.71 MB.
+2026-09-04T14:49:07 INFO    OK    ostia 2020  490.2 MB in 74s  (ok (366 timesteps))
+2026-09-04T14:49:07 INFO    GET   ostia 2021  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2021-01-01..2021-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:49:11Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:49:11Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:50:22Z - Total size of the download: 466.43 MB.
+2026-09-04T14:50:22 INFO    OK    ostia 2021  488.8 MB in 75s  (ok (365 timesteps))
+2026-09-04T14:50:22 INFO    GET   ostia 2022  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2022-01-01..2022-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:50:26Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:50:26Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:51:37Z - Total size of the download: 466.43 MB.
+2026-09-04T14:51:37 INFO    OK    ostia 2022  488.8 MB in 75s  (ok (365 timesteps))
+2026-09-04T14:51:37 INFO    GET   ostia 2023  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2023-01-01..2023-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:51:41Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:51:41Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:52:54Z - Total size of the download: 466.43 MB.
+2026-09-04T14:52:54 INFO    OK    ostia 2023  488.8 MB in 77s  (ok (365 timesteps))
+2026-09-04T14:52:54 INFO    GET   ostia 2024  dataset_id=METOFFICE-GLO-SST-L4-REP-OBS-SST vars=['analysed_sst'] time=2024-01-01..2024-12-15 box=lat[4.0,31.0] lon[44.0,106.0] extra={}
+INFO - 2026-09-04T14:52:58Z - Selected dataset version: "202003"
+INFO - 2026-09-04T14:52:58Z - Selected dataset part: "default"
+INFO - 2026-09-04T14:54:08Z - Total size of the download: 447.26 MB.
+2026-09-04T14:54:08 INFO    OK    ostia 2024  468.8 MB in 74s  (ok (350 timesteps))
+2026-09-04T14:54:08 INFO    ----------------------------------------------------------------------
+2026-09-04T14:54:08 INFO    PRODUCT glorys  DOI 10.48670/moi-00021
+2026-09-04T14:54:08 INFO    GET   glorys 2015  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2015-01-01..2015-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T14:54:12Z - Selected dataset version: "202311"
+INFO - 2026-09-04T14:54:12Z - Selected dataset part: "default"
+WARNING - 2026-09-04T14:54:12Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T15:21:50Z - Total size of the download: 5.93 GB.
+2026-09-04T15:21:50 INFO    OK    glorys 2015  6363.1 MB in 1662s  (ok (365 timesteps))
+2026-09-04T15:21:50 INFO    GET   glorys 2016  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2016-01-01..2016-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T15:21:55Z - Selected dataset version: "202311"
+INFO - 2026-09-04T15:21:55Z - Selected dataset part: "default"
+WARNING - 2026-09-04T15:21:55Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T15:51:05Z - Total size of the download: 5.95 GB.
+2026-09-04T15:51:05 INFO    OK    glorys 2016  6380.5 MB in 1754s  (ok (366 timesteps))
+2026-09-04T15:51:05 INFO    GET   glorys 2017  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2017-01-01..2017-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T15:51:09Z - Selected dataset version: "202311"
+INFO - 2026-09-04T15:51:09Z - Selected dataset part: "default"
+WARNING - 2026-09-04T15:51:09Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T16:17:57Z - Total size of the download: 5.93 GB.
+2026-09-04T16:17:57 INFO    OK    glorys 2017  6363.1 MB in 1612s  (ok (365 timesteps))
+2026-09-04T16:17:57 INFO    GET   glorys 2018  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2018-01-01..2018-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T16:18:02Z - Selected dataset version: "202311"
+INFO - 2026-09-04T16:18:02Z - Selected dataset part: "default"
+WARNING - 2026-09-04T16:18:02Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T16:45:13Z - Total size of the download: 5.93 GB.
+2026-09-04T16:45:13 INFO    OK    glorys 2018  6363.1 MB in 1636s  (ok (365 timesteps))
+2026-09-04T16:45:13 INFO    GET   glorys 2019  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2019-01-01..2019-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T16:45:18Z - Selected dataset version: "202311"
+INFO - 2026-09-04T16:45:18Z - Selected dataset part: "default"
+WARNING - 2026-09-04T16:45:18Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T17:18:18Z - Total size of the download: 5.93 GB.
+2026-09-04T17:18:19 INFO    OK    glorys 2019  6363.1 MB in 1985s  (ok (365 timesteps))
+2026-09-04T17:18:19 INFO    GET   glorys 2020  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2020-01-01..2020-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T17:18:23Z - Selected dataset version: "202311"
+INFO - 2026-09-04T17:18:23Z - Selected dataset part: "default"
+WARNING - 2026-09-04T17:18:23Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T17:47:40Z - Total size of the download: 5.95 GB.
+2026-09-04T17:47:41 INFO    OK    glorys 2020  6380.5 MB in 1762s  (ok (366 timesteps))
+2026-09-04T17:47:41 INFO    GET   glorys 2021  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2021-01-01..2021-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T17:47:46Z - Selected dataset version: "202311"
+INFO - 2026-09-04T17:47:46Z - Selected dataset part: "default"
+WARNING - 2026-09-04T17:47:46Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T18:20:06Z - Total size of the download: 5.93 GB.
+2026-09-04T18:20:06 INFO    OK    glorys 2021  6363.1 MB in 1946s  (ok (365 timesteps))
+2026-09-04T18:20:06 INFO    GET   glorys 2022  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2022-01-01..2022-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T18:20:11Z - Selected dataset version: "202311"
+INFO - 2026-09-04T18:20:11Z - Selected dataset part: "default"
+WARNING - 2026-09-04T18:20:11Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T18:51:48Z - Total size of the download: 5.93 GB.
+2026-09-04T18:51:49 INFO    OK    glorys 2022  6363.1 MB in 1903s  (ok (365 timesteps))
+2026-09-04T18:51:49 INFO    GET   glorys 2023  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2023-01-01..2023-12-31 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T18:51:54Z - Selected dataset version: "202311"
+INFO - 2026-09-04T18:51:54Z - Selected dataset part: "default"
+WARNING - 2026-09-04T18:51:54Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T19:23:01Z - Total size of the download: 5.93 GB.
+2026-09-04T19:23:01 INFO    OK    glorys 2023  6363.1 MB in 1872s  (ok (365 timesteps))
+2026-09-04T19:23:01 INFO    GET   glorys 2024  dataset_id=cmems_mod_glo_phy_my_0.083deg_P1D-m vars=['thetao'] time=2024-01-01..2024-12-15 box=lat[4.0,31.0] lon[44.0,106.0] extra={'minimum_depth': 0.0, 'maximum_depth': 1200.0}
+INFO - 2026-09-04T19:23:06Z - Selected dataset version: "202311"
+INFO - 2026-09-04T19:23:06Z - Selected dataset part: "default"
+WARNING - 2026-09-04T19:23:06Z - Some of your subset selection [0.0, 1200.0] for the depth dimension exceed the dataset coordinates [0.49402499198913574, 5727.9169921875]
+INFO - 2026-09-04T19:52:48Z - Total size of the download: 5.69 GB.
+2026-09-04T19:52:49 INFO    OK    glorys 2024  6101.6 MB in 1788s  (ok (350 timesteps))
+2026-09-04T19:52:49 INFO    ======================================================================
+2026-09-04T19:52:49 INFO    DONE  ok=39 skipped=1 failed=0

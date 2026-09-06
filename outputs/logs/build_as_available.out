@@ -1,0 +1,117 @@
+2026-09-04T21:30:37 INFO    ======================================================================
+2026-09-04T21:30:37 INFO    YEAR 2016  (2016-01-01 .. 2016-12-31)
+2026-09-04T21:30:51 INFO      loaded sst  ['sst'] n_time=366
+2026-09-04T21:30:52 INFO      loaded sss  ['sss'] n_time=366
+2026-09-04T21:30:52 INFO      loaded sla  ['sla'] n_time=366
+2026-09-04T21:30:53 INFO      loaded cur  ['current_u', 'current_v'] n_time=366
+2026-09-04T21:30:56 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=366
+2026-09-04T21:32:54 INFO      common dates: 366 of 366
+2026-09-04T21:38:34 INFO      WROTE oceanembed_2016.zarr  499.1 MB  dims={'time': 366, 'lat': 101, 'lon': 241}
+2026-09-04T21:38:34 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (78 rows, 2 years)
+2026-09-04T21:38:34 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (66 rows)
+2026-09-04T21:38:34 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-04T21:38:34 INFO    BUILT 1 year(s)
+2026-09-04T21:48:37 INFO    ======================================================================
+2026-09-04T21:48:37 INFO    YEAR 2017  (2017-01-01 .. 2017-12-31)
+2026-09-04T21:48:49 INFO      loaded sst  ['sst'] n_time=365
+2026-09-04T21:48:50 INFO      loaded sss  ['sss'] n_time=365
+2026-09-04T21:48:50 INFO      loaded sla  ['sla'] n_time=365
+2026-09-04T21:48:51 INFO      loaded cur  ['current_u', 'current_v'] n_time=365
+2026-09-04T21:48:54 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=365
+2026-09-04T21:51:11 INFO      common dates: 365 of 365
+2026-09-04T21:57:31 INFO      WROTE oceanembed_2017.zarr  498.4 MB  dims={'time': 365, 'lat': 101, 'lon': 241}
+2026-09-04T21:57:32 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (117 rows, 3 years)
+2026-09-04T21:57:32 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (290 rows)
+2026-09-04T21:57:32 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-04T21:57:32 INFO    BUILT 1 year(s)
+2026-09-04T22:15:37 INFO    ======================================================================
+2026-09-04T22:15:37 INFO    YEAR 2018  (2018-01-01 .. 2018-12-31)
+2026-09-04T22:15:50 INFO      loaded sst  ['sst'] n_time=365
+2026-09-04T22:15:50 INFO      loaded sss  ['sss'] n_time=365
+2026-09-04T22:15:50 INFO      loaded sla  ['sla'] n_time=365
+2026-09-04T22:15:52 INFO      loaded cur  ['current_u', 'current_v'] n_time=365
+2026-09-04T22:15:55 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=365
+2026-09-04T22:17:53 INFO      common dates: 365 of 365
+2026-09-04T22:23:33 INFO      WROTE oceanembed_2018.zarr  500.3 MB  dims={'time': 365, 'lat': 101, 'lon': 241}
+2026-09-04T22:23:33 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (156 rows, 4 years)
+2026-09-04T22:23:33 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (290 rows)
+2026-09-04T22:23:33 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-04T22:23:33 INFO    BUILT 1 year(s)
+2026-09-04T22:48:38 INFO    ======================================================================
+2026-09-04T22:48:38 INFO    YEAR 2019  (2019-01-01 .. 2019-12-31)
+2026-09-04T22:48:50 INFO      loaded sst  ['sst'] n_time=365
+2026-09-04T22:48:50 INFO      loaded sss  ['sss'] n_time=365
+2026-09-04T22:48:51 INFO      loaded sla  ['sla'] n_time=365
+2026-09-04T22:48:52 INFO      loaded cur  ['current_u', 'current_v'] n_time=365
+2026-09-04T22:48:55 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=365
+2026-09-04T22:50:47 INFO      common dates: 365 of 365
+2026-09-04T22:56:35 INFO      WROTE oceanembed_2019.zarr  499.8 MB  dims={'time': 365, 'lat': 101, 'lon': 241}
+2026-09-04T22:56:35 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (195 rows, 5 years)
+2026-09-04T22:56:35 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (291 rows)
+2026-09-04T22:56:35 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-04T22:56:35 INFO    BUILT 1 year(s)
+2026-09-04T23:18:40 INFO    ======================================================================
+2026-09-04T23:18:40 INFO    YEAR 2020  (2020-01-01 .. 2020-12-31)
+2026-09-04T23:18:52 INFO      loaded sst  ['sst'] n_time=366
+2026-09-04T23:18:53 INFO      loaded sss  ['sss'] n_time=366
+2026-09-04T23:18:53 INFO      loaded sla  ['sla'] n_time=366
+2026-09-04T23:18:54 INFO      loaded cur  ['current_u', 'current_v'] n_time=366
+2026-09-04T23:18:57 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=366
+2026-09-04T23:20:50 INFO      common dates: 366 of 366
+2026-09-04T23:26:27 INFO      WROTE oceanembed_2020.zarr  501.2 MB  dims={'time': 366, 'lat': 101, 'lon': 241}
+2026-09-04T23:26:28 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (234 rows, 6 years)
+2026-09-04T23:26:28 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (292 rows)
+2026-09-04T23:26:28 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-04T23:26:28 INFO    BUILT 1 year(s)
+2026-09-04T23:50:32 INFO    ======================================================================
+2026-09-04T23:50:32 INFO    YEAR 2021  (2021-01-01 .. 2021-12-31)
+2026-09-04T23:50:45 INFO      loaded sst  ['sst'] n_time=365
+2026-09-04T23:50:46 INFO      loaded sss  ['sss'] n_time=365
+2026-09-04T23:50:46 INFO      loaded sla  ['sla'] n_time=365
+2026-09-04T23:50:47 INFO      loaded cur  ['current_u', 'current_v'] n_time=365
+2026-09-04T23:50:50 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=365
+2026-09-04T23:52:34 INFO      common dates: 365 of 365
+2026-09-04T23:58:28 INFO      WROTE oceanembed_2021.zarr  499.6 MB  dims={'time': 365, 'lat': 101, 'lon': 241}
+2026-09-04T23:58:29 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (273 rows, 7 years)
+2026-09-04T23:58:29 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (312 rows)
+2026-09-04T23:58:29 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-04T23:58:29 INFO    BUILT 1 year(s)
+2026-09-05T00:22:45 INFO    ======================================================================
+2026-09-05T00:22:45 INFO    YEAR 2022  (2022-01-01 .. 2022-12-31)
+2026-09-05T00:23:04 INFO      loaded sst  ['sst'] n_time=365
+2026-09-05T00:23:04 INFO      loaded sss  ['sss'] n_time=365
+2026-09-05T00:23:04 INFO      loaded sla  ['sla'] n_time=365
+2026-09-05T00:23:06 INFO      loaded cur  ['current_u', 'current_v'] n_time=365
+2026-09-05T00:23:09 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=365
+2026-09-05T00:25:00 INFO      common dates: 365 of 365
+2026-09-05T00:31:00 INFO      WROTE oceanembed_2022.zarr  502.0 MB  dims={'time': 365, 'lat': 101, 'lon': 241}
+2026-09-05T00:31:00 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (312 rows, 8 years)
+2026-09-05T00:31:00 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (363 rows)
+2026-09-05T00:31:00 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-05T00:31:00 INFO    BUILT 1 year(s)
+2026-09-05T00:53:05 INFO    ======================================================================
+2026-09-05T00:53:05 INFO    YEAR 2023  (2023-01-01 .. 2023-12-31)
+2026-09-05T00:53:17 INFO      loaded sst  ['sst'] n_time=365
+2026-09-05T00:53:17 INFO      loaded sss  ['sss'] n_time=365
+2026-09-05T00:53:18 INFO      loaded sla  ['sla'] n_time=365
+2026-09-05T00:53:19 INFO      loaded cur  ['current_u', 'current_v'] n_time=365
+2026-09-05T00:53:22 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=365
+2026-09-05T00:55:08 INFO      common dates: 365 of 365
+2026-09-05T01:01:05 INFO      WROTE oceanembed_2023.zarr  501.6 MB  dims={'time': 365, 'lat': 101, 'lon': 241}
+2026-09-05T01:01:06 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (351 rows, 9 years)
+2026-09-05T01:01:06 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (855 rows)
+2026-09-05T01:01:06 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-05T01:01:06 INFO    BUILT 1 year(s)
+2026-09-05T01:23:11 INFO    ======================================================================
+2026-09-05T01:23:11 INFO    YEAR 2024  (2024-01-01 .. 2024-12-15)
+2026-09-05T01:23:22 INFO      loaded sst  ['sst'] n_time=350
+2026-09-05T01:23:22 INFO      loaded sss  ['sss'] n_time=350
+2026-09-05T01:23:22 INFO      loaded sla  ['sla'] n_time=350
+2026-09-05T01:23:24 INFO      loaded cur  ['current_u', 'current_v'] n_time=350
+2026-09-05T01:23:27 INFO      loaded wnd  ['wind_u', 'wind_v'] n_time=350
+2026-09-05T01:25:09 INFO      common dates: 350 of 350
+2026-09-05T01:30:14 INFO      WROTE oceanembed_2024.zarr  479.8 MB  dims={'time': 350, 'lat': 101, 'lon': 241}
+2026-09-05T01:30:15 INFO    wrote C:\sih2\outputs\tables\multiyear_qc_by_year.csv (390 rows, 10 years)
+2026-09-05T01:30:15 INFO    wrote C:\sih2\outputs\tables\glorys_suspicious_values.csv (939 rows)
+2026-09-05T01:30:15 INFO    wrote C:\sih2\outputs\tables\glorys_depth_interpolation_15.csv
+2026-09-05T01:30:15 INFO    BUILT 1 year(s)

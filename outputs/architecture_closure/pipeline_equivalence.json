@@ -1,0 +1,9 @@
+{
+  "validation_loss_cached": 0.15351675358945377,
+  "recorded_best_val_loss": 0.15351675395687966,
+  "train_ms_per_day": 188.13677628835043,
+  "train_days": 2192,
+  "val_days": 365,
+  "n_cells_train": 11067,
+  "n_cells_validation": 11136
+}

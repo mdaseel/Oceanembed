@@ -1,0 +1,28 @@
+[orchestrator] waiting for data/raw/glorys/2016/glorys_2016.nc
+[orchestrator] building 2016
+[orchestrator] 2016 exit=0
+[orchestrator] waiting for data/raw/glorys/2017/glorys_2017.nc
+[orchestrator] building 2017
+[orchestrator] 2017 exit=0
+[orchestrator] waiting for data/raw/glorys/2018/glorys_2018.nc
+[orchestrator] building 2018
+[orchestrator] 2018 exit=0
+[orchestrator] waiting for data/raw/glorys/2019/glorys_2019.nc
+[orchestrator] building 2019
+[orchestrator] 2019 exit=0
+[orchestrator] waiting for data/raw/glorys/2020/glorys_2020.nc
+[orchestrator] building 2020
+[orchestrator] 2020 exit=0
+[orchestrator] waiting for data/raw/glorys/2021/glorys_2021.nc
+[orchestrator] building 2021
+[orchestrator] 2021 exit=0
+[orchestrator] waiting for data/raw/glorys/2022/glorys_2022.nc
+[orchestrator] building 2022
+[orchestrator] 2022 exit=0
+[orchestrator] waiting for data/raw/glorys/2023/glorys_2023.nc
+[orchestrator] building 2023
+[orchestrator] 2023 exit=0
+[orchestrator] waiting for data/raw/glorys/2024/glorys_2024.nc
+[orchestrator] building 2024
+[orchestrator] 2024 exit=0
+[orchestrator] all requested years processed

@@ -1,0 +1,41 @@
+# OceanEmbed — data splits (Phase 6A.5)
+#
+# THE TEST PERIOD IS LOCKED. It must not influence, in any future phase:
+#   normalisation / scaling statistics, climatology construction, feature
+#   engineering, architecture choice, hyperparameters, early stopping,
+#   data-cleaning thresholds, or the selection of which experiment to report.
+#
+# Phase 6A.5 trains nothing. These boundaries exist now so that no later phase
+# can leak test information by accident.
+
+dataset:
+  start: "2015-01-01"
+  end: "2024-12-15"
+  # end is NOT a preference: it is the hard end of the official multi-year SSS
+  # reanalysis cmems_obs-mob_glo_phy-sss_my_multi_P1D (DOI 10.48670/moi-00051).
+  # Every other product extends beyond it. Verified against the live
+  # Copernicus catalogue on 2026-09-04.
+  end_determined_by: "cmems_obs-mob_glo_phy-sss_my_multi_P1D"
+
+splits:
+  train:
+    start: "2015-01-01"
+    end: "2020-12-31"
+    n_days: 2192
+  validation:
+    start: "2021-01-01"
+    end: "2021-12-31"
+    n_days: 365
+  test:
+    start: "2022-01-01"
+    end: "2024-12-15"
+    n_days: 1080
+    locked: true
+
+total_days: 3637
+
+rules:
+  - "Fit every statistic (mean, std, climatology, quantiles) on TRAIN only."
+  - "Validation may be used for model selection and early stopping."
+  - "Test is opened once, at the end, for final reported numbers only."
+  - "No test-period date may appear in any fitted preprocessing artefact."

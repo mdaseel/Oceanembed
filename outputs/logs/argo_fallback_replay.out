@@ -1,0 +1,17 @@
+Argo population: 5,176 profiles, 92 floats, 730 dates, 2022-01-01..2023-12-31
+  60/730 dates  (49s)
+  120/730 dates  (100s)
+  180/730 dates  (151s)
+  240/730 dates  (202s)
+  300/730 dates  (253s)
+  360/730 dates  (303s)
+  420/730 dates  (354s)
+  480/730 dates  (412s)
+  540/730 dates  (470s)
+  600/730 dates  (530s)
+  660/730 dates  (589s)
+  720/730 dates  (649s)
+
+L2 unchanged: b715bb2bff32d5e4
+replayed 5,160 profile matches over 727 dates (3 dates skipped) in 11.0 min
+wrote C:\sih2\outputs\argo\fallback_replay.parquet

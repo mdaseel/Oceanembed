@@ -1,0 +1,15 @@
+TRAIN 2015-01-01..2020-12-31  VALIDATION 2021-01-01..2021-12-31
+L2 patch=33 dilations=[1, 2, 4, 8, 1] RF=33 latent=32
+params total=136,335 encoder=113,152
+train days/epoch=2192 (stride 1), samples/epoch=24,258,864
+epoch   1  train 0.17061  val 0.16109  lr 1.00e-03    814s  <- best
+epoch   2  train 0.11370  val 0.16780  lr 1.00e-03    813s
+epoch   3  train 0.10334  val 0.15352  lr 1.00e-03    807s  <- best
+epoch   4  train 0.09542  val 0.16091  lr 1.00e-03    808s
+epoch   5  train 0.09089  val 0.17490  lr 1.00e-03    809s
+epoch   6  train 0.08659  val 0.16525  lr 5.00e-04    811s
+epoch   7  train 0.07748  val 0.15771  lr 5.00e-04    812s
+early stopping after 4 epochs without improvement
+
+best epoch 3  val 0.15352  runtime 94.5 min
+checkpoint C:\sih2\outputs\models\phase6b_l2_final.pt

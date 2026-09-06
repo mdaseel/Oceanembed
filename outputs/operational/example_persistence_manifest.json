@@ -1,0 +1,108 @@
+{
+  "reconstruction_issue_time": "2021-01-05 00:00:00",
+  "requested_valid_time": "2021-01-05 00:00:00",
+  "replay_mode": "RETROSPECTIVE",
+  "policy_name": "SSS_ABSENT_PERSIST",
+  "policy_state": "OBS_SUPPORTED_FALLBACK",
+  "policy_evidence": "6C-B: 1.2254 vs 1.2255 degC at 100 m on GLORYS/2021. 6C-C Argo: -0.0007 degC vs COMPLETE at 100 m, CI spans zero at all six key depths, bias change <0.001 degC",
+  "channels": [
+    {
+      "channel": "sst",
+      "requested_valid_time": "2021-01-05 00:00:00",
+      "source_valid_time": "2021-01-05 00:00:00",
+      "original_observation_time": "2021-01-05 00:00:00",
+      "age_days": 0.0,
+      "fallback_policy": null,
+      "source_product": null,
+      "source_available_time": null,
+      "source_revision": null,
+      "training_period": null,
+      "note": "observed at the requested valid time"
+    },
+    {
+      "channel": "sss",
+      "requested_valid_time": "2021-01-05 00:00:00",
+      "source_valid_time": "2021-01-04 00:00:00",
+      "original_observation_time": "2021-01-03 00:00:00",
+      "age_days": 2.0,
+      "fallback_policy": "PERSIST_LAST_OBSERVED",
+      "source_product": "model-ready SSS",
+      "source_available_time": null,
+      "source_revision": null,
+      "training_period": null,
+      "note": "age measured from the ORIGINAL observation, not the store date"
+    },
+    {
+      "channel": "sla",
+      "requested_valid_time": "2021-01-05 00:00:00",
+      "source_valid_time": "2021-01-05 00:00:00",
+      "original_observation_time": "2021-01-05 00:00:00",
+      "age_days": 0.0,
+      "fallback_policy": null,
+      "source_product": null,
+      "source_available_time": null,
+      "source_revision": null,
+      "training_period": null,
+      "note": "observed at the requested valid time"
+    },
+    {
+      "channel": "current_u",
+      "requested_valid_time": "2021-01-05 00:00:00",
+      "source_valid_time": "2021-01-05 00:00:00",
+      "original_observation_time": "2021-01-05 00:00:00",
+      "age_days": 0.0,
+      "fallback_policy": null,
+      "source_product": null,
+      "source_available_time": null,
+      "source_revision": null,
+      "training_period": null,
+      "note": "observed at the requested valid time"
+    },
+    {
+      "channel": "current_v",
+      "requested_valid_time": "2021-01-05 00:00:00",
+      "source_valid_time": "2021-01-05 00:00:00",
+      "original_observation_time": "2021-01-05 00:00:00",
+      "age_days": 0.0,
+      "fallback_policy": null,
+      "source_product": null,
+      "source_available_time": null,
+      "source_revision": null,
+      "training_period": null,
+      "note": "observed at the requested valid time"
+    },
+    {
+      "channel": "wind_u",
+      "requested_valid_time": "2021-01-05 00:00:00",
+      "source_valid_time": "2021-01-05 00:00:00",
+      "original_observation_time": "2021-01-05 00:00:00",
+      "age_days": 0.0,
+      "fallback_policy": null,
+      "source_product": null,
+      "source_available_time": null,
+      "source_revision": null,
+      "training_period": null,
+      "note": "observed at the requested valid time"
+    },
+    {
+      "channel": "wind_v",
+      "requested_valid_time": "2021-01-05 00:00:00",
+      "source_valid_time": "2021-01-05 00:00:00",
+      "original_observation_time": "2021-01-05 00:00:00",
+      "age_days": 0.0,
+      "fallback_policy": null,
+      "source_product": null,
+      "source_available_time": null,
+      "source_revision": null,
+      "training_period": null,
+      "note": "observed at the requested valid time"
+    }
+  ],
+  "model": {
+    "l2_checkpoint": "outputs/models/phase6b_l2_final.pt",
+    "l2_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "patch": 33,
+    "latent": 32
+  },
+  "note": "complete assembled field passed to the unmodified legacy day_field"
+}

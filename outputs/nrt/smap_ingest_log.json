@@ -1,0 +1,56 @@
+{
+  "stride_days": 24,
+  "n_dates": 7,
+  "qc_reject_mask": 511,
+  "per_date": [
+    {
+      "date": "2024-07-01",
+      "n_granules": 65,
+      "n_failed": 0,
+      "n_qualified_points": 21306,
+      "cells_filled": 3206
+    },
+    {
+      "date": "2024-07-25",
+      "n_granules": 44,
+      "n_failed": 0,
+      "n_qualified_points": 25843,
+      "cells_filled": 6678
+    },
+    {
+      "date": "2024-08-18",
+      "n_granules": 50,
+      "n_failed": 0,
+      "n_qualified_points": 31114,
+      "cells_filled": 7251
+    },
+    {
+      "date": "2024-09-11",
+      "n_granules": 16,
+      "n_failed": 0,
+      "n_qualified_points": 13877,
+      "cells_filled": 6586
+    },
+    {
+      "date": "2024-10-05",
+      "n_granules": 38,
+      "n_failed": 0,
+      "n_qualified_points": 33379,
+      "cells_filled": 6751
+    },
+    {
+      "date": "2024-10-29",
+      "n_granules": 52,
+      "n_failed": 0,
+      "n_qualified_points": 40672,
+      "cells_filled": 7690
+    },
+    {
+      "date": "2024-11-22",
+      "n_granules": 54,
+      "n_failed": 0,
+      "n_qualified_points": 43210,
+      "cells_filled": 5983
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+[
+  {
+    "key": "sst_nrt",
+    "source": "C:\\sih2\\data\\raw\\nrt\\sst_nrt\\sst_nrt_2024-07-01_2024-12-15.nc",
+    "output": "C:\\sih2\\data\\processed\\nrt\\sst_nrt_canonical.nc",
+    "native_valid_fraction": 0.4833363201911589,
+    "regridded_valid_fraction": {
+      "sst": 0.49143420566123003
+    },
+    "n_times": 168,
+    "grid": [
+      101,
+      241
+    ]
+  },
+  {
+    "key": "sla_nrt",
+    "source": "C:\\sih2\\data\\raw\\nrt\\sla_nrt\\sla_nrt_2024-07-01_2024-12-15.nc",
+    "output": "C:\\sih2\\data\\processed\\nrt\\sla_nrt_canonical.nc",
+    "native_valid_fraction": 0.4909460872162485,
+    "regridded_valid_fraction": {
+      "sla": 0.49463867548580587
+    },
+    "n_times": 168,
+    "grid": [
+      101,
+      241
+    ]
+  },
+  {
+    "key": "sss_nrt_smos",
+    "source": "C:\\sih2\\data\\raw\\nrt\\sss_nrt_smos\\sss_nrt_smos_2024-07-01_2024-12-15.nc",
+    "output": "C:\\sih2\\data\\processed\\nrt\\sss_nrt_smos_canonical.nc",
+    "native_valid_fraction": 0.01762388348409854,
+    "regridded_valid_fraction": {
+      "sss": 0.011548709702031259
+    },
+    "n_times": 168,
+    "grid": [
+      101,
+      241
+    ]
+  },
+  {
+    "key": "wind_nrt",
+    "source": "C:\\sih2\\data\\raw\\nrt\\wind_nrt\\wind_nrt_2024-07-01_2024-12-15.nc",
+    "output": "C:\\sih2\\data\\processed\\nrt\\wind_nrt_canonical.nc",
+    "native_valid_fraction": 1.0,
+    "regridded_valid_fraction": {
+      "wind_u": 1.0,
+      "wind_v": 1.0
+    },
+    "n_times": 168,
+    "grid": [
+      101,
+      241
+    ]
+  },
+  {
+    "key": "currents_nrt",
+    "source": "C:\\sih2\\data\\raw\\nrt\\currents_nrt\\oscar_nrt_2024-07-01_2024-12-13.nc",
+    "output": "C:\\sih2\\data\\processed\\nrt\\currents_nrt_canonical.nc",
+    "native_valid_fraction": 0.4684971866496129,
+    "regridded_valid_fraction": {
+      "current_u": 0.46476036904223916,
+      "current_v": 0.46476036904223916
+    },
+    "n_times": 56,
+    "grid": [
+      101,
+      241
+    ]
+  },
+  {
+    "key": "currents_nrt_lag3",
+    "source": "C:\\sih2\\data\\raw\\nrt\\currents_nrt\\oscar_nrt_2024-06-28_2024-12-10.nc",
+    "output": "C:\\sih2\\data\\processed\\nrt\\currents_nrt_lag3_canonical.nc",
+    "native_valid_fraction": 0.46832941201240086,
+    "regridded_valid_fraction": {
+      "current_u": 0.4646129106093775,
+      "current_v": 0.4646129106093775
+    },
+    "n_times": 56,
+    "grid": [
+      101,
+      241
+    ]
+  },
+  {
+    "key": "sss_nrt_smap",
+    "source": "C:\\sih2\\data\\raw\\nrt\\sss_nrt_smap\\smap_nrt_binned_daily.nc",
+    "output": "C:\\sih2\\data\\processed\\nrt\\sss_nrt_smap_canonical.nc",
+    "native_valid_fraction": null,
+    "regridded_valid_fraction": {
+      "sss": 0.25908666741007236
+    },
+    "note": "binned from L2 swath; never interpolated"
+  }
+]

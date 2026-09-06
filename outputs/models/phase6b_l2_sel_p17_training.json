@@ -1,0 +1,81 @@
+{
+  "tag": "sel_p17",
+  "patch": 17,
+  "latent": 32,
+  "seed": 20260905,
+  "stride": 6,
+  "epochs_run": 8,
+  "best_epoch": 8,
+  "best_val_loss": 0.1504120798551873,
+  "runtime_seconds": 1513.76389169693,
+  "n_parameters": 99407,
+  "n_encoder_parameters": 76224,
+  "dilations": [
+    1,
+    2,
+    4,
+    1
+  ],
+  "receptive_field": 17,
+  "train_days_per_epoch": 366,
+  "samples_per_epoch": 4050522,
+  "loss": "per-depth masked MSE in per-depth standardised target space",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.3325775421219445,
+      "val_loss": 0.19497368984842953,
+      "lr": 0.001,
+      "seconds": 190.06166124343872
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.16416929287662924,
+      "val_loss": 0.16431304861421456,
+      "lr": 0.001,
+      "seconds": 189.72187042236328
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.1498007169756733,
+      "val_loss": 0.17384852638391599,
+      "lr": 0.001,
+      "seconds": 189.0598442554474
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.13857370543756772,
+      "val_loss": 0.18234844477209328,
+      "lr": 0.001,
+      "seconds": 188.08109331130981
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.13353219728082255,
+      "val_loss": 0.15201305934827622,
+      "lr": 0.001,
+      "seconds": 189.22083592414856
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.13276304274064596,
+      "val_loss": 0.1568599897500587,
+      "lr": 0.001,
+      "seconds": 189.45641589164734
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.12626041138107008,
+      "val_loss": 0.15586226047718363,
+      "lr": 0.001,
+      "seconds": 189.54272174835205
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.12459687473344021,
+      "val_loss": 0.1504120798551873,
+      "lr": 0.001,
+      "seconds": 188.60597443580627
+    }
+  ]
+}

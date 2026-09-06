@@ -1,0 +1,14 @@
+[train] building targets for 2192 days x 11067 cells
+    targets 300/2192
+    targets 600/2192
+    targets 900/2192
+    targets 1200/2192
+    targets 1500/2192
+    targets 1800/2192
+    targets 2100/2192
+    wrote C:\sih2\outputs\targets_cache\train\y.npy shape=(2192,11067,15)
+[train] done in 323s
+[validation] building targets for 365 days x 11136 cells
+    targets 300/365
+    wrote C:\sih2\outputs\targets_cache\validation\y.npy shape=(365,11136,15)
+[validation] done in 52s

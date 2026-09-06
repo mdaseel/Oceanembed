@@ -1,0 +1,9 @@
+audit window 2022-01-01..2023-12-31: 6,598 profiles, 108 floats
+  20/108 floats  (53s)
+  40/108 floats  (140s)
+  60/108 floats  (155s)
+  80/108 floats  (187s)
+  100/108 floats  (210s)
+
+downloaded=103 cached=5 failed=0 in 4.1 min
+manifest -> C:\sih2\outputs\argo\download_manifest.json

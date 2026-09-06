@@ -1,0 +1,35 @@
+# --- credentials / env ---
+.env
+.env.*
+*.cdsapirc
+.copernicusmarine/
+config/credentials*.yml
+
+# --- scientific data (never commit) ---
+*.nc
+*.nc4
+*.grib
+*.grib2
+*.h5
+*.hdf5
+*.zarr/
+*.zip
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# --- outputs that are large / regenerable ---
+outputs/figures/*.png
+outputs/logs/*.log

@@ -1,0 +1,7 @@
+{
+  "split": "test",
+  "n_samples": 12026868,
+  "start": "2022-01-01",
+  "end": "2024-12-15",
+  "checkpoint_epoch": 7
+}

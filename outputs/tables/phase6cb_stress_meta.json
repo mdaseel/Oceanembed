@@ -1,0 +1,29 @@
+{
+  "split": "validation",
+  "n_days": 362,
+  "n_cells": 11136,
+  "samples_per_mode": 4031232,
+  "max_age_days": 3,
+  "l2_sha256_before": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+  "l2_sha256_after": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+  "first_target": "2021-01-04",
+  "last_target": "2021-12-31",
+  "modes": [
+    "A_COMPLETE",
+    "B_SSS_MISSING",
+    "C_SSS_SPATIAL_GAPS",
+    "D_CURRENT_STALE_1D",
+    "E_CURRENT_STALE_2D",
+    "F_CURRENT_STALE_3D",
+    "G_WIND_STALE_1D",
+    "H_SLA_STALE_1D",
+    "I_SSS_MISSING_CURRENT_STALE_2D",
+    "J_SSS_MISSING_JOINT_MASK"
+  ],
+  "fallback_policies": [
+    "zero_standardised",
+    "persistence",
+    "channel_climatology"
+  ],
+  "heldout_2024_argo": "untouched"
+}

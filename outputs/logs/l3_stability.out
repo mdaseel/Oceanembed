@@ -1,0 +1,83 @@
+window=1  seed=20260906
+TRAIN targets 2015-01-07..2020-12-31 n=2186 days x 11067 cells = 24,192,462
+VAL   targets 2021-01-07..2021-12-31 n=359 days x 11136 cells = 3,997,824
+trainable=29,519 (gru 6,336 + decoder 23,183)  frozen=113,152
+C:\sih2\scripts\baselines\train_l3_temporal.py:123: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\utils\tensor_numpy.cpp:219.)
+  pred = head(torch.from_numpy(seq), torch.from_numpy(ctx))
+epoch   1  train 0.09085  val 0.15407  lr 1.00e-03    100s  <- best
+epoch   2  train 0.08435  val 0.15420  lr 1.00e-03     65s
+epoch   3  train 0.08286  val 0.15610  lr 1.00e-03     49s
+epoch   4  train 0.08221  val 0.15308  lr 1.00e-03     46s  <- best
+epoch   5  train 0.08206  val 0.15762  lr 1.00e-03     44s
+epoch   6  train 0.08171  val 0.15541  lr 1.00e-03     44s
+epoch   7  train 0.08115  val 0.16413  lr 5.00e-04     48s
+epoch   8  train 0.08136  val 0.15370  lr 5.00e-04     44s
+epoch   9  train 0.08091  val 0.14910  lr 5.00e-04     42s  <- best
+epoch  10  train 0.08016  val 0.16039  lr 5.00e-04     43s
+epoch  11  train 0.08059  val 0.16048  lr 5.00e-04     48s
+epoch  12  train 0.07991  val 0.16397  lr 2.50e-04     52s
+epoch  13  train 0.08135  val 0.16642  lr 2.50e-04     47s
+epoch  14  train 0.08084  val 0.15888  lr 2.50e-04     48s
+early stopping after 5 epochs without improvement
+encoder unchanged: 30cfd2db9e8b6b96 == 30cfd2db9e8b6b96  OK
+best epoch 9  val 0.14910  runtime 12.0 min
+window=3  seed=20260906
+TRAIN targets 2015-01-07..2020-12-31 n=2186 days x 11067 cells = 24,192,462
+VAL   targets 2021-01-07..2021-12-31 n=359 days x 11136 cells = 3,997,824
+trainable=29,519 (gru 6,336 + decoder 23,183)  frozen=113,152
+epoch   1  train 0.08899  val 0.15318  lr 1.00e-03     82s  <- best
+epoch   2  train 0.08299  val 0.15267  lr 1.00e-03     74s  <- best
+epoch   3  train 0.08141  val 0.15654  lr 1.00e-03     71s
+epoch   4  train 0.08083  val 0.15092  lr 1.00e-03     71s  <- best
+epoch   5  train 0.08054  val 0.15834  lr 1.00e-03     71s
+epoch   6  train 0.08020  val 0.15205  lr 1.00e-03     71s
+epoch   7  train 0.07963  val 0.16247  lr 5.00e-04     72s
+epoch   8  train 0.07984  val 0.15159  lr 5.00e-04     80s
+epoch   9  train 0.07934  val 0.14837  lr 5.00e-04     88s  <- best
+epoch  10  train 0.07858  val 0.15630  lr 5.00e-04     93s
+epoch  11  train 0.07895  val 0.15909  lr 5.00e-04     78s
+epoch  12  train 0.07828  val 0.16214  lr 2.50e-04     72s
+epoch  13  train 0.07959  val 0.16822  lr 2.50e-04     72s
+epoch  14  train 0.07916  val 0.15755  lr 2.50e-04     80s
+early stopping after 5 epochs without improvement
+encoder unchanged: 30cfd2db9e8b6b96 == 30cfd2db9e8b6b96  OK
+best epoch 9  val 0.14837  runtime 17.9 min
+window=1  seed=20260907
+TRAIN targets 2015-01-07..2020-12-31 n=2186 days x 11067 cells = 24,192,462
+VAL   targets 2021-01-07..2021-12-31 n=359 days x 11136 cells = 3,997,824
+trainable=29,519 (gru 6,336 + decoder 23,183)  frozen=113,152
+C:\sih2\scripts\baselines\train_l3_temporal.py:123: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\utils\tensor_numpy.cpp:219.)
+  pred = head(torch.from_numpy(seq), torch.from_numpy(ctx))
+epoch   1  train 0.08932  val 0.15355  lr 1.00e-03     52s  <- best
+epoch   2  train 0.08375  val 0.15449  lr 1.00e-03     48s
+epoch   3  train 0.08274  val 0.15226  lr 1.00e-03     42s  <- best
+epoch   4  train 0.08230  val 0.15835  lr 1.00e-03     42s
+epoch   5  train 0.08206  val 0.15333  lr 1.00e-03     42s
+epoch   6  train 0.08142  val 0.15982  lr 5.00e-04     42s
+epoch   7  train 0.08143  val 0.15482  lr 5.00e-04     42s
+epoch   8  train 0.08099  val 0.15103  lr 5.00e-04     41s  <- best
+epoch   9  train 0.08030  val 0.15943  lr 5.00e-04     42s
+epoch  10  train 0.08058  val 0.16182  lr 5.00e-04     43s
+epoch  11  train 0.07988  val 0.16613  lr 2.50e-04     43s
+epoch  12  train 0.08137  val 0.16828  lr 2.50e-04     43s
+epoch  13  train 0.08091  val 0.15904  lr 2.50e-04     42s
+early stopping after 5 epochs without improvement
+encoder unchanged: 30cfd2db9e8b6b96 == 30cfd2db9e8b6b96  OK
+best epoch 8  val 0.15103  runtime 9.4 min
+window=3  seed=20260907
+TRAIN targets 2015-01-07..2020-12-31 n=2186 days x 11067 cells = 24,192,462
+VAL   targets 2021-01-07..2021-12-31 n=359 days x 11136 cells = 3,997,824
+trainable=29,519 (gru 6,336 + decoder 23,183)  frozen=113,152
+epoch   1  train 0.08733  val 0.15370  lr 1.00e-03     79s  <- best
+epoch   2  train 0.08229  val 0.15376  lr 1.00e-03     82s
+epoch   3  train 0.08147  val 0.15213  lr 1.00e-03     81s  <- best
+epoch   4  train 0.08104  val 0.15893  lr 1.00e-03     81s
+epoch   5  train 0.08063  val 0.14998  lr 1.00e-03     80s  <- best
+epoch   6  train 0.07995  val 0.16037  lr 1.00e-03     83s
+epoch   7  train 0.07980  val 0.15506  lr 1.00e-03     82s
+epoch   8  train 0.07917  val 0.15104  lr 5.00e-04     81s
+epoch   9  train 0.07908  val 0.15755  lr 5.00e-04     81s
+epoch  10  train 0.07909  val 0.15916  lr 5.00e-04     81s
+early stopping after 5 epochs without improvement
+encoder unchanged: 30cfd2db9e8b6b96 == 30cfd2db9e8b6b96  OK
+best epoch 5  val 0.14998  runtime 13.5 min

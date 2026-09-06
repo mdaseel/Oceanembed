@@ -1,0 +1,28 @@
+{
+  "tag": "residual_metrics_validation",
+  "split": "validation",
+  "dates": [
+    "2021-01-01",
+    "2021-12-31"
+  ],
+  "n_days": 365,
+  "n_cells": 11136,
+  "models": [
+    {
+      "label": "FROZEN_L2",
+      "residual": false,
+      "ablate": null,
+      "sha": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d"
+    },
+    {
+      "label": "L2_RESIDUAL_s20260905",
+      "residual": true,
+      "ablate": null,
+      "sha": "7476fbe1514d42caf8c0a62c5f7d6dd35e1ea0db3b2fea0e7f7af7a6b0310eab",
+      "best_epoch": 4,
+      "val_loss": 1.0815253599049295
+    }
+  ],
+  "runtime_seconds": 77.32708406448364,
+  "note": "physical temperature space; identical population for every model; test split never opened; no Argo read"
+}

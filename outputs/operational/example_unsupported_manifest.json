@@ -1,0 +1,16 @@
+{
+  "requested_valid_time": "2021-01-05 00:00:00",
+  "declared_absent": [
+    "sst"
+  ],
+  "policy_state": "UNSUPPORTED_INPUT_MODE",
+  "inference_run": false,
+  "error": "UNSUPPORTED_INPUT_MODE: absent=['sst'] stale={} is not in the tested allow-list; no inference will be run",
+  "reason": "SST outage was never tested; no fallback is registered for it",
+  "model": {
+    "l2_checkpoint": "outputs/models/phase6b_l2_final.pt",
+    "l2_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "patch": 33,
+    "latent": 32
+  }
+}

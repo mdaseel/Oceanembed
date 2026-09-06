@@ -1,0 +1,23 @@
+C:\sih2\scripts\baselines\train_l1_mlp.py:78: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:821.)
+  run += float(loss) * len(X); n += len(X)
+TRAIN      2015-01-01 .. 2020-12-31 (2192 d)
+VALIDATION 2021-01-01 .. 2021-12-31 (365 d)
+scalers: frozen, fitted_on=train
+model: 11 -> [256, 256, 128] -> 15  (103,695 params)
+epoch   1  train 0.10770  val 0.19189  lr 1.00e-03    110s  <- best (saved)
+epoch   2  train 0.08829  val 0.19821  lr 1.00e-03    115s
+epoch   3  train 0.08460  val 0.17112  lr 1.00e-03    109s  <- best (saved)
+epoch   4  train 0.08213  val 0.17590  lr 1.00e-03    109s
+epoch   5  train 0.07982  val 0.18115  lr 1.00e-03    108s
+epoch   6  train 0.07963  val 0.17427  lr 5.00e-04    108s
+epoch   7  train 0.08112  val 0.16519  lr 5.00e-04    108s  <- best (saved)
+epoch   8  train 0.07979  val 0.17245  lr 5.00e-04    108s
+epoch   9  train 0.07932  val 0.17274  lr 5.00e-04    112s
+epoch  10  train 0.07814  val 0.16690  lr 2.50e-04    105s
+epoch  11  train 0.07960  val 0.18941  lr 2.50e-04    108s
+epoch  12  train 0.07976  val 0.17857  lr 2.50e-04    108s
+early stopping: no improvement for 5 epochs
+
+best epoch 7  val 0.16519  runtime 21.8 min
+checkpoint: C:\sih2\outputs\models\phase6b_l1_mlp.pt

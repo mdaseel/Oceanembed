@@ -1,0 +1,775 @@
+{
+  "source": "https://data-argo.ifremer.fr/dac",
+  "index_file": "ar_index_global_prof.txt.gz",
+  "audit_window": [
+    "2022-01-01",
+    "2023-12-31"
+  ],
+  "heldout_period_not_fetched": [
+    "2024-01-01",
+    "2024-12-15"
+  ],
+  "n_profiles_in_index": 6598,
+  "n_floats": 108,
+  "downloaded": 103,
+  "cached": 5,
+  "failed": 0,
+  "files": [
+    {
+      "wmo": "1902457",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/1902457/1902457_prof.nc",
+      "bytes": 4137740,
+      "status": "cached"
+    },
+    {
+      "wmo": "1901517",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/1901517/1901517_prof.nc",
+      "bytes": 2458620,
+      "status": "cached"
+    },
+    {
+      "wmo": "2902388",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2902388/2902388_prof.nc",
+      "bytes": 15835608,
+      "status": "cached"
+    },
+    {
+      "wmo": "1902458",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/1902458/1902458_prof.nc",
+      "bytes": 4098128,
+      "status": "cached"
+    },
+    {
+      "wmo": "1902189",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/1902189/1902189_prof.nc",
+      "bytes": 7792664,
+      "status": "cached"
+    },
+    {
+      "wmo": "2903138",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2903138/2903138_prof.nc",
+      "bytes": 6297820,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903137",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2903137/2903137_prof.nc",
+      "bytes": 6269056,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903132",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2903132/2903132_prof.nc",
+      "bytes": 10638428,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903140",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2903140/2903140_prof.nc",
+      "bytes": 6269056,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903142",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2903142/2903142_prof.nc",
+      "bytes": 6332084,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902392",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2902392/2902392_prof.nc",
+      "bytes": 14225884,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902394",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2902394/2902394_prof.nc",
+      "bytes": 14501840,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902391",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2902391/2902391_prof.nc",
+      "bytes": 14133896,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903145",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2903145/2903145_prof.nc",
+      "bytes": 4675328,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902390",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2902390/2902390_prof.nc",
+      "bytes": 15421700,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902389",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2902389/2902389_prof.nc",
+      "bytes": 15697660,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903147",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2903147/2903147_prof.nc",
+      "bytes": 4662488,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903149",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/2903149/2903149_prof.nc",
+      "bytes": 4662488,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5905082",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/5905082/5905082_prof.nc",
+      "bytes": 6209764,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5905084",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/5905084/5905084_prof.nc",
+      "bytes": 6013852,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5905083",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/5905083/5905083_prof.nc",
+      "bytes": 6307720,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5905085",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/5905085/5905085_prof.nc",
+      "bytes": 5842424,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1901897",
+      "dac": "bodc",
+      "url": "https://data-argo.ifremer.fr/dac/bodc/1901897/1901897_prof.nc",
+      "bytes": 3038916,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5905088",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/5905088/5905088_prof.nc",
+      "bytes": 6111808,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5905089",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/5905089/5905089_prof.nc",
+      "bytes": 5989332,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1901898",
+      "dac": "bodc",
+      "url": "https://data-argo.ifremer.fr/dac/bodc/1901898/1901898_prof.nc",
+      "bytes": 3719316,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5905090",
+      "dac": "aoml",
+      "url": "https://data-argo.ifremer.fr/dac/aoml/5905090/5905090_prof.nc",
+      "bytes": 6283200,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1902594",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/1902594/1902594_prof.nc",
+      "bytes": 7270772,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "4903660",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/4903660/4903660_prof.nc",
+      "bytes": 9407764,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903007",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903007/6903007_prof.nc",
+      "bytes": 15481776,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903008",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903008/6903008_prof.nc",
+      "bytes": 16325300,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903046",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903046/6903046_prof.nc",
+      "bytes": 15754948,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903058",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903058/6903058_prof.nc",
+      "bytes": 15839132,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6902947",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6902947/6902947_prof.nc",
+      "bytes": 20814516,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903059",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903059/6903059_prof.nc",
+      "bytes": 23098636,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903060",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903060/6903060_prof.nc",
+      "bytes": 25228208,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903063",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903063/6903063_prof.nc",
+      "bytes": 15389780,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903138",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903138/6903138_prof.nc",
+      "bytes": 16431008,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902710",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902710/2902710_prof.nc",
+      "bytes": 818984,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902680",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902680/2902680_prof.nc",
+      "bytes": 1241016,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903062",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903062/6903062_prof.nc",
+      "bytes": 25355132,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902758",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902758/2902758_prof.nc",
+      "bytes": 1115968,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902764",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902764/2902764_prof.nc",
+      "bytes": 1793468,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903140",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903140/6903140_prof.nc",
+      "bytes": 17631488,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903139",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903139/6903139_prof.nc",
+      "bytes": 18398756,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902766",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902766/2902766_prof.nc",
+      "bytes": 2964308,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902765",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902765/2902765_prof.nc",
+      "bytes": 2927856,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6990514",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6990514/6990514_prof.nc",
+      "bytes": 9689368,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902768",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902768/2902768_prof.nc",
+      "bytes": 2915744,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902837",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902837/2902837_prof.nc",
+      "bytes": 900164,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6903141",
+      "dac": "coriolis",
+      "url": "https://data-argo.ifremer.fr/dac/coriolis/6903141/6903141_prof.nc",
+      "bytes": 18197852,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902852",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902852/2902852_prof.nc",
+      "bytes": 996172,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902770",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902770/2902770_prof.nc",
+      "bytes": 2903600,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902769",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902769/2902769_prof.nc",
+      "bytes": 3035400,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902853",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902853/2902853_prof.nc",
+      "bytes": 1035452,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1902669",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/1902669/1902669_prof.nc",
+      "bytes": 790516,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1902670",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/1902670/1902670_prof.nc",
+      "bytes": 809792,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1902671",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/1902671/1902671_prof.nc",
+      "bytes": 783096,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902772",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902772/2902772_prof.nc",
+      "bytes": 2903600,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902771",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902771/2902771_prof.nc",
+      "bytes": 3145072,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1902672",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/1902672/1902672_prof.nc",
+      "bytes": 794944,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1902673",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/1902673/1902673_prof.nc",
+      "bytes": 783096,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902775",
+      "dac": "csio",
+      "url": "https://data-argo.ifremer.fr/dac/csio/2902775/2902775_prof.nc",
+      "bytes": 3425668,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902198",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902198/2902198_prof.nc",
+      "bytes": 1682060,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902200",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902200/2902200_prof.nc",
+      "bytes": 1786652,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902201",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902201/2902201_prof.nc",
+      "bytes": 1940792,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902203",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902203/2902203_prof.nc",
+      "bytes": 2028872,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902206",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902206/2902206_prof.nc",
+      "bytes": 1951776,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902209",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902209/2902209_prof.nc",
+      "bytes": 3277412,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902182",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902182/2902182_prof.nc",
+      "bytes": 4506628,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902262",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902262/2902262_prof.nc",
+      "bytes": 2534732,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902259",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902259/2902259_prof.nc",
+      "bytes": 2528588,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902216",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902216/2902216_prof.nc",
+      "bytes": 2931172,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902265",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902265/2902265_prof.nc",
+      "bytes": 2614712,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902267",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902267/2902267_prof.nc",
+      "bytes": 2649172,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902268",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902268/2902268_prof.nc",
+      "bytes": 2425580,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902264",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902264/2902264_prof.nc",
+      "bytes": 4663548,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "1901739",
+      "dac": "csiro",
+      "url": "https://data-argo.ifremer.fr/dac/csiro/1901739/1901739_prof.nc",
+      "bytes": 10900412,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902263",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902263/2902263_prof.nc",
+      "bytes": 5513692,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902211",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902211/2902211_prof.nc",
+      "bytes": 11360820,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902210",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902210/2902210_prof.nc",
+      "bytes": 11135696,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902276",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902276/2902276_prof.nc",
+      "bytes": 5991472,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902270",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902270/2902270_prof.nc",
+      "bytes": 8246300,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903891",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2903891/2903891_prof.nc",
+      "bytes": 783096,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2903892",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2903892/2903892_prof.nc",
+      "bytes": 797900,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "4903775",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/4903775/4903775_prof.nc",
+      "bytes": 805292,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "4903776",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/4903776/4903776_prof.nc",
+      "bytes": 921540,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5907082",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/5907082/5907082_prof.nc",
+      "bytes": 797900,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5907083",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/5907083/5907083_prof.nc",
+      "bytes": 805292,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5907084",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/5907084/5907084_prof.nc",
+      "bytes": 790516,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5907085",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/5907085/5907085_prof.nc",
+      "bytes": 768320,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902277",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902277/2902277_prof.nc",
+      "bytes": 7115024,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902275",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902275/2902275_prof.nc",
+      "bytes": 10845316,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6990608",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/6990608/6990608_prof.nc",
+      "bytes": 913936,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6990610",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/6990610/6990610_prof.nc",
+      "bytes": 783096,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6990609",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/6990609/6990609_prof.nc",
+      "bytes": 797900,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6990611",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/6990611/6990611_prof.nc",
+      "bytes": 790516,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "6990612",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/6990612/6990612_prof.nc",
+      "bytes": 783096,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "7901125",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/7901125/7901125_prof.nc",
+      "bytes": 802364,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "7901126",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/7901126/7901126_prof.nc",
+      "bytes": 812676,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "7901128",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/7901128/7901128_prof.nc",
+      "bytes": 797900,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "7901127",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/7901127/7901127_prof.nc",
+      "bytes": 847864,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902271",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902271/2902271_prof.nc",
+      "bytes": 16482092,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902273",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902273/2902273_prof.nc",
+      "bytes": 16624544,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902272",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902272/2902272_prof.nc",
+      "bytes": 18313944,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "2902294",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/2902294/2902294_prof.nc",
+      "bytes": 16443856,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "5907092",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/5907092/5907092_prof.nc",
+      "bytes": 12812504,
+      "status": "downloaded"
+    },
+    {
+      "wmo": "7901136",
+      "dac": "incois",
+      "url": "https://data-argo.ifremer.fr/dac/incois/7901136/7901136_prof.nc",
+      "bytes": 13208392,
+      "status": "downloaded"
+    }
+  ]
+}

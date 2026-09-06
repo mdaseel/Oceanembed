@@ -1,0 +1,131 @@
+{
+  "name": "L2_RESIDUAL_s20260905",
+  "mode": "residual",
+  "seed": 20260905,
+  "residual": true,
+  "ablated_group": null,
+  "patch": 33,
+  "latent": 32,
+  "max_epochs": 15,
+  "patience": 4,
+  "lr": 0.001,
+  "epochs_run": 8,
+  "best_epoch": 4,
+  "best_val_loss": 1.0815253599049295,
+  "runtime_seconds": 4579.221494436264,
+  "n_parameters": 136335,
+  "train_days": 2192,
+  "val_days": 365,
+  "n_cells_train": 11067,
+  "n_cells_validation": 11136,
+  "loss": "per-depth masked MSE in standardised target space",
+  "residual_meta": {
+    "scaler": "C:\\sih2\\outputs\\architecture_closure\\closure_residual_target_scaler.json",
+    "scaler_sha256": "253a0a169ad2b618d174f19f1f18e350d1e2db29b8b480d9a9a4aecc94fec336",
+    "l0_file_sha256": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5",
+    "mean": [
+      -3.278037219221303e-11,
+      -3.123755812872755e-10,
+      -8.54982645176687e-12,
+      -1.4316748546169387e-11,
+      -4.365131513177059e-10,
+      -8.768949754112983e-12,
+      -3.699285639017085e-11,
+      -6.515701645152802e-11,
+      2.5051465556916465e-11,
+      -6.178234354888944e-11,
+      -1.911483171962392e-10,
+      -3.994644978126563e-11,
+      -2.746275973531842e-11,
+      -1.1059990562126249e-10,
+      -2.770134740204365e-11
+    ],
+    "std": [
+      0.5516445103435819,
+      0.5448553670412798,
+      0.5498768763888445,
+      0.5966423657112213,
+      0.6906764914994601,
+      0.948145129306562,
+      1.3256985468212432,
+      1.5009171450035108,
+      1.4181158443954507,
+      1.208782795595752,
+      0.789225722355831,
+      0.4460154205586232,
+      0.295150967068855,
+      0.2963730193547304,
+      0.2929687832910081
+    ]
+  },
+  "frozen_sha256_start": {
+    "l2_checkpoint_file": "81979a6541927ff5c6b0a13c5ce7cdbcd486040d16a304dcdc10b2962a586e35",
+    "feature_scaler_file": "49671ce760b0dca5c1c82cb184dae91908cc064abfdea8cc7eb2f5bc3c320467",
+    "target_scaler_file": "5b6f359db0d228dd7d3acf775ab8a6eea76dd521e7b4568ff1873c832e89e93b",
+    "climatology_file": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5"
+  },
+  "frozen_sha256_end": {
+    "l2_checkpoint_file": "81979a6541927ff5c6b0a13c5ce7cdbcd486040d16a304dcdc10b2962a586e35",
+    "feature_scaler_file": "49671ce760b0dca5c1c82cb184dae91908cc064abfdea8cc7eb2f5bc3c320467",
+    "target_scaler_file": "5b6f359db0d228dd7d3acf775ab8a6eea76dd521e7b4568ff1873c832e89e93b",
+    "climatology_file": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5"
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.7811096472679263,
+      "val_loss": 1.1867906379373105,
+      "lr": 0.001,
+      "seconds": 462.7431859970093
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.6503337139576456,
+      "val_loss": 1.104609767704794,
+      "lr": 0.001,
+      "seconds": 522.7032155990601
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5805244899361673,
+      "val_loss": 1.1098499422204005,
+      "lr": 0.001,
+      "seconds": 586.9226398468018
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5431542835422676,
+      "val_loss": 1.0815253599049295,
+      "lr": 0.001,
+      "seconds": 579.3609788417816
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.5180507507447126,
+      "val_loss": 1.159958812635239,
+      "lr": 0.001,
+      "seconds": 575.358136177063
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.5014163038292287,
+      "val_loss": 1.1312804762631246,
+      "lr": 0.001,
+      "seconds": 560.485499382019
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.4872058690355642,
+      "val_loss": 1.1221877468775396,
+      "lr": 0.0005,
+      "seconds": 643.2674219608307
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.4547169658280637,
+      "val_loss": 1.1031274849421357,
+      "lr": 0.0005,
+      "seconds": 627.0082211494446
+    }
+  ]
+}

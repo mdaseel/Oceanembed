@@ -1,0 +1,7 @@
+reading 108 float files
+accepted 5,176 profiles of 23,907 seen
+C:\sih2\scripts\validate\argo_validate.py:201: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\utils\tensor_numpy.cpp:219.)
+  z = torch.from_numpy(np.asarray(cache.z[t]))
+collocated 5,176 profiles; frozen weights verified unchanged
+
+wrote C:\sih2\outputs\argo\matched_profiles.parquet (5,176 rows) in 3.4 min

@@ -1,0 +1,46 @@
+TRAIN 2015-01-01..2020-12-31  VALIDATION 2021-01-01..2021-12-31
+L2 patch=9 dilations=[1, 2, 1] RF=9 latent=32
+params total=62,479 encoder=39,296
+train days/epoch=366 (stride 6), samples/epoch=4,050,522
+epoch   1  train 0.29142  val 0.18882  lr 1.00e-03    179s  <- best
+epoch   2  train 0.17195  val 0.16944  lr 1.00e-03    180s  <- best
+epoch   3  train 0.15474  val 0.17219  lr 1.00e-03    177s
+epoch   4  train 0.14565  val 0.17285  lr 1.00e-03    168s
+epoch   5  train 0.13879  val 0.15305  lr 1.00e-03    170s  <- best
+epoch   6  train 0.13856  val 0.15886  lr 1.00e-03    170s
+epoch   7  train 0.13136  val 0.17253  lr 1.00e-03    172s
+epoch   8  train 0.13080  val 0.15555  lr 5.00e-04    179s
+early stopping after 3 epochs without improvement
+
+best epoch 5  val 0.15305  runtime 23.3 min
+checkpoint C:\sih2\outputs\models\phase6b_l2_sel_p9.pt
+TRAIN 2015-01-01..2020-12-31  VALIDATION 2021-01-01..2021-12-31
+L2 patch=17 dilations=[1, 2, 4, 1] RF=17 latent=32
+params total=99,407 encoder=76,224
+train days/epoch=366 (stride 6), samples/epoch=4,050,522
+epoch   1  train 0.33258  val 0.19497  lr 1.00e-03    190s  <- best
+epoch   2  train 0.16417  val 0.16431  lr 1.00e-03    190s  <- best
+epoch   3  train 0.14980  val 0.17385  lr 1.00e-03    189s
+epoch   4  train 0.13857  val 0.18235  lr 1.00e-03    188s
+epoch   5  train 0.13353  val 0.15201  lr 1.00e-03    189s  <- best
+epoch   6  train 0.13276  val 0.15686  lr 1.00e-03    189s
+epoch   7  train 0.12626  val 0.15586  lr 1.00e-03    190s
+epoch   8  train 0.12460  val 0.15041  lr 1.00e-03    189s  <- best
+
+best epoch 8  val 0.15041  runtime 25.2 min
+checkpoint C:\sih2\outputs\models\phase6b_l2_sel_p17.pt
+TRAIN 2015-01-01..2020-12-31  VALIDATION 2021-01-01..2021-12-31
+L2 patch=33 dilations=[1, 2, 4, 8, 1] RF=33 latent=32
+params total=136,335 encoder=113,152
+train days/epoch=366 (stride 6), samples/epoch=4,050,522
+epoch   1  train 0.33544  val 0.20912  lr 1.00e-03    204s  <- best
+epoch   2  train 0.16937  val 0.16648  lr 1.00e-03    204s  <- best
+epoch   3  train 0.14988  val 0.17710  lr 1.00e-03    203s
+epoch   4  train 0.13587  val 0.18266  lr 1.00e-03    203s
+epoch   5  train 0.13064  val 0.16380  lr 1.00e-03    203s  <- best
+epoch   6  train 0.12939  val 0.15504  lr 1.00e-03    204s  <- best
+epoch   7  train 0.12189  val 0.15524  lr 1.00e-03    204s
+epoch   8  train 0.11701  val 0.14869  lr 1.00e-03    203s  <- best
+
+best epoch 8  val 0.14869  runtime 27.1 min
+checkpoint C:\sih2\outputs\models\phase6b_l2_sel_p33.pt

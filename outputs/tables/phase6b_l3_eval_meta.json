@@ -1,0 +1,10 @@
+{
+  "split": "validation",
+  "n_samples": 3997824,
+  "selected_tag": "w3_s20260905",
+  "selected_window": 3,
+  "control_tag": "w1_s20260905",
+  "common_start": "2021-01-07",
+  "common_end": "2021-12-31",
+  "n_targets": 359
+}

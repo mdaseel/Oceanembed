@@ -1,0 +1,7 @@
+{
+  "n_matched": 5176,
+  "n_floats": 92,
+  "date_min": "2022-01-01",
+  "date_max": "2023-12-31",
+  "example_profile_rule": "seeded RNG 20260905, uniform among profiles matched at every depth 5-1000 m"
+}

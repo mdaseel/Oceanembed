@@ -1,0 +1,32 @@
+{
+  "method": "ocean_aware_bilinear_then_nearest_wet_within_1_cell",
+  "n_matched": 5176,
+  "depths_m": [
+    0,
+    5,
+    10,
+    20,
+    30,
+    50,
+    75,
+    100,
+    125,
+    150,
+    200,
+    300,
+    500,
+    700,
+    1000
+  ],
+  "audit_window": [
+    "2022-01-01",
+    "2023-12-31"
+  ],
+  "heldout_untouched": [
+    "2024-01-01",
+    "2024-12-15"
+  ],
+  "grid": "canonical 0.25 deg, 101 x 241",
+  "temporal_matching": "same UTC calendar day, offset 0",
+  "glorys_reference": "regridded model-ready target temp_<d>m"
+}

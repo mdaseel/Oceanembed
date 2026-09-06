@@ -1,0 +1,26 @@
+{
+  "files_read": 108,
+  "profiles_seen": 23907,
+  "outside_window": 16699,
+  "outside_domain": 597,
+  "rejected_profile_qc": {
+    "position_qc=8": 52,
+    "juld_qc=8": 2,
+    "position_qc=4": 1
+  },
+  "rejected_no_levels": 1206,
+  "rejected_adjusted_empty": 174,
+  "accepted": 5176,
+  "data_mode": {
+    "D": 5886,
+    "A": 304,
+    "R": 366
+  },
+  "levels_accepted_total": 2883017,
+  "collocated": 5176,
+  "audit_window": [
+    "2022-01-01",
+    "2023-12-31"
+  ],
+  "collocation_method": "ocean_aware_bilinear_then_nearest_wet_within_1_cell"
+}

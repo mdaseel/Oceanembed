@@ -1,0 +1,68 @@
+{
+  "tag": "channel_ablation",
+  "split": "validation",
+  "dates": [
+    "2021-01-01",
+    "2021-12-31"
+  ],
+  "n_days": 365,
+  "n_cells": 11136,
+  "models": [
+    {
+      "label": "FROZEN_L2",
+      "residual": false,
+      "ablate": null,
+      "sha": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d"
+    },
+    {
+      "label": "D_CONTROL_ALL",
+      "residual": false,
+      "ablate": null,
+      "sha": "6c41703c452e7be3bec548bbfb0283161eecb73d15cf4eda29fddca98e58d19f",
+      "best_epoch": 3,
+      "val_loss": 0.1539438561421551
+    },
+    {
+      "label": "D_MINUS_SST",
+      "residual": false,
+      "ablate": "SST",
+      "sha": "2f0519feb2c996a022ccf05725da8dec7d12afb6d390bd85d16efb13b5574291",
+      "best_epoch": 1,
+      "val_loss": 0.166760508961057
+    },
+    {
+      "label": "D_MINUS_SSS",
+      "residual": false,
+      "ablate": "SSS",
+      "sha": "15b2fd8093f3924f479dbd50b22f215afd173604886c1fc9c7c573fb1064dca7",
+      "best_epoch": 3,
+      "val_loss": 0.15110584038169417
+    },
+    {
+      "label": "D_MINUS_SLA",
+      "residual": false,
+      "ablate": "SLA",
+      "sha": "c2878fc596ce09e06ca4f8652669a14653a63b6bb61a4b218fc0b464ecd6efdc",
+      "best_epoch": 2,
+      "val_loss": 0.2099076224516516
+    },
+    {
+      "label": "D_MINUS_CURRENTS",
+      "residual": false,
+      "ablate": "CURRENTS",
+      "sha": "344e8a01ecca465782b8e1f9d71016614a9af29073a711cad7a6b765b5d4002f",
+      "best_epoch": 3,
+      "val_loss": 0.15241345693803812
+    },
+    {
+      "label": "D_MINUS_WINDS",
+      "residual": false,
+      "ablate": "WINDS",
+      "sha": "6c4e5146d613f3ae3535853a98d8a1db82fccbe388f12cc9e7f1917a453b473f",
+      "best_epoch": 3,
+      "val_loss": 0.15254337346717103
+    }
+  ],
+  "runtime_seconds": 115.8921148777008,
+  "note": "physical temperature space; identical population for every model; test split never opened; no Argo read"
+}

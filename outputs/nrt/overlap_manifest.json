@@ -1,0 +1,161 @@
+{
+  "generated": "2026-09-05 11:28:59.026642",
+  "method": "per-pair intersection of reference catalogue extent, NRT catalogue extent, and the locally held harmonised reference archive; no universal window assumed",
+  "local_reference_archive": {
+    "start": "2015-01-01",
+    "end": "2024-12-15",
+    "stores": [
+      "oceanembed_2015.zarr",
+      "oceanembed_2016.zarr",
+      "oceanembed_2017.zarr",
+      "oceanembed_2018.zarr",
+      "oceanembed_2019.zarr",
+      "oceanembed_2020.zarr",
+      "oceanembed_2021.zarr",
+      "oceanembed_2022.zarr",
+      "oceanembed_2023.zarr",
+      "oceanembed_2024.zarr"
+    ]
+  },
+  "pairs": {
+    "sst": {
+      "reference_key": "sst_reference",
+      "nrt_key": "sst_nrt",
+      "reference_catalogue_extent": [
+        "1981-10-01",
+        "2026-03-31"
+      ],
+      "nrt_catalogue_extent": [
+        "2024-01-17",
+        "2026-09-04"
+      ],
+      "reference_extent_end_parsed": "2026-03-31",
+      "local_reference_archive": [
+        "2015-01-01",
+        "2024-12-15"
+      ],
+      "overlap_start": "2024-01-17",
+      "overlap_end": "2024-12-15",
+      "overlap_days": 334,
+      "binding_lower_constraint": "nrt_product_start",
+      "binding_upper_constraint": "local_archive_end"
+    },
+    "sss_smos": {
+      "reference_key": "sss_reference",
+      "nrt_key": "sss_nrt_smos",
+      "reference_catalogue_extent": [
+        "1993-01-01",
+        "2024-12-15"
+      ],
+      "nrt_catalogue_extent": [
+        "2010-01-12",
+        "2026-09-03"
+      ],
+      "reference_extent_end_parsed": "2024-12-15",
+      "local_reference_archive": [
+        "2015-01-01",
+        "2024-12-15"
+      ],
+      "overlap_start": "2015-01-01",
+      "overlap_end": "2024-12-15",
+      "overlap_days": 3637,
+      "binding_lower_constraint": "local_archive_start",
+      "binding_upper_constraint": "local_archive_end"
+    },
+    "sss_smap": {
+      "reference_key": "sss_reference",
+      "nrt_key": "sss_nrt_smap",
+      "reference_catalogue_extent": [
+        "1993-01-01",
+        "2024-12-15"
+      ],
+      "nrt_catalogue_extent": [
+        "2024-01-01",
+        "2026-09-04"
+      ],
+      "reference_extent_end_parsed": "2024-12-15",
+      "local_reference_archive": [
+        "2015-01-01",
+        "2024-12-15"
+      ],
+      "overlap_start": "2024-01-01",
+      "overlap_end": "2024-12-15",
+      "overlap_days": 350,
+      "binding_lower_constraint": "nrt_product_start",
+      "binding_upper_constraint": "local_archive_end"
+    },
+    "sla": {
+      "reference_key": "sla_reference",
+      "nrt_key": "sla_nrt",
+      "reference_catalogue_extent": [
+        "1993-01-01",
+        "2026-01-16"
+      ],
+      "nrt_catalogue_extent": [
+        "2024-07-01",
+        "2026-09-05"
+      ],
+      "reference_extent_end_parsed": "2026-01-16",
+      "local_reference_archive": [
+        "2015-01-01",
+        "2024-12-15"
+      ],
+      "overlap_start": "2024-07-01",
+      "overlap_end": "2024-12-15",
+      "overlap_days": 168,
+      "binding_lower_constraint": "nrt_product_start",
+      "binding_upper_constraint": "local_archive_end"
+    },
+    "currents": {
+      "reference_key": "currents_reference",
+      "nrt_key": "currents_nrt",
+      "reference_catalogue_extent": [
+        "1993-01-01",
+        "~2025 (about one year latency)"
+      ],
+      "nrt_catalogue_extent": [
+        "2024-01-01",
+        "2026-09-04"
+      ],
+      "reference_extent_end_parsed": null,
+      "local_reference_archive": [
+        "2015-01-01",
+        "2024-12-15"
+      ],
+      "overlap_start": "2024-01-01",
+      "overlap_end": "2024-12-15",
+      "overlap_days": 350,
+      "binding_lower_constraint": "nrt_product_start",
+      "binding_upper_constraint": "local_archive_end"
+    },
+    "wind": {
+      "reference_key": "wind_reference",
+      "nrt_key": "wind_nrt",
+      "reference_catalogue_extent": [
+        "1993-01-01",
+        "~2025"
+      ],
+      "nrt_catalogue_extent": [
+        "2024-06-13",
+        "2026-09-04"
+      ],
+      "reference_extent_end_parsed": null,
+      "local_reference_archive": [
+        "2015-01-01",
+        "2024-12-15"
+      ],
+      "overlap_start": "2024-06-13",
+      "overlap_end": "2024-12-15",
+      "overlap_days": 186,
+      "binding_lower_constraint": "nrt_product_start",
+      "binding_upper_constraint": "local_archive_end"
+    }
+  },
+  "all_pair_intersection": {
+    "start": "2024-07-01",
+    "end": "2024-12-15",
+    "days": 168,
+    "note": "used ONLY for the whole-stack substitution experiment, where every channel must be swapped on the same day; per-channel comparisons use their own per-pair windows"
+  },
+  "caveat": "Overlap here is CATALOGUE overlap measured today. It says nothing about whether a product was retrievable on the original date; that is what the prospective latency log measures separately."
+}

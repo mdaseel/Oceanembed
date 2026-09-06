@@ -1,0 +1,24 @@
+{
+  "n_matches": 5160,
+  "n_floats": 92,
+  "modes": [
+    "COMPLETE",
+    "SSS_ABSENT_PERSIST",
+    "SSS_ABSENT_CLIM",
+    "CURRENT_STALE_1D",
+    "CURRENT_STALE_2D",
+    "CURRENT_STALE_3D",
+    "WIND_STALE_1D",
+    "SLA_STALE_1D",
+    "SSS_ABSENT_PERSIST_CURRENT_STALE_2D",
+    "L0"
+  ],
+  "key_depths": [
+    50,
+    75,
+    100,
+    125,
+    150,
+    200
+  ]
+}

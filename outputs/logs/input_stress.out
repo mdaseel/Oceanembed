@@ -1,0 +1,57 @@
+frozen L2: patch=33 latent=32 sha=b715bb2bff32d5e4
+validation cohort: targets 2021-01-04..2021-12-31 (362 days) x 11136 cells = 4,031,232 samples
+identical population for every operating mode
+
+  day 30/362  (56s)
+  day 60/362  (111s)
+  day 90/362  (166s)
+  day 120/362  (225s)
+  day 150/362  (283s)
+  day 180/362  (342s)
+  day 210/362  (399s)
+  day 240/362  (448s)
+  day 270/362  (502s)
+  day 300/362  (553s)
+  day 330/362  (607s)
+  day 360/362  (657s)
+
+L2 unchanged: b715bb2bff32d5e4 == b715bb2bff32d5e4
+evaluated 4,031,232 samples per mode in 11.0 min
+
+=== DEGRADATION vs COMPLETE (% RMSE increase) ===
+mode     A_COMPLETE  B_SSS_MISSING  C_SSS_SPATIAL_GAPS  D_CURRENT_STALE_1D  E_CURRENT_STALE_2D  F_CURRENT_STALE_3D  G_WIND_STALE_1D  H_SLA_STALE_1D  I_SSS_MISSING_CURRENT_STALE_2D  J_SSS_MISSING_JOINT_MASK
+depth_m                                                                                                                                                                                                      
+0               0.0          20.77                7.31                0.10                0.22                0.35            -0.02            0.07                           20.85                    223.09
+5               0.0          19.39                6.69                0.06                0.14                0.23             0.02            0.03                           19.43                    211.45
+10              0.0          18.98                6.44                0.05                0.12                0.21             0.02            0.05                           19.02                    229.26
+20              0.0          18.97                6.33                0.06                0.15                0.25             0.00            0.03                           19.02                    215.88
+30              0.0          20.20                7.32                0.04                0.11                0.20             0.01            0.01                           20.21                    201.95
+50              0.0          20.28                8.25               -0.01                0.02                0.10             0.04           -0.03                           20.25                    165.13
+75              0.0          15.28                6.11               -0.02                0.04                0.20             0.04           -0.12                           15.32                    108.62
+100             0.0          11.21                4.55               -0.07                0.02                0.25             0.02           -0.11                           11.29                     90.38
+125             0.0          11.22                4.70               -0.10               -0.02                0.20             0.02           -0.07                           11.25                     84.09
+150             0.0          10.85                4.60               -0.07                0.01                0.20             0.01           -0.05                           10.85                     85.40
+200             0.0           8.17                3.45               -0.06               -0.05                0.02             0.01           -0.06                            8.06                     78.84
+300             0.0           5.82                2.25               -0.04               -0.06               -0.07             0.01           -0.07                            5.76                     59.22
+500             0.0           6.88                2.75                0.03                0.07                0.10             0.02           -0.12                            6.98                    119.73
+700             0.0           6.02                2.41                0.02                0.03                0.04            -0.01           -0.06                            6.10                     81.06
+1000            0.0           3.12                1.30                0.04                0.07                0.10             0.00           -0.03                            3.23                     40.45
+
+=== 100 m summary ===
+                                     rmse  degradation_pct  skill_over_L0_pct  beats_L0
+mode                                                                                   
+A_COMPLETE                          1.225            0.000             34.556      True
+B_SSS_MISSING                       1.363           11.209             27.220      True
+C_SSS_SPATIAL_GAPS                  1.281            4.548             31.580      True
+D_CURRENT_STALE_1D                  1.225           -0.069             34.601      True
+E_CURRENT_STALE_2D                  1.226            0.017             34.545      True
+F_CURRENT_STALE_3D                  1.229            0.255             34.389      True
+G_WIND_STALE_1D                     1.226            0.018             34.544      True
+H_SLA_STALE_1D                      1.224           -0.112             34.629      True
+I_SSS_MISSING_CURRENT_STALE_2D      1.364           11.291             27.167      True
+J_SSS_MISSING_JOINT_MASK            2.333           90.385            -24.595     False
+B_SSS_MISSING::persistence          1.225           -0.009             34.562      True
+B_SSS_MISSING::channel_climatology  1.224           -0.093             34.617      True
+L0_climatology                      1.873           52.803              0.000     False
+
+total runtime 11.0 min

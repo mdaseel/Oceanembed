@@ -1,0 +1,7 @@
+{
+  "split": "test",
+  "n_samples": 12026880,
+  "l2_tag": "final",
+  "patch": 33,
+  "latent": 32
+}

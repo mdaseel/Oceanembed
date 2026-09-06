@@ -1,0 +1,81 @@
+# OceanEmbed - Phase 6B-A baseline configuration (L0 climatology + L1 MLP)
+# Phase 6A/6A.5 config is NOT modified; this file only adds baseline settings.
+phase: "6B-A"
+baseline_version: "6B.1"
+
+data:
+  model_ready_glob: "data/processed/model_ready/oceanembed_*.zarr"
+  splits_file: "config/data_splits.yaml"
+
+features:
+  # 7 surface channels + lat + lon + cyclic day-of-year = 11 inputs
+  surface: [sst, sss, sla, current_u, current_v, wind_u, wind_v]
+  static:  [lat, lon]
+  cyclic:  [doy_sin, doy_cos]
+  n_features: 11
+
+targets:
+  depths_m: [0, 5, 10, 20, 30, 50, 75, 100, 125, 150, 200, 300, 500, 700, 1000]
+  n_targets: 15
+  note: >
+    The 0 m target is GLORYS's shallowest level (0.494 m), clamped per the
+    Phase 6A.5 provenance. It is NOT a native 0.0 m GLORYS observation.
+
+climatology:
+  method: harmonic_regression
+  n_harmonics: 3          # annual + semiannual + terannual
+  period_days: 365.25
+  fit_on: train_only
+  rationale: >
+    Six training years give only ~6 samples per calendar day, so a raw
+    day-of-year mean is noisy. A truncated Fourier series is smooth and exactly
+    periodic by construction (no Dec31->Jan1 discontinuity), defined for any
+    day-of-year including leap day, and 3 harmonics resolve the annual cycle
+    plus the semiannual monsoon signal that dominates the North Indian Ocean.
+
+normalization:
+  method: zscore
+  fit_on: train_only
+  # Targets are standardized per depth so the masked loss weights each depth
+  # by its own natural variability rather than by raw degC variance, which
+  # would otherwise let the high-variance thermocline dominate.
+  standardize_targets_per_depth: true
+
+model:
+  name: pointwise_mlp
+  hidden: [256, 256, 128]
+  activation: relu
+  output: 15
+  spatially_blind: true
+  temporally_blind: true
+
+training:
+  seed: 20260905
+  optimizer: adam
+  learning_rate: 0.001
+  batch_size: 8192
+  max_epochs: 40
+  early_stopping_patience: 5
+  lr_scheduler: reduce_on_plateau
+  lr_factor: 0.5
+  lr_patience: 2
+  gradient_updates_on: train_only
+  model_selection_on: validation_only
+
+evaluation:
+  depth_groups:
+    surface_mixed_layer: [0, 5, 10]
+    upper_thermocline:   [20, 30, 50]
+    thermocline:         [75, 100, 125]
+    intermediate:        [150, 200, 300]
+    deep:                [500, 700, 1000]
+  basins:
+    arabian_sea:   {lat: [8, 25],  lon: [50, 77]}
+    bay_of_bengal: {lat: [5, 22],  lon: [80, 100]}
+  metrics: [rmse, mae, bias, correlation, nrmse]
+
+paths:
+  models: outputs/models
+  baselines: outputs/baselines
+  tables: outputs/tables
+  figures: outputs/figures

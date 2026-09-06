@@ -1,0 +1,8 @@
+variable,source_product,native_resolution_deg,target_resolution_deg,method,lat_flipped,lon_0_360_converted,nan_handling,pct_missing_native,pct_missing_regridded
+sst,OSTIA L4 REP (METOFFICE-GLO-SST-L4-REP-OBS-SST),0.05,0.25,xarray.interp linear (scipy),False,False,propagate; no land fill; no extrapolation,51.67,50.86
+sss,SMAP JPL L3 CAP v5.0 8-day running mean,0.25,0.25,xarray.interp linear (scipy),True,False,propagate; no land fill; no extrapolation,54.92,55.92
+sla,DUACS L4 C3S two-sat 0.25deg daily,0.25,0.25,xarray.interp linear (scipy),False,False,propagate; no land fill; no extrapolation,50.02,50.53
+current_u,"OSCAR L4_OC_FINAL v2.0 (total currents u,v)",0.25,0.25,xarray.interp linear (scipy),False,True,propagate; no land fill; no extrapolation,53.81,54.11
+current_v,"OSCAR L4_OC_FINAL v2.0 (total currents u,v)",0.25,0.25,xarray.interp linear (scipy),False,True,propagate; no land fill; no extrapolation,53.81,54.11
+wind_u,CCMP v3.1 6-hourly L4 (daily vector mean),0.25,0.25,xarray.interp linear (scipy),False,True,propagate; no land fill; no extrapolation,0.0,0.0
+wind_v,CCMP v3.1 6-hourly L4 (daily vector mean),0.25,0.25,xarray.interp linear (scipy),False,True,propagate; no land fill; no extrapolation,0.0,0.0

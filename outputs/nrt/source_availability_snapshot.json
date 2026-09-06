@@ -1,0 +1,56 @@
+{
+  "snapshot_time": "2026-09-05 11:57:29.799809",
+  "poll_cycles_recorded": 4,
+  "sources": {
+    "sst_nrt": {
+      "dataset_id": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
+      "newest_valid_time": "2026-09-04 00:00:00",
+      "snapshot_latency_days": 1.4746718285185185
+    },
+    "sss_nrt_smos": {
+      "dataset_id": "cmems_obs-mob_glo_phy-sss_mynrt_smos-asc_P1D",
+      "newest_valid_time": "2026-09-03 00:00:00",
+      "snapshot_latency_days": 2.474713967986111
+    },
+    "sss_nrt_smap": {
+      "dataset_id": "SMAP_RSS_L2_SSS_NRT_V6",
+      "newest_valid_time": "2026-09-05 03:08:14",
+      "snapshot_latency_days": 0.344027233125
+    },
+    "sla_nrt": {
+      "dataset_id": "cmems_obs-sl_glo_phy-ssh_nrt_allsat-l4-duacs-0.125deg_P1D",
+      "newest_valid_time": "2026-09-05 00:00:00",
+      "snapshot_latency_days": 0.4747691512037037
+    },
+    "currents_nrt": {
+      "dataset_id": "OSCAR_L4_OC_NRT_V2.0",
+      "newest_valid_time": "2026-09-03 00:00:00",
+      "snapshot_latency_days": 2.4748000351041664
+    },
+    "wind_nrt": {
+      "dataset_id": "cmems_obs-wind_glo_phy_nrt_l4_0.125deg_PT1H",
+      "newest_valid_time": "2026-09-04 23:00:00",
+      "snapshot_latency_days": 0.516481879525463
+    },
+    "sst_reference": {
+      "dataset_id": "METOFFICE-GLO-SST-L4-REP-OBS-SST",
+      "newest_valid_time": "2026-03-31 00:00:00",
+      "snapshot_latency_days": 158.4748466839236
+    },
+    "sla_reference": {
+      "dataset_id": "c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D",
+      "newest_valid_time": "2026-01-16 00:00:00",
+      "snapshot_latency_days": 232.47487740791667
+    },
+    "currents_reference": {
+      "dataset_id": "OSCAR_L4_OC_FINAL_V2.0",
+      "newest_valid_time": "2025-04-22 00:00:00",
+      "snapshot_latency_days": 501.47536421114586
+    },
+    "wind_reference": {
+      "dataset_id": "CCMP_WINDS_10M6HR_L4_V3.1",
+      "newest_valid_time": "2025-04-22 00:00:00",
+      "snapshot_latency_days": 501.4753838878125
+    }
+  }
+}

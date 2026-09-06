@@ -1,0 +1,117 @@
+# OceanEmbed — central configuration (SIH26066 / INCOIS)
+# Single source of truth. Do NOT scatter these constants through the codebase.
+pipeline_version: "6A.1"
+
+# ---------------------------------------------------------------- domain
+domain:
+  south: 5.0
+  north: 30.0
+  west: 45.0
+  east: 105.0
+
+grid:
+  resolution: 0.25          # degrees, both axes
+  lat_order: ascending      # canonical: south -> north
+  lon_convention: "-180_180"  # canonical: [-180, 180)
+
+# ---------------------------------------------------------------- period
+# Phase 6A smoke test. The originally requested 2019-04-25..2019-05-10
+# (Cyclone Fani) window is NOT present in the supplied archives; the supplied
+# data is January 2020. See outputs/data_inventory.md conflict C1.
+test_period:
+  start: "2020-01-01"
+  end:   "2020-01-02"
+
+# Retained for provenance; not used in Phase 6A.
+originally_requested_period:
+  start: "2019-04-25"
+  end:   "2019-05-10"
+  note: "Cyclone Fani window. Not available in supplied archives."
+
+# ---------------------------------------------------------------- depths
+debug_target_depths_m: [0, 50, 100, 500, 1000]
+final_target_depths_m: [0, 5, 10, 20, 30, 50, 75, 100, 125, 150, 200, 300, 500, 700, 1000]
+
+# ---------------------------------------------------------------- channels
+surface_channels: [sst, sss, sla, current_u, current_v, wind_u, wind_v]
+
+# ---------------------------------------------------------------- products
+# Verified against the live Copernicus Marine catalogue on 2026-09-04.
+products:
+  sst:
+    name: OSTIA L4 REP
+    dataset_id: METOFFICE-GLO-SST-L4-REP-OBS-SST
+    doi: 10.48670/moi-00168
+    provider: copernicusmarine
+    variables: [analysed_sst]
+    native_resolution_deg: 0.05
+    native_units: kelvin
+    target_units: degC
+  sla:
+    name: DUACS L4 (C3S two-sat, 0.25deg daily)
+    dataset_id: c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D
+    doi: 10.48670/moi-00145
+    provider: copernicusmarine
+    variables: [sla]
+    native_resolution_deg: 0.25
+    native_units: m
+    target_units: m
+  glorys:
+    name: GLORYS12V1 daily reanalysis
+    dataset_id: cmems_mod_glo_phy_my_0.083deg_P1D-m
+    doi: 10.48670/moi-00021
+    provider: copernicusmarine
+    variables: [thetao]
+    native_resolution_deg: 0.0833333
+    native_units: degC
+    target_units: degC
+  sss:
+    name: SMAP JPL L3 CAP v5.0 (8-day running mean)
+    doi: 10.5067/SMP50-3TPCS
+    provider: supplied_archive
+    source_glob: "data/raw/_extracted/Ocean_embed_datas/sss/SMAP_L3_SSS_*_8DAYS_V5.0.nc"
+    variables: [smap_sss]
+    native_resolution_deg: 0.25
+    native_units: "1e-3 (PSU)"
+    target_units: PSU
+    caveat: "8-day trailing running mean stamped daily, not a true daily field."
+  currents:
+    name: OSCAR L4_OC_FINAL v2.0
+    doi: 10.5067/OSCAR-25F20
+    provider: supplied_archive
+    source_glob: "data/raw/_extracted/Ocean_embed_datas/OSCAR/oscar_currents_final_*.nc"
+    variables: [u, v]
+    native_resolution_deg: 0.25
+    native_units: "m s-1"
+    target_units: "m s-1"
+    caveat: "Diagnostic product derived from SSH + winds + SST; top ~30 m average."
+  winds:
+    name: CCMP v3.1 6-hourly L4
+    doi: 10.5067/CCMP-6HW10M-L4V31
+    provider: supplied_archive
+    source_glob: "data/raw/_extracted/Ocean_embed_datas/ccmp/CCMP_Wind_Analysis_*_V03.1_L4.nc"
+    variables: [uwnd, vwnd]
+    native_resolution_deg: 0.25
+    native_units: "m s-1"
+    target_units: "m s-1"
+    temporal_aggregation: "daily mean of U and V independently (4 x 6-hourly)"
+
+# ---------------------------------------------------------------- paths
+paths:
+  raw: data/raw
+  extracted: data/raw/_extracted
+  interim: data/interim
+  processed: data/processed
+  outputs: outputs
+  figures: outputs/figures
+  tables: outputs/tables
+  logs: outputs/logs
+
+# ---------------------------------------------------------------- methods
+regridding:
+  horizontal_method: linear      # xarray/scipy linear interpolation, first pass
+  fill_land: false               # never extrapolate across land
+  nan_policy: preserve           # do not auto-fill NaN
+vertical:
+  method: linear                 # interpolate between bracketing GLORYS levels
+  nearest_snap: false            # never silently snap

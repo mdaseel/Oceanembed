@@ -1,0 +1,7 @@
+{
+  "split": "validation",
+  "n_samples": 4064640,
+  "start": "2021-01-01",
+  "end": "2021-12-31",
+  "checkpoint_epoch": 7
+}

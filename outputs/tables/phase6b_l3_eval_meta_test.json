@@ -1,0 +1,10 @@
+{
+  "split": "test",
+  "n_samples": 11960064,
+  "selected_tag": "selected",
+  "selected_window": 3,
+  "control_tag": "w1_s20260905",
+  "common_start": "2022-01-07",
+  "common_end": "2024-12-15",
+  "n_targets": 1074
+}

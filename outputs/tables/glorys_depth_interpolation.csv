@@ -1,0 +1,6 @@
+requested_depth_m,native_below_m,native_above_m,clamped,method
+0.0,0.49402499198913574,0.49402499198913574,True,nearest-level clamp (target outside native range)
+50.0,47.37369155883789,55.76428985595703,False,linear between bracketing levels
+100.0,92.3260726928711,109.72930145263672,False,linear between bracketing levels
+500.0,453.9377136230469,541.0889282226562,False,linear between bracketing levels
+1000.0,902.3392944335938,1062.43994140625,False,linear between bracketing levels

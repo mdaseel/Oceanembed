@@ -1,0 +1,15 @@
+frozen L2 encoder: patch=33 latent=32 sha256=30cfd2db9e8b6b96  trainable_encoder_params=0
+[test] 1080 days x 11136 cells
+    cached 200/1080 days
+    cached 400/1080 days
+    cached 600/1080 days
+    cached 800/1080 days
+    cached 1000/1080 days
+    wrote C:\sih2\outputs\embeddings\test\z.npy shape=(1080,11136,32)
+[test] done in 272s
+[test] building targets for 1080 days x 11136 cells
+    targets 300/1080
+    targets 600/1080
+    targets 900/1080
+    wrote C:\sih2\outputs\targets_cache\test\y.npy shape=(1080,11136,15)
+[test] done in 171s

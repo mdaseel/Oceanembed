@@ -1,0 +1,53 @@
+{
+  "use_dates": [
+    "2020-01-01",
+    "2020-01-02"
+  ],
+  "depth_provenance": {
+    "0.0": {
+      "native_below_m": 0.49402499198913574,
+      "native_above_m": 0.49402499198913574,
+      "clamped": true,
+      "method": "nearest-level clamp (target outside native range)"
+    },
+    "50.0": {
+      "native_below_m": 47.37369155883789,
+      "native_above_m": 55.76428985595703,
+      "clamped": false,
+      "method": "linear between bracketing levels"
+    },
+    "100.0": {
+      "native_below_m": 92.3260726928711,
+      "native_above_m": 109.72930145263672,
+      "clamped": false,
+      "method": "linear between bracketing levels"
+    },
+    "500.0": {
+      "native_below_m": 453.9377136230469,
+      "native_above_m": 541.0889282226562,
+      "clamped": false,
+      "method": "linear between bracketing levels"
+    },
+    "1000.0": {
+      "native_below_m": 902.3392944335938,
+      "native_above_m": 1062.43994140625,
+      "clamped": false,
+      "method": "linear between bracketing levels"
+    }
+  },
+  "native_flags": {
+    "sst": [
+      "RANGE: sst has 338 finite values outside the plausible open-ocean envelope [15.0, 33.0] (min=0.060, max=30.310)"
+    ],
+    "sss": [
+      "RANGE: sss has 2605 finite values outside the plausible open-ocean envelope [30.0, 41.0] (min=10.005, max=44.431)"
+    ],
+    "sla": [],
+    "currents": [],
+    "winds": [],
+    "glorys": []
+  },
+  "merged_flags": [
+    "RANGE: sss has 478 finite values outside the plausible open-ocean envelope [30.0, 41.0] (min=14.637, max=41.600)"
+  ]
+}

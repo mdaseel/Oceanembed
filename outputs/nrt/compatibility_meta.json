@@ -1,0 +1,48 @@
+{
+  "preregistered_bands": {
+    "source": "outputs/nrt/PREREGISTRATION_6CD.md section 4",
+    "frozen_before_results": true,
+    "compatibility": {
+      "INTERCHANGEABLE": {
+        "r_lt": 0.1,
+        "b_lt": 0.05,
+        "rho_ge": 0.98,
+        "q_in": [
+          0.95,
+          1.05
+        ]
+      },
+      "USABLE_WITH_CAVEAT": {
+        "r_lt": 0.25,
+        "b_lt": 0.15,
+        "rho_ge": 0.9,
+        "q_in": [
+          0.85,
+          1.15
+        ]
+      },
+      "MARGINAL": {
+        "r_lt": 0.5,
+        "rho_ge": 0.75
+      }
+    },
+    "sensitivity": {
+      "NEGLIGIBLE": 0.1,
+      "MINOR": 0.25,
+      "MATERIAL": 0.5
+    }
+  },
+  "calibration_applied": "NONE - raw products as delivered",
+  "reference_variables_opened": [
+    "current_u",
+    "current_v",
+    "ocean_mask",
+    "sla",
+    "sss",
+    "sst",
+    "surface_input_valid",
+    "wind_u",
+    "wind_v"
+  ],
+  "targets_opened": []
+}

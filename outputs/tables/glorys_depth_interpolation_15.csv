@@ -1,0 +1,16 @@
+requested_depth_m,native_below_m,native_above_m,clamped,method
+0.0,0.49402499198913574,0.49402499198913574,True,nearest-level clamp (target outside native range)
+5.0,3.8194949626922607,5.078224182128906,False,linear between bracketing levels
+10.0,9.572997093200684,11.404999732971191,False,linear between bracketing levels
+20.0,18.495559692382812,21.598819732666016,False,linear between bracketing levels
+30.0,29.444730758666992,34.43415069580078,False,linear between bracketing levels
+50.0,47.37369155883789,55.76428985595703,False,linear between bracketing levels
+75.0,65.80726623535156,77.85385131835938,False,linear between bracketing levels
+100.0,92.3260726928711,109.72930145263672,False,linear between bracketing levels
+125.0,109.72930145263672,130.66600036621094,False,linear between bracketing levels
+150.0,130.66600036621094,155.85069274902344,False,linear between bracketing levels
+200.0,186.12559509277344,222.47520446777344,False,linear between bracketing levels
+300.0,266.0403137207031,318.1274108886719,False,linear between bracketing levels
+500.0,453.9377136230469,541.0889282226562,False,linear between bracketing levels
+700.0,643.5667724609375,763.3331298828125,False,linear between bracketing levels
+1000.0,902.3392944335938,1062.43994140625,False,linear between bracketing levels
