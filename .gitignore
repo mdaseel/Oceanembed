@@ -33,3 +33,7 @@ venv/
 # --- outputs that are large / regenerable ---
 outputs/figures/*.png
 outputs/logs/*.log
+
+*.npy
+outputs/embeddings/
+outputs/targets_cache/
