@@ -1,0 +1,146 @@
+{
+  "generated": "2026-09-07 16:43:43.182723",
+  "phase": "7A",
+  "final_core_decision": {
+    "model_name": "L2 Spatial Satellite Embedding Engine",
+    "decision": "FINAL CORE \u2014 unchanged",
+    "source": "ARCHITECTURE_CLOSURE_REPORT.md",
+    "rejected_alternatives": {
+      "L3_temporal_GRU": "tested, rejected \u2014 validation gain did not generalise out of sample",
+      "L2_RESIDUAL_climatology_residual": "tested, rejected \u2014 worse at every depth 0-500 m; 3 of 4 pre-registered gate criteria failed",
+      "EOF_decoder": "diagnosed only; no decoder adopted",
+      "ViT_GNN_autoencoder": "not justified before SIH; see ARCHITECTURE_REVIEW.md"
+    }
+  },
+  "model": {
+    "model_class": "oceanembed.ml.l2_model.L2EmbeddingModel",
+    "checkpoint_path": "outputs/models/phase6b_l2_final.pt",
+    "checkpoint_file_sha256": "81979a6541927ff5c6b0a13c5ce7cdbcd486040d16a304dcdc10b2962a586e35",
+    "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "l2_encoder_sha256": "30cfd2db9e8b6b96473c1e205280c0099a422a1ec4a3cc6d0dd6dee554db4808",
+    "patch": 33,
+    "receptive_field": 33,
+    "latent_dim": 32,
+    "n_parameters": 136335,
+    "n_encoder_parameters": 113152,
+    "dilations": [
+      1,
+      2,
+      4,
+      8,
+      1
+    ]
+  },
+  "inputs": {
+    "seven_physical_inputs": [
+      "sst",
+      "sss",
+      "sla",
+      "current_u",
+      "current_v",
+      "wind_u",
+      "wind_v"
+    ],
+    "n_data_channels": 7,
+    "n_model_channels": 8,
+    "mask_semantics": {
+      "channels": "7 standardised data channels + 1 validity-mask channel",
+      "joint_mask": "isfinite(all seven surface channels).all(axis=0) \u2014 a SINGLE joint mask; it cannot express a per-channel outage",
+      "missing_is_not_zero": "missing cells are set to 0 AFTER standardisation (the training mean) and flagged by the mask channel",
+      "edges": "internal zero-pad by patch//2 with mask=0; no external halo, no reflection or replication"
+    },
+    "products": {
+      "sst": "OSTIA L4 REP (DOI 10.48670/moi-00168)",
+      "sss": "CMEMS MULTIOBS (DOI 10.48670/moi-00051)",
+      "sla": "DUACS L4 C3S two-satellite (DOI 10.48670/moi-00145)",
+      "current_u/current_v": "OSCAR L4 Final v2.0 (DOI 10.5067/OSCAR-25F20)",
+      "wind_u/wind_v": "CCMP v3.1 (DOI 10.5067/CCMP-6HW10M-L4V31)"
+    }
+  },
+  "targets": {
+    "depths_m": [
+      0,
+      5,
+      10,
+      20,
+      30,
+      50,
+      75,
+      100,
+      125,
+      150,
+      200,
+      300,
+      500,
+      700,
+      1000
+    ],
+    "n_targets": 15,
+    "training_target_product": "GLORYS12V1 thetao (DOI 10.48670/moi-00021)",
+    "nominal_zero_m_note": "Nominal 0 m is the shallowest GLORYS target level (approximately 0.494 m), not the OSTIA sea-surface-temperature input. The two are physically related but are not the same quantity and are not fully independent.",
+    "deep_skill_note": "Deep-ocean daily anomaly skill is weaker and more climatology-dominant at 500-1000 m. Interpret L2 departures from climatology cautiously at those depths."
+  },
+  "frozen_artifacts": {
+    "feature_scaler": {
+      "path": "outputs/baselines/phase6b_feature_scaler.json",
+      "sha256": "49671ce760b0dca5c1c82cb184dae91908cc064abfdea8cc7eb2f5bc3c320467",
+      "fitted_on": "train"
+    },
+    "target_scaler": {
+      "path": "outputs/baselines/phase6b_target_scaler.json",
+      "sha256": "5b6f359db0d228dd7d3acf775ab8a6eea76dd521e7b4568ff1873c832e89e93b",
+      "fitted_on": "train"
+    },
+    "l0_climatology": {
+      "path": "outputs/baselines/phase6b_climatology.nc",
+      "sha256": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5",
+      "fitted_on": "train",
+      "method": "harmonic_regression",
+      "n_harmonics": 3,
+      "fit_start": "2015-01-01",
+      "fit_end": "2020-12-31"
+    }
+  },
+  "grid": {
+    "domain": {
+      "south": 5.0,
+      "north": 30.0,
+      "west": 45.0,
+      "east": 105.0
+    },
+    "resolution_deg": 0.25,
+    "shape": [
+      101,
+      241
+    ],
+    "lat_first_last": [
+      5.0,
+      30.0
+    ],
+    "lon_first_last": [
+      45.0,
+      105.0
+    ],
+    "grid_version": "5.0-30.0N_45.0-105.0E_0.25deg"
+  },
+  "replay": {
+    "processing_version": "6B.1",
+    "field_primitive": "oceanembed.replay.replay_field(date)",
+    "point_primitive": "oceanembed.replay.replay_point(date, lat, lon)",
+    "point_derives_from_field": true,
+    "cell_support_rule": "predictions are produced at the cells where THAT date's surface_input_valid is true, which is by construction identical to the joint validity mask day_field computes internally; off-support cells are NaN, never zero and never interpolated",
+    "anomaly_definition": "frozen_L2_prediction - frozen_L0_climatology",
+    "field_view_shape": "(nlat, nlon, n_depths) = (101, 241, 15)"
+  },
+  "documentation": {
+    "architecture_closure": "ARCHITECTURE_CLOSURE_REPORT.md",
+    "architecture_review": "ARCHITECTURE_REVIEW.md",
+    "l2_report": "PHASE6B_L2_REPORT.md",
+    "argo_validation": "PHASE6C_ARGO_VALIDATION_REPORT.md",
+    "nrt_compatibility": "PHASE6C_NRT_COMPATIBILITY_REPORT.md"
+  },
+  "holdout_status": {
+    "argo_2024": "PROTECTED",
+    "note": "never downloaded, opened, collocated or scored; replay reads no Argo data at all"
+  }
+}

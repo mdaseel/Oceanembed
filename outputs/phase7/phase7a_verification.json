@@ -1,0 +1,68 @@
+{
+  "generated": "2026-09-07 16:47:29.157962",
+  "uncached_replay_field_timing": {
+    "reps": 5,
+    "warmup_seconds": 0.6504273000009562,
+    "wall_seconds_median": 0.11622199999874283,
+    "wall_seconds_min": 0.10332709999966028,
+    "wall_seconds_max": 0.19852840000021388,
+    "compute_seconds_median": 0.09797460000118008,
+    "per_call": [
+      {
+        "date": "2021-06-15",
+        "wall_seconds": 0.10517840000102296,
+        "compute_seconds": 0.09797460000118008,
+        "n_supported_cells": 11136
+      },
+      {
+        "date": "2021-06-16",
+        "wall_seconds": 0.11622199999874283,
+        "compute_seconds": 0.10813550000057148,
+        "n_supported_cells": 11136
+      },
+      {
+        "date": "2021-06-17",
+        "wall_seconds": 0.10332709999966028,
+        "compute_seconds": 0.09781220000149915,
+        "n_supported_cells": 11136
+      },
+      {
+        "date": "2022-11-20",
+        "wall_seconds": 0.19852840000021388,
+        "compute_seconds": 0.15109189999930095,
+        "n_supported_cells": 11268
+      },
+      {
+        "date": "2023-05-14",
+        "wall_seconds": 0.12775679999867862,
+        "compute_seconds": 0.09707330000128422,
+        "n_supported_cells": 11268
+      }
+    ],
+    "note": "cache disabled; every call is a real frozen-L2 whole-field run"
+  },
+  "isolated_no_target_run": {
+    "result": "PASS",
+    "isolated_store_variables": [
+      "current_u",
+      "current_v",
+      "ocean_mask",
+      "sla",
+      "sss",
+      "sst",
+      "surface_input_valid",
+      "wind_u",
+      "wind_v"
+    ],
+    "target_variables_present": [],
+    "n_depths_returned": 15,
+    "n_finite_predictions": 15,
+    "field_shape": [
+      101,
+      241,
+      15
+    ],
+    "n_supported_cells": 11136,
+    "method": "temporary Zarr store built with targets dropped; no real project file was deleted, renamed, moved or overwritten"
+  }
+}

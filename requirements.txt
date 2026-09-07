@@ -17,3 +17,7 @@ copernicusmarine
 earthaccess
 requests
 certifi
+# --- Phase 7A: local replay API (transport only; no inference) ---
+fastapi
+uvicorn[standard]
+httpx2          # starlette TestClient dependency, used by the API tests

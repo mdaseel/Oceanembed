@@ -1,0 +1,33 @@
+{
+  "identity": {
+    "cache_format_version": 1,
+    "date": "2023-05-14",
+    "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "l2_encoder_sha256": "30cfd2db9e8b6b96473c1e205280c0099a422a1ec4a3cc6d0dd6dee554db4808",
+    "feature_scaler_sha256": "49671ce760b0dca5c1c82cb184dae91908cc064abfdea8cc7eb2f5bc3c320467",
+    "target_scaler_sha256": "5b6f359db0d228dd7d3acf775ab8a6eea76dd521e7b4568ff1873c832e89e93b",
+    "climatology_sha256": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5",
+    "processing_version": "6B.1",
+    "grid_version": "5.0-30.0N_45.0-105.0E_0.25deg",
+    "patch": 33,
+    "depths": [
+      0,
+      5,
+      10,
+      20,
+      30,
+      50,
+      75,
+      100,
+      125,
+      150,
+      200,
+      300,
+      500,
+      700,
+      1000
+    ]
+  },
+  "written_by": "oceanembed.replay.engine.replay_field",
+  "content": "authoritative frozen-L2 replay output only; never fabricated, hand-authored or placeholder values"
+}
