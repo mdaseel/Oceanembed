@@ -312,12 +312,14 @@ class ReplayEngine:
                         "n_supported_cells": int(siv.sum()),
                         "n_ocean_cells": int(ocean.sum()),
                         "climatology_defined_note":
-                            "isfinite(climatology) is a valid-water-depth mask "
-                            "(L0 was fitted only where a GLORYS target existed). "
-                            "The frozen L2 has no bathymetry awareness and still "
-                            "emits a value below the seafloor; that prediction is "
-                            "not suppressed, but anomaly is NaN there and "
-                            "consumers should render those cells distinctly."},
+                            "isfinite(climatology) records CLIMATOLOGY DEPTH-SUPPORT "
+                            "availability - where the frozen L0 has coefficients. It "
+                            "is NOT a bathymetry product and NOT an authoritative "
+                            "seafloor mask; it is one reanalysis's target "
+                            "availability on a single reference day. Anomaly is NaN "
+                            "where it is False because there is no baseline to "
+                            "subtract. The raw frozen-L2 temperature is preserved at "
+                            "all 15 mandated depths regardless."},
         ).validate()
         return view
 

@@ -112,15 +112,29 @@ class FieldView:
 
     @property
     def climatology_defined(self) -> np.ndarray:
-        """(nlat, nlon, n_depths) bool — where the frozen L0 exists at all.
+        """(nlat, nlon, n_depths) bool — CLIMATOLOGY DEPTH-SUPPORT availability.
 
-        L0 was fitted only where a GLORYS target existed, so its NaN pattern is
-        a valid-water-depth mask: it is False below the seafloor. The frozen L2
-        has no bathymetry awareness and will happily emit a 1000 m temperature
-        over a shelf cell with no 1000 m water. That prediction is NOT
-        suppressed here — suppressing or overwriting deep L2 output is forbidden
-        — but this mask lets a consumer render those cells honestly, and it is
-        derived from a frozen artifact already loaded, never from a target.
+        True where the frozen L0 harmonic climatology has coefficients at this
+        cell and depth. L0 was fitted only where a GLORYS target existed on the
+        training reference day, so this records **where a comparison baseline
+        exists**, and nothing more.
+
+        This is NOT a bathymetry product and NOT an authoritative seafloor mask.
+        It is one reanalysis's target availability at 1/12 deg regridded to
+        0.25 deg, sampled on a single day. It correlates with water depth, but
+        an absent value here can equally mean the target was missing for a
+        processing reason. Do not label it "seafloor", "water depth" or
+        "bathymetry" in the UI or in any report; if a real depth mask is ever
+        needed, bring in an actual static bathymetry source (e.g. GEBCO) and say
+        which one.
+
+        What it is for: ``anomaly`` is NaN wherever this is False, because there
+        is no climatology to subtract. A consumer needs to know the difference
+        between "no anomaly available" and "zero anomaly".
+
+        The raw frozen-L2 ``temperature`` is preserved at ALL 15 mandated depths
+        regardless of this mask. Suppressing or overwriting deep L2 output is
+        forbidden, and nothing here does it.
         """
         return np.isfinite(self.climatology)
 

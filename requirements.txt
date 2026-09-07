@@ -18,6 +18,15 @@ earthaccess
 requests
 certifi
 # --- Phase 7A: local replay API (transport only; no inference) ---
-fastapi
-uvicorn[standard]
-httpx2          # starlette TestClient dependency, used by the API tests
+fastapi                 # 0.141.1 verified
+uvicorn[standard]       # 0.52.4 verified
+
+# Test-only. NOT a runtime dependency and NOT a typo for `httpx`.
+# starlette 1.6.0 (the version FastAPI 0.141.1 pulls) imports the test client as
+#   `import httpx2 as httpx`
+# and falls back to plain `httpx` only with a DeprecationWarning. Provenance was
+# checked before installing: httpx2 2.12.0, github.com/pydantic/httpx2,
+# Tom Christie <tom@tomchristie.com>, BSD-3-Clause; its own deps httpcore2
+# (same project) and truststore (Seth Larson / David Glick, MIT) check out too.
+# Needed only by tests/test_phase7a_replay.py::TestClient.
+httpx2                  # 2.12.0 verified

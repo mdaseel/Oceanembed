@@ -1,7 +1,7 @@
 # Phase 7A — Historical Replay Backend
 
 **OceanEmbed (SIH26066)** · INCOIS / Ministry of Earth Sciences · Theme: Disaster Management
-Run 2026-09-06 · Full test suite **432 passed** (baseline before Phase 7: 384)
+Run 2026-09-06 · Full test suite **437 passed** (baseline before Phase 7: 384)
 Scope: backend only. **No UI, no NRT, no D26/TCHP, no event replay, no 2024 Argo.**
 
 ---
@@ -84,6 +84,18 @@ uses that date's own mask, which is the scientifically correct per-day support.
 The difference is small and affects only coastal cells, but it is a genuine
 difference and is stated rather than glossed.
 
+**This convention is now pinned by three tests**, so it cannot be silently
+"simplified" back to a static time=0 population:
+
+- `test_support_comes_from_the_requested_dates_own_mask` — for 2015, 2021 and
+  2023 dates, the returned support equals that date's own mask exactly.
+- `test_per_year_support_actually_differs` — asserts the three years genuinely
+  disagree (11,067 / 11,136 / 11,268), so the test above is not vacuous.
+- `test_engine_never_indexes_surface_input_valid_at_time_zero` — a structural
+  guard: it spies on `DataArray.isel` and asserts `surface_input_valid` is read
+  only at the requested time index, on a date deliberately chosen not to be
+  day 0 of its year.
+
 ## 4. Are all 15 depths returned?
 
 **Yes**, always, in the exact mandated order
@@ -104,20 +116,37 @@ climatology against `HarmonicClimatology.predict` at `atol=0` (exact, NaN-aware)
 
 ### One honest finding the UI will have to handle
 
-L0 was fitted only where a GLORYS target existed, so **its NaN pattern is a
-valid-water-depth mask**. At 100 m on 2023-05-14 the model predicts at 11,268
-cells but climatology is defined at only 9,764; at 1000 m, 8,974. The frozen L2
-has no bathymetry awareness and **will emit a 1000 m temperature over a shelf
-cell with no 1000 m water**.
+**The frozen L2 predicts at more cells than the climatology covers.** At 100 m on
+2023-05-14 the model predicts at 11,268 cells but L0 has coefficients at only
+9,764; at 1000 m, 8,974. Across the whole field there are **18,261 (cell, depth)
+pairs with a prediction but no baseline**.
 
-That prediction is **not suppressed** — §7B.3 forbids silently replacing deep L2
-output. Instead the field-view exposes `climatology_defined`, a derived
-valid-water-depth mask, so a consumer can render below-seafloor cells distinctly.
-It is derived from a frozen artifact already loaded, **never from a target**. A
-test asserts the mask is monotonically non-increasing with depth.
+The field-view exposes this as `climatology_defined`. Naming it precisely
+matters, so, stated plainly:
 
-Consequence: `anomaly` is NaN below the seafloor, because climatology is. That
-is correct, and it is why the point contract emits `null` rather than a number.
+> `climatology_defined` records **climatology depth-support availability** —
+> where the frozen L0 has coefficients. It is **not** a bathymetry product and
+> **not** an authoritative seafloor mask. It is one reanalysis's target
+> availability at 1/12° regridded to 0.25°, sampled on a single reference day.
+> It correlates with water depth, but an absent value can equally mean the
+> target was missing for a processing reason. If a real depth mask is ever
+> needed, bring in an actual static bathymetry source (e.g. GEBCO) and name it.
+
+An earlier draft of this report called it a "valid-water-depth mask" and said it
+was "False below the seafloor". That overstated what the artifact supports and
+has been corrected in the code docstring, the provenance note, the test names and
+here. A test now asserts the disclaimer text is present, so the wording cannot
+quietly drift back.
+
+**The raw frozen-L2 output is preserved at all 15 mandated depths regardless of
+this mask** — §7B.3 forbids silently replacing deep L2 output, and nothing here
+does. `test_raw_l2_is_preserved_at_all_depths_regardless_of_climatology_support`
+asserts that every one of those 18,261 predictions is finite.
+
+What the mask is *for*: `anomaly` is NaN wherever it is False, because there is
+no baseline to subtract. A consumer needs to distinguish "no anomaly available"
+from "zero anomaly" — which is why the point contract emits `null` rather than a
+number.
 
 ## 6. Is target leakage avoided? Were the tests non-destructive?
 
@@ -256,16 +285,28 @@ python scripts/replay/historical_replay.py --field --date 2023-05-14 --out field
 (full field or one depth slice; the payload Phase 7B's field-view adapter will
 consume). Tested to return the same numbers as the Python primitives.
 
-**Tests** — `tests/test_phase7a_replay.py`, **48 tests**, all passing. Full suite
-**432 passed** (384 → 432).
+**Tests** — `tests/test_phase7a_replay.py`, **53 tests**, all passing. Full suite
+**437 passed** (384 → 437).
 
 ## 13. Deviations and notes
 
 1. **FastAPI was built in 7A**, per §5.6.1 of the master prompt, which places the
    backend API in this phase. It is transport only and contains no inference, so
    it is not "UI" and not scaffolding for a later phase's science. New
-   dependencies recorded in `requirements.txt`: `fastapi`, `uvicorn[standard]`,
-   `httpx2` (the starlette test-client dependency).
+   dependencies recorded in `requirements.txt` with versions:
+   `fastapi 0.141.1`, `uvicorn[standard] 0.52.4`, and — **test-only** —
+   `httpx2 2.12.0`.
+
+   **On `httpx2`.** It is not a typo for `httpx` and not a typosquat, but I
+   installed it on the strength of an error message before verifying, which was
+   the wrong order. Verified afterwards, and recorded in `requirements.txt` so
+   nobody has to repeat the check: starlette 1.6.0 — the version FastAPI 0.141.1
+   pulls — imports its test client as `import httpx2 as httpx` and falls back to
+   plain `httpx` only with a `DeprecationWarning`. Provenance: `httpx2` 2.12.0,
+   `github.com/pydantic/httpx2`, Tom Christie <tom@tomchristie.com>, BSD-3-Clause;
+   its deps `httpcore2` (same project, same author) and `truststore` (Seth Larson
+   / David Glick, MIT) also check out. Plain `httpx` is not installed and is not
+   wanted here. It is used only by the API tests, never at runtime.
 2. **Two implementation bugs found and fixed during the phase**, both caught by
    running rather than by inspection: `cache_identity` read a provenance key that
    did not exist (`depths` vs `depths_m`); and `np.savez_compressed` appends
@@ -299,7 +340,7 @@ Point/field equivalence test: PASS
 Climatology + anomaly: WORKING
 0m convention documented: YES
 replay_field() uncached time: 0.116 seconds (median; min 0.103, max 0.199)
-Tests passing: 432 / 432
+Tests passing: 437 / 437
 ```
 
 Additional status:

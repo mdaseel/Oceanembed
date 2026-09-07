@@ -177,6 +177,67 @@ def test_field_uses_the_exact_frozen_l2_path(eng, view):
 
 
 @needs_data
+def test_support_comes_from_the_requested_dates_own_mask(eng):
+    """Per-date support, NOT the frozen benchmark's time=0 cell population.
+
+    ``surface_input_valid`` is constant within a year but differs between years
+    (2015 / 2021 / 2023 do not agree). The frozen evaluation scripts open a
+    multi-year split and take time=0, so on a 2023 date they would use the 2022
+    cell list. Replay must use the requested date's own mask. This test fails if
+    anyone "simplifies" the engine back to a static mask.
+    """
+    for date, year in (("2015-07-01", 2015), ("2021-06-15", 2021),
+                       ("2023-05-14", 2023)):
+        if not (DATA / f"oceanembed_{year}.zarr").exists():
+            continue
+        ds = eng._store(year)
+        t = eng._time_index(ds, pd.Timestamp(date))
+        own = np.asarray(ds["surface_input_valid"].isel(time=t).values, dtype=bool)
+        view = eng.replay_field(date)
+        assert np.array_equal(view.surface_input_valid, own), \
+            f"{date}: support does not match that date's own mask"
+        assert view.provenance["n_supported_cells"] == int(own.sum())
+
+
+@needs_data
+def test_per_year_support_actually_differs(eng):
+    """If the years agreed, the test above would be vacuous. They do not."""
+    counts = {}
+    for date, year in (("2015-07-01", 2015), ("2021-06-15", 2021),
+                       ("2023-05-14", 2023)):
+        if (DATA / f"oceanembed_{year}.zarr").exists():
+            counts[year] = eng.replay_field(date).provenance["n_supported_cells"]
+    if len(counts) < 2:
+        pytest.skip("need at least two years present")
+    assert len(set(counts.values())) > 1, \
+        f"expected per-year support to differ, got {counts}"
+
+
+@needs_data
+def test_engine_never_indexes_surface_input_valid_at_time_zero(eng, monkeypatch):
+    """A structural guard: the mask is read at the requested time index."""
+    when = pd.Timestamp("2023-05-14")
+    if not (DATA / "oceanembed_2023.zarr").exists():
+        pytest.skip("2023 store not present")
+    ds = eng._store(2023)
+    wanted = eng._time_index(ds, when)
+    assert wanted != 0, "pick a date that is not the first day of the year"
+    seen: list[int] = []
+    real_isel = xr.DataArray.isel
+
+    def spy(self, *a, **kw):
+        if getattr(self, "name", None) == "surface_input_valid" and "time" in kw:
+            seen.append(int(kw["time"]))
+        return real_isel(self, *a, **kw)
+
+    monkeypatch.setattr(xr.DataArray, "isel", spy)
+    eng.replay_field(str(when.date()), force_recompute=True)
+    assert seen, "surface_input_valid was never indexed by time"
+    assert set(seen) == {wanted}, \
+        f"surface_input_valid read at time {sorted(set(seen))}, expected {wanted}"
+
+
+@needs_data
 def test_day_field_joint_mask_equals_surface_input_valid(eng):
     """The decode cell set and the encoder's mask channel must agree."""
     when = pd.Timestamp(DATE)
@@ -205,13 +266,40 @@ def test_anomaly_is_prediction_minus_climatology(view):
 
 
 @needs_data
-def test_climatology_defined_mask_marks_below_seafloor(view):
-    """L0's NaN pattern is a valid-water-depth mask and must shrink with depth."""
+def test_climatology_depth_support_shrinks_with_depth(view):
+    """L0 coefficient availability, not bathymetry.
+
+    Deliberately worded as depth-support availability: this records where a
+    comparison baseline exists, not where the seafloor is.
+    """
     defined = view.climatology_defined
     counts = [int(defined[:, :, k].sum()) for k in range(len(DEPTHS))]
-    assert counts[0] > counts[-1], "deep water should be defined in fewer cells"
+    assert counts[0] > counts[-1], \
+        "climatology support should be available in fewer cells at depth"
     assert all(a >= b for a, b in zip(counts, counts[1:])), \
-        "valid water depth must be monotonically non-increasing with depth"
+        "climatology depth-support must be monotonically non-increasing"
+
+
+@needs_data
+def test_climatology_support_is_never_described_as_bathymetry(view):
+    """Guard the wording: this mask must not be sold as a seafloor product."""
+    note = view.provenance["climatology_defined_note"].lower()
+    assert "not a bathymetry" in note and "not an authoritative" in note
+    doc = FieldView.climatology_defined.__doc__.lower()
+    for claim in ("not a bathymetry product",
+                  "not an authoritative seafloor mask"):
+        assert claim in doc, f"docstring no longer disclaims: {claim}"
+
+
+@needs_data
+def test_raw_l2_is_preserved_at_all_depths_regardless_of_climatology_support(view):
+    """The mask must never be used to blank the model's own output."""
+    no_baseline = view.surface_input_valid[:, :, None] & ~view.climatology_defined
+    assert no_baseline.any(), "expected some cells with prediction but no baseline"
+    assert np.isfinite(view.temperature[no_baseline]).all(), \
+        "frozen-L2 temperature was suppressed where climatology is unavailable"
+    assert np.isnan(view.anomaly[no_baseline]).all(), \
+        "anomaly must be NaN where there is no baseline to subtract"
 
 
 @needs_data
