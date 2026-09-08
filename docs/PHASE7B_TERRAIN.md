@@ -1,5 +1,57 @@
 # Offline terrain context — Phase 7B
 
+## Current geometry and theme update
+
+Exploded ocean sheets now have actual shallow **display-only curvature**, not
+just optical shading. CPU mesh deformation changes only rendered Y positions:
+the surface amplitude is bounded by 0.36 scene units, deeper sheets by 0.22.
+Curvature tapers to zero beside land/missing-data cells, while open-ocean crop
+edges may curve. Side faces receive the identical offset, keeping thickness
+constant at 0.8 scene units. The existing horizontal footprint and six-unit
+layer spacing remain unchanged. Side opacity is 62% of face opacity.
+
+The same curved mesh is used for raycast picking, retaining two triangles per
+scientific cell. Curvature is disabled when layer separation is zero, restoring
+planar true-depth sheet positions. This styling is explicitly disclosed as
+illustrative, not measured waves or depth variation. Temperature, anomaly,
+scientific masks and exported numerical values are untouched.
+
+Land lighting now uses cool ambient `#c4dce5` at 0.75, key `#e4f2f5` at 2.35
+from (-30,34,18), and rim `#8ebcc9` at 0.65 from (30,16,-24). The real ETOPO
+terrain and charcoal material remain. The 2D map now shares the 3D thermal
+palette and uses a cool charcoal land fill (`#182a30`); both its legends and
+rendered PNG use that matching palette. Coordinate selection is unchanged.
+
+Screenshots: `outputs/phase7b/terrain/curved-water.png`,
+`curved-water-side.png`, and `matching-map.png`. Build and 53 frontend tests
+passed, including constant side thickness, coordinate preservation,
+true-depth restoration and curved-mesh raycast-to-cell identity.
+
+## Latest reference finish
+
+The current 3D view uses a richer red-ended thermal palette defined in
+`web/src/field/depthColors.ts`. The water faces, thin side faces and 3D legend
+share the same ramp and unchanged numerical range. The 2D palette, anomaly
+palette, viridis and cividis remain unchanged. Larger-scale hot/cold patterns
+are still determined by the real field, not copied from the reference image.
+
+Terrain stays charcoal with real ETOPO relief, now with two light adjacency
+smoothing passes and **60× default exaggeration**. Each pass retains 75% of
+the previous height and adds 25% of the local triangle-neighbor mean. All
+sea-level coastline vertices, horizontal positions and connectivity remain
+fixed; the source DEM is unchanged.
+
+The striped ocean shading has been replaced by irregular multiscale optical
+surface detail. It adds no geometric wave height. Supported-cell edge coverage
+is linearly filtered and feathered only inside existing ocean triangles; no
+new water or values are drawn across the scientific mask. Renderer pixel ratio
+is bounded to 1.5–2 for smoother edges. Ocean side thickness is 0.45 display
+units with 38% of face opacity, preserving a thin-layer appearance and the
+existing 6-unit separation. No rectangular cage is added.
+
+Final screenshot: `outputs/phase7b/terrain/reference-finish.png`. Earlier
+settings and measurements below are retained as implementation history.
+
 ## Current finish: charcoal terrain and optical ocean ripples
 
 The latest requested finish supersedes the earthy material described in the

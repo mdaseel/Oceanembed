@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { color, rangeFor, type ScaleMode } from "../field/colors";
+import { rangeFor, type ScaleMode } from "../field/colors";
+import { depthColor as color, depthGradient } from "../field/depthColors";
 import {
   type FieldView,
   type Layer,
@@ -50,7 +51,7 @@ export function drawMap(
       // input for this date stay near-black. Neither is ever coloured by
       // temperature, and neither carries any elevation.
       c.fillStyle = !f.ocean[i]
-        ? "#23272d"
+        ? "#182a30"
         : !f.inputValid[i] || !Number.isFinite(v)
           ? "#0d1119"
           : `rgb(${color(v, range, layer, palette).join(",")})`;
@@ -107,7 +108,7 @@ export function drawMap(
   c.fillText(
     `Equirectangular grid · neutral land / dark unavailable · no spatial interpolation · color scale: ${
       scaleMode === "field"
-        ? "whole reconstruction, all 15 depths (comparable across depths and dates)"
+        ? "whole reconstruction, all 15 depths (compare dates using their displayed ranges)"
         : "this depth only (NOT comparable across depths or dates)"
     }`,
     left,
@@ -186,6 +187,7 @@ export function MapView(props: MapProps) {
         )}
         layer={props.layer}
         palette={props.palette}
+        displayGradient={depthGradient(props.layer, props.palette)}
       />
     </>
   );

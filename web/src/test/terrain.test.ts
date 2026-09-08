@@ -50,7 +50,7 @@ describe("static DEM context", () => {
       const h = original[i * 3 + 2];
       if (h === 0) expect(heights[i]).toBe(0);
       if (h !== heights[i]) changed++;
-      expect(heights[i]).toBeGreaterThanOrEqual(h * 0.75 - 0.001);
+      expect(heights[i]).toBeGreaterThanOrEqual(h * 0.75 ** 2 - 0.001);
     }
     expect(changed).toBeGreaterThan(1000);
     expect(data.coordinates).toEqual(original);

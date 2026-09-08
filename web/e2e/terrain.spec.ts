@@ -15,12 +15,12 @@ test("real local DEM renders offline and terrain control leaves field requests a
   await page.goto("/#depth");
   await expect(page.getByTestId("terrain-context")).toContainText("NOAA ETOPO 2022");
   const slider = page.getByRole("slider", { name: "Terrain relief exaggeration", exact: true });
-  await expect(slider).toHaveValue("75");
+  await expect(slider).toHaveValue("60");
   const lat = await page.getByLabel("Latitude", { exact: true }).inputValue();
   const lon = await page.getByLabel("Longitude", { exact: true }).inputValue();
   await slider.fill("110");
   await expect(page.getByTestId("terrain-context")).toContainText("110×");
-  await slider.fill("75");
+  await slider.fill("60");
   await expect(page.getByLabel("Latitude", { exact: true })).toHaveValue(lat);
   await expect(page.getByLabel("Longitude", { exact: true })).toHaveValue(lon);
   const samples: number[] = [];

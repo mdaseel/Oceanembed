@@ -4,10 +4,12 @@ export function Colorbar({
   range,
   layer,
   palette,
+  displayGradient,
 }: {
   range: Range;
   layer: Layer;
   palette: Palette;
+  displayGradient?: string;
 }) {
   return (
     <div className="colorbar" aria-label="Color scale in degrees Celsius">
@@ -21,7 +23,7 @@ export function Colorbar({
         <>
           <div
             className="scale"
-            style={{ background: gradient(layer, palette) }}
+            style={{ background: displayGradient ?? gradient(layer, palette) }}
           />
           <div className="scale-labels">
             <span>{format(range.min, 2)} °C</span>

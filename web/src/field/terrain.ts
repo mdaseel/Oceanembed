@@ -51,7 +51,7 @@ export function loadTerrain(): Promise<TerrainData> {
 }
 
 const smoothed = new WeakMap<TerrainData, Float32Array>();
-/** One gentle adjacency pass on display heights. Keep the zero coastline fixed
+/** Two gentle adjacency passes on display heights. Keep the zero coastline fixed
  * and never connect across a water hole. Source DEM and horizontal positions
  * remain unchanged. This softens sampling spikes without inventing terrain.
  */
@@ -59,16 +59,19 @@ export function terrainDisplayHeights(data: TerrainData) {
   const cached = smoothed.get(data);
   if (cached) return cached;
   const heights = data.coordinates.filter((_, i) => i % 3 === 2);
-  const sums = new Float64Array(heights.length);
-  const counts = new Uint32Array(heights.length);
-  for (let t = 0; t < data.indices.length; t += 3) {
-    const a = data.indices[t], b = data.indices[t + 1], c = data.indices[t + 2];
-    sums[a] += heights[b] + heights[c]; counts[a] += 2;
-    sums[b] += heights[a] + heights[c]; counts[b] += 2;
-    sums[c] += heights[a] + heights[b]; counts[c] += 2;
+  let result = heights;
+  for (let pass = 0; pass < 2; pass++) {
+    const sums = new Float64Array(heights.length);
+    const counts = new Uint32Array(heights.length);
+    for (let t = 0; t < data.indices.length; t += 3) {
+      const a = data.indices[t], b = data.indices[t + 1], c = data.indices[t + 2];
+      sums[a] += result[b] + result[c]; counts[a] += 2;
+      sums[b] += result[a] + result[c]; counts[b] += 2;
+      sums[c] += result[a] + result[b]; counts[c] += 2;
+    }
+    result = result.map((h, i) => heights[i] === 0 || counts[i] === 0 ? h :
+      0.75 * h + 0.25 * sums[i] / counts[i]);
   }
-  const result = heights.map((h, i) => h === 0 || counts[i] === 0 ? h :
-    0.75 * h + 0.25 * sums[i] / counts[i]);
   smoothed.set(data, result);
   return result;
 }

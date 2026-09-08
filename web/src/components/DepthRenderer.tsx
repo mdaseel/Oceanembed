@@ -22,6 +22,8 @@ import { MapView } from "./MapView";
 import { Button } from "./ui/button";
 import { loadTerrain, terrainGeometry, type TerrainData } from "../field/terrain";
 import { landMaterial, oceanMaterial, smoothWaterColors } from "../field/surfaceMaterials";
+import { depthColor, depthGradient } from "../field/depthColors";
+import { waterShape } from "../field/waterShape";
 
 export interface DepthRendererProps {
   field: FieldView;
@@ -60,7 +62,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
   const [ready, setReady] = useState(false);
   const [terrain, setTerrain] = useState<TerrainData | null>(null);
   const [terrainError, setTerrainError] = useState(false);
-  const [terrainExaggeration, setTerrainExaggeration] = useState(75);
+  const [terrainExaggeration, setTerrainExaggeration] = useState(60);
   useEffect(() => {
     let active = true;
     loadTerrain().then(data => { if (active) setTerrain(data); })
@@ -80,7 +82,8 @@ export default function DepthRenderer(props: DepthRendererProps) {
       return;
     }
     const element = host.current;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    // Supersample edges even on a standard-DPI display, within a bounded budget.
+    renderer.setPixelRatio(Math.min(Math.max(window.devicePixelRatio, 1.5), 2));
     renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
     element.appendChild(renderer.domElement);
     renderer.domElement.setAttribute(
@@ -93,12 +96,12 @@ export default function DepthRenderer(props: DepthRendererProps) {
     // Soft key + fill so the land relief and slice stack read as solid surfaces
     // instead of flat colour. Lighting is presentation only: the ocean slices
     // stay MeshBasic so their colours remain the exact colormap values.
-    scene.add(new THREE.AmbientLight(0xffffff, 0.65));
-    const key = new THREE.DirectionalLight(0xffffff, 2.1);
-    key.position.set(-24, 40, 26);
+    scene.add(new THREE.AmbientLight(0xc4dce5, 0.75));
+    const key = new THREE.DirectionalLight(0xe4f2f5, 2.35);
+    key.position.set(-30, 34, 18);
     scene.add(key);
-    const rim = new THREE.DirectionalLight(0xd5dae0, 0.8);
-    rim.position.set(35, 8, 30);
+    const rim = new THREE.DirectionalLight(0x8ebcc9, 0.65);
+    rim.position.set(30, 16, -24);
     scene.add(rim);
     const camera = new THREE.PerspectiveCamera(
       CAMERA.fov,
@@ -228,7 +231,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
   // cell of every layer: they are drawing devices, and no cell is ever made
   // thicker, higher or lower by its value.
   const gap = LAYER_GAP;
-  const slab = 0.22;
+  const slab = 0.8;
   const ys = layerLayout(f.depths, levels, exaggeration, explode, gap);
   useEffect(() => {
     if (!sceneData.current) return;
@@ -253,8 +256,11 @@ export default function DepthRenderer(props: DepthRendererProps) {
         range,
         palette,
         y,
+        depthColor,
       );
       if (!data.positions.length) return;
+      const curve = waterShape(data.cells, f.lat.length, f.lon.length,
+        explode === 0 ? 0 : (i === 0 ? 0.36 : 0.22) * Math.min(explode, 1));
       // Deeper sheets fade, so the stack has aerial depth without hiding any
       // level. Opacity is presentation only and never alters a colormap value.
       const fade = i === 0 ? 1 : Math.max(0.68, 0.9 - i * 0.055);
@@ -268,10 +274,10 @@ export default function DepthRenderer(props: DepthRendererProps) {
           toneMapped: false,
         });
       const waterGeometry = geometry({
-        positions: data.positions,
+        positions: curve(data.positions),
         colors: smoothWaterColors(data, f.lat.length, f.lon.length),
       });
-      const mesh = new THREE.Mesh(waterGeometry, oceanMaterial(fade, i === 0));
+      const mesh = new THREE.Mesh(waterGeometry, oceanMaterial(fade, i === 0, data.cells, f.lat.length, f.lon.length));
       if (selected) {
         // Only the selected sheet is pickable, and its geometry stays exactly
         // two triangles per grid cell — the click maths depends on that, so the
@@ -292,11 +298,12 @@ export default function DepthRenderer(props: DepthRendererProps) {
         palette,
         slab,
         y,
+        depthColor,
       );
       if (body.positions.length) {
         const wallMaterial = material();
-        wallMaterial.opacity = fade * 0.25;
-        const wall = new THREE.Mesh(geometry(body), wallMaterial);
+        wallMaterial.opacity = fade * 0.62;
+        const wall = new THREE.Mesh(geometry({ positions: curve(body.positions), colors: body.colors }), wallMaterial);
         wall.name = selected ? "selected-depth-skirt" : "";
         wall.renderOrder = (levels.length - i) * 3;
         group.add(wall);
@@ -423,7 +430,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
           {fps === null ? "Measuring frame rate…" : `${fps.toFixed(1)} fps`}
         </span>
       </div>
-      <Colorbar range={range} layer={layer} palette={palette} />
+      <Colorbar range={range} layer={layer} palette={palette} displayGradient={depthGradient(layer, palette)} />
       {explode > 0 && (
         <p className="notice" role="status" data-testid="explode-notice">
           <strong>Exploded view — vertical spacing is not to scale.</strong> The
@@ -447,7 +454,9 @@ export default function DepthRenderer(props: DepthRendererProps) {
         export value is modified. Terrain is geographic context, not an
         OceanEmbed prediction. Terrain relief is gently smoothed for display,
         with its coastline fixed. Water uses display-only color smoothing
-        within supported regions and illustrative ripple shading, not measured waves;
+        within supported regions. Curved water surfaces and ripple shading are
+        illustrative, not measured waves or physical depth variations. Set
+        separation to zero for planar true-depth sheets;
         values are read from the scale and profile.
       </p>
     </>
