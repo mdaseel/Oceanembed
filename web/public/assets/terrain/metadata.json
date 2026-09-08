@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "contextOnly": true,
+  "dataset": "NOAA ETOPO 2022",
+  "version": "v1, ice surface, 60 arc-second product",
+  "attribution": "NOAA National Centers for Environmental Information (NCEI), ETOPO 2022, doi:10.25921/fd45-gt74",
+  "sourceUrl": "https://oceanwatch.pifsc.noaa.gov/erddap/griddap/ETOPO_2022_v1_60s.nc?z[(4.95):3:(30.05)][(44.95):3:(105.05)]",
+  "sourceSha256": "1c998d5c0c800580e10511fef42ed93bb79605d29c1319a9bfa63741da662dad",
+  "sourceNativeArcseconds": 60.0,
+  "inputSpacingDegrees": [
+    0.04999999999999716,
+    0.05000000000001137
+  ],
+  "displayStepDegrees": 0.05,
+  "bounds": [
+    45,
+    5,
+    105,
+    30
+  ],
+  "processing": "Bilinear display resampling; triangles clipped at positive-elevation zero contour; no bathymetry, backing or procedural relief",
+  "verticalDatum": "EGM2008",
+  "vertices": 317826,
+  "triangles": 620447,
+  "maxElevationMetres": 6987.07275390625,
+  "binaryLayout": "little-endian float32 lon,lat,elevation_m triples then uint32 triangle indices",
+  "license": "The data may be used and redistributed for free but is not intended\nfor legal use, since it may contain inaccuracies. Neither the data\nContributor, ERD, NOAA, nor the United States Government, nor any\nof their employees or contractors, makes any warranty, express or\nimplied, including warranties of merchantability and fitness for a\nparticular purpose, or assumes any legal liability for the accuracy,\ncompleteness, or usefulness, of this information.",
+  "meshSha256": "574e85bdf4879820cece3d8e46eec845c8ef92244541e57f3688159bfa096d19"
+}

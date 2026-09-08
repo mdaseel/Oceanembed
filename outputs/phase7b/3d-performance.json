@@ -1,0 +1,31 @@
+{
+  "browser": "Microsoft Edge headless",
+  "viewport": {
+    "width": 1440,
+    "height": 1050
+  },
+  "canvas": {
+    "width": 734,
+    "height": 560
+  },
+  "samples_fps": [
+    138,
+    143.3,
+    143.4,
+    143.3,
+    144
+  ],
+  "median_fps": 143.3,
+  "noDepthInference": true,
+  "interactions": [
+    "orbit",
+    "right-drag pan",
+    "wheel zoom",
+    "depth scrub",
+    "vertical exaggeration",
+    "range clipping",
+    "layer toggle",
+    "column selection",
+    "reset"
+  ]
+}

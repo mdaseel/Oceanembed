@@ -1,0 +1,16 @@
+{
+  "externalRequests": [],
+  "pageErrors": [],
+  "fieldRequests": [
+    "http://127.0.0.1:8000/api/replay/view?date=2021-06-15&force_recompute=true",
+    "http://127.0.0.1:8000/api/replay/view?date=2021-06-16&force_recompute=false",
+    "http://127.0.0.1:8000/api/replay/view?date=2021-06-16&force_recompute=true"
+  ],
+  "profileMatchesBackend": true,
+  "exports": [
+    "CSV",
+    "PNG",
+    "NetCDF"
+  ],
+  "method": "All non-loopback requests blocked from before initial page navigation"
+}

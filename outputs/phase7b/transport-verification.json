@@ -1,0 +1,92 @@
+{
+  "date": "2021-06-15",
+  "shape": [
+    101,
+    241,
+    15
+  ],
+  "source": "LIVE_MODEL_RUN",
+  "compute_seconds": 0.15053579999948852,
+  "requested_location": [
+    15.25,
+    87.75
+  ],
+  "profile_c": [
+    29.528697923293677,
+    29.534076323587595,
+    29.541122885038178,
+    29.532266785864685,
+    29.495698714208174,
+    28.394504794912535,
+    25.567584982644725,
+    22.339528670824087,
+    19.340223152317375,
+    17.062838141633307,
+    14.178619016339367,
+    11.74490901958063,
+    10.037997418132132,
+    8.63848957296764,
+    6.74717955165566
+  ],
+  "provenance": {
+    "model_name": "L2 Spatial Satellite Embedding Engine",
+    "model_class": "oceanembed.ml.l2_model.L2EmbeddingModel",
+    "checkpoint_path": "outputs\\models\\phase6b_l2_final.pt",
+    "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "l2_encoder_sha256": "30cfd2db9e8b6b96473c1e205280c0099a422a1ec4a3cc6d0dd6dee554db4808",
+    "feature_scaler_sha256": "49671ce760b0dca5c1c82cb184dae91908cc064abfdea8cc7eb2f5bc3c320467",
+    "target_scaler_sha256": "5b6f359db0d228dd7d3acf775ab8a6eea76dd521e7b4568ff1873c832e89e93b",
+    "climatology_sha256": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5",
+    "l2_checkpoint_file_sha256": "81979a6541927ff5c6b0a13c5ce7cdbcd486040d16a304dcdc10b2962a586e35",
+    "patch": 33,
+    "latent_dim": 32,
+    "receptive_field": 33,
+    "n_parameters": 136335,
+    "surface_inputs": [
+      "sst",
+      "sss",
+      "sla",
+      "current_u",
+      "current_v",
+      "wind_u",
+      "wind_v"
+    ],
+    "depths_m": [
+      0,
+      5,
+      10,
+      20,
+      30,
+      50,
+      75,
+      100,
+      125,
+      150,
+      200,
+      300,
+      500,
+      700,
+      1000
+    ],
+    "processing_version": "6B.1",
+    "grid_version": "5.0-30.0N_45.0-105.0E_0.25deg",
+    "nominal_zero_m_note": "Nominal 0 m is the shallowest GLORYS target level (approximately 0.494 m), not the OSTIA sea-surface-temperature input. The two are physically related but are not the same quantity and are not fully independent.",
+    "deep_skill_note": "Deep-ocean daily anomaly skill is weaker and more climatology-dominant at 500-1000 m. Interpret L2 departures from climatology cautiously at those depths.",
+    "target_used_for_inference": false,
+    "argo_used_for_inference": false,
+    "inference_source": "LIVE_MODEL_RUN",
+    "compute_seconds": 0.15053579999948852,
+    "operating_mode": "HISTORICAL_COMPLETE_INPUT",
+    "n_supported_cells": 11136,
+    "n_ocean_cells": 11855,
+    "climatology_defined_note": "isfinite(climatology) records CLIMATOLOGY DEPTH-SUPPORT availability - where the frozen L0 has coefficients. It is NOT a bathymetry product and NOT an authoritative seafloor mask; it is one reanalysis's target availability on a single reference day. Anomaly is NaN where it is False because there is no baseline to subtract. The raw frozen-L2 temperature is preserved at all 15 mandated depths regardless."
+  },
+  "frozen_hashes": {
+    "outputs/models/phase6b_l2_final.pt": "81979a6541927ff5c6b0a13c5ce7cdbcd486040d16a304dcdc10b2962a586e35",
+    "outputs/models/phase6b_l1_mlp.pt": "fefebd216536b9a1b8383ae41b5d35057b8b46ed1b4b77a9642a514bc9c92b5b",
+    "outputs/baselines/phase6b_feature_scaler.json": "49671ce760b0dca5c1c82cb184dae91908cc064abfdea8cc7eb2f5bc3c320467",
+    "outputs/baselines/phase6b_target_scaler.json": "5b6f359db0d228dd7d3acf775ab8a6eea76dd521e7b4568ff1873c832e89e93b",
+    "outputs/baselines/phase6b_climatology.nc": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5",
+    "outputs/baselines/phase6cb_surface_climatology.nc": "58f0c5812ebcb6d4394a4f18e5b133d0a69657960e0e4c98d74184e91f6e8932"
+  }
+}

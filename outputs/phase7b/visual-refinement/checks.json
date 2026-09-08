@@ -1,0 +1,10 @@
+{
+  "resetScreenshotIdentical": true,
+  "mobileCanvas": {
+    "x": 24,
+    "y": 453.6875,
+    "width": 342,
+    "height": 390
+  },
+  "mobileNoOverflow": true
+}

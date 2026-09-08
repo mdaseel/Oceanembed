@@ -37,3 +37,13 @@ outputs/logs/*.log
 *.npy
 outputs/embeddings/
 outputs/targets_cache/
+
+# Phase 7B local application
+web/node_modules/
+web/dist/
+web/test-results/
+web/playwright-report/
+web/*.tsbuildinfo
+outputs/phase7b/*.log
+outputs/phase7b/test-field.json
+outputs/phase7/replay_cache/
