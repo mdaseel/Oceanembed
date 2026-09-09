@@ -3,7 +3,8 @@
     "argv": [
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\sih2\\web\\node_modules\\@playwright\\test\\cli.js",
-      "test"
+      "test",
+      "e2e/probe.spec.ts"
     ],
     "configFile": "C:\\sih2\\web\\playwright.config.ts",
     "rootDir": "C:/sih2/web/e2e",
@@ -65,13 +66,13 @@
   },
   "suites": [
     {
-      "title": "historical.spec.ts",
-      "file": "historical.spec.ts",
+      "title": "probe.spec.ts",
+      "file": "probe.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "judge flow uses exact replay, remains offline, and depth/selection never fetch again",
+          "title": "probe follows shared selection, stays on top through depth changes, and hides invalid cells",
           "ok": true,
           "tags": [],
           "tests": [
@@ -86,12 +87,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8874,
+                  "duration": 4676,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-09T09:55:38.519Z",
+                  "startTime": "2026-09-09T10:17:49.615Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -99,263 +100,9 @@
               "status": "expected"
             }
           ],
-          "id": "b421e3efd7172a99c9f8-0729aeca4fe2f1c8aa18",
-          "file": "historical.spec.ts",
-          "line": 17,
-          "column": 1
-        },
-        {
-          "title": "3D orbit pan zoom clipping depth selection and frame rate",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 16959,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-09-09T09:55:47.675Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b421e3efd7172a99c9f8-6701d716f6c9eb2dfe8f",
-          "file": "historical.spec.ts",
-          "line": 141,
-          "column": 1
-        },
-        {
-          "title": "WebGL unavailable keeps map profile depth and disclosures usable",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3133,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-09-09T09:56:04.650Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b421e3efd7172a99c9f8-855fc4886592141e1e34",
-          "file": "historical.spec.ts",
-          "line": 337,
-          "column": 1
-        },
-        {
-          "title": "responsive mobile route navigation and science without horizontal overflow",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2691,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-09-09T09:56:07.794Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b421e3efd7172a99c9f8-67d03a7078212eeaa40b",
-          "file": "historical.spec.ts",
-          "line": 362,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "prism.spec.ts",
-      "file": "prism.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "prism renders in the ocean canvas through orbit and anomaly changes",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 5587,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-09-09T09:56:10.503Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "558683a335f4a656609f-dd589756300de99acd63",
-          "file": "prism.spec.ts",
+          "id": "9223f0ac28d4fb57516f-59a02c42e584d134465b",
+          "file": "probe.spec.ts",
           "line": 2,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "terrain.spec.ts",
-      "file": "terrain.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "2D map loads local ETOPO relief with the scientific map intact",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2713,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-09-09T09:56:16.127Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b1c58c11f97ca81ac327-3b2df423bee6e3116431",
-          "file": "terrain.spec.ts",
-          "line": 4,
-          "column": 1
-        },
-        {
-          "title": "real local DEM renders offline and terrain control leaves field requests and selection unchanged",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 13357,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-09-09T09:56:18.853Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b1c58c11f97ca81ac327-df1dffa43d061c3a19b8",
-          "file": "terrain.spec.ts",
-          "line": 12,
-          "column": 1
-        },
-        {
-          "title": "missing DEM leaves ocean usable and never substitutes flat or invented terrain",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3396,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-09-09T09:56:32.222Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b1c58c11f97ca81ac327-48a55d35b92ece314956",
-          "file": "terrain.spec.ts",
-          "line": 48,
           "column": 1
         }
       ]
@@ -363,9 +110,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-09T09:55:37.940Z",
-    "duration": 58209.83,
-    "expected": 8,
+    "startTime": "2026-09-09T10:17:49.112Z",
+    "duration": 5769.812,
+    "expected": 1,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

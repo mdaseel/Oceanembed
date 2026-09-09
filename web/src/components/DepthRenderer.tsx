@@ -25,6 +25,7 @@ import { landMaterial, oceanMaterial, smoothWaterColors } from "../field/surface
 import { depthColor, depthGradient } from "../field/depthColors";
 import { waterShape } from "../field/waterShape";
 import { createTemperaturePrism } from "./TemperaturePrism";
+import { createLocationProbe } from "./LocationProbe";
 
 export interface DepthRendererProps {
   field: FieldView;
@@ -50,6 +51,7 @@ export interface DepthRendererProps {
 export default function DepthRenderer(props: DepthRendererProps) {
   const host = useRef<HTMLDivElement>(null);
   const controlRef = useRef<OrbitControls | null>(null);
+  const probeRef = useRef<THREE.Group | null>(null);
   const sceneData = useRef<{
     group: THREE.Group;
     camera: THREE.PerspectiveCamera;
@@ -199,6 +201,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
       cancelAnimationFrame(frame);
       resize.disconnect();
       controls.dispose();
+      if (probeRef.current) { disposeGroup(probeRef.current); probeRef.current = null; }
       disposeGroup(group);
       renderer.dispose();
       renderer.domElement.removeEventListener("webglcontextlost", lost);
@@ -279,6 +282,8 @@ export default function DepthRenderer(props: DepthRendererProps) {
         colors: smoothWaterColors(data, f.lat.length, f.lon.length),
       });
       const mesh = new THREE.Mesh(waterGeometry, oceanMaterial(fade, i === 0, data.cells, f.lat.length, f.lon.length));
+      mesh.userData.cells = data.cells;
+      mesh.userData.topSurface = i === 0;
       if (selected) {
         // Only the selected sheet is pickable, and its geometry stays exactly
         // two triangles per grid cell — the click maths depends on that, so the
@@ -351,12 +356,6 @@ export default function DepthRenderer(props: DepthRendererProps) {
       label.position.set(x, ys[0], z + 1.2);
       group.add(label);
     }
-    // No plumb line through the stack. It was drawn with depthTest off, so it
-    // painted over every sheet and the land, and it cut across the very
-    // separation the exploded view exists to show. The selected column is still
-    // reported by the 2D map marker, the lat/lon fields and the vertical
-    // profile panel, none of which obstruct the stack.
-    //
     // range and levels derive wholly from these inputs.
   }, [
     f,
@@ -372,10 +371,21 @@ export default function DepthRenderer(props: DepthRendererProps) {
     ready,
     terrain,
     terrainExaggeration,
-    // `selection` is deliberately absent: nothing in the scene depends on it
-    // any more, and leaving it here rebuilt every sheet's geometry on each
-    // click. `props.selection` still reaches the 2D fallback below.
+    // Selection updates the separate lightweight probe below.
   ]);
+  useEffect(() => {
+    if (!sceneData.current) return;
+    const {scene,group}=sceneData.current;
+    if (probeRef.current) { scene.remove(probeRef.current); disposeGroup(probeRef.current); }
+    const surface=group.children.find(child=>child.userData.topSurface) as THREE.Mesh | undefined;
+    const probe=createLocationProbe(f,props.selection,surface,ys[ys.length-1]);
+    probeRef.current=probe; scene.add(probe);
+    if(host.current) {
+      host.current.dataset.probeCell=probe.userData.cell?.toString() ?? "";
+      host.current.dataset.probePosition=probe.children.length ? probe.position.toArray().join(",") : "";
+    }
+  }, [f,props.selection.row,props.selection.col,props.selection.status,layer,depth,
+    exaggeration,clip[0],clip[1],palette,scaleMode,explode,layerCount,ready,terrain,terrainExaggeration]);
   if (failed)
     return (
       <div>

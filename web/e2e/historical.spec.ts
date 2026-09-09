@@ -232,6 +232,13 @@ test("3D orbit pan zoom clipping depth selection and frame rate", async ({
     )
   ).json();
   expect(clicked.location.status).toBe("OK");
+  const probeView=page.getByTestId("depth-renderer");
+  const probeCell=(selectedLat-5)/.25*241+(selectedLon-45)/.25;
+  await expect(probeView).toHaveAttribute("data-probe-cell",String(probeCell));
+  const probePosition=(await probeView.getAttribute("data-probe-position"))!.split(",").map(Number);
+  expect(probePosition[0]).toBeCloseTo(position(selectedLon,selectedLat,0,700)[0],10);
+  expect(probePosition[2]).toBeCloseTo(position(selectedLon,selectedLat,0,700)[2],10);
+  await probeView.screenshot({path:"../outputs/phase7b/selected-location-probe.png"});
   await page.getByText("Inspect all profile values", { exact: true }).click();
   for (const row of clicked.profile)
     await expect(
