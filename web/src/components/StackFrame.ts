@@ -24,6 +24,10 @@ export function createStackFrame(levels:number[], ys:number[], selected:number, 
         const edge=new THREE.Mesh(new THREE.CylinderGeometry(V.selectedOutlineRadius,V.selectedOutlineRadius,delta.length(),6),material);
         edge.position.copy(a).add(b).multiplyScalar(.5);
         edge.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.normalize()); frame.add(edge);
+        const halo=new THREE.Mesh(new THREE.CylinderGeometry(V.selectedOutlineRadius*2.5,V.selectedOutlineRadius*2.5,
+          a.distanceTo(b),8),new THREE.MeshBasicMaterial({color:V.selectedOutlineColor,transparent:true,
+          opacity:V.selectedFrameGlow,depthWrite:false,toneMapped:false}));
+        halo.position.copy(edge.position); halo.quaternion.copy(edge.quaternion); frame.add(halo);
       }
     }
     frame.renderOrder=90; frame.traverse(o=>o.renderOrder=90); group.add(frame);

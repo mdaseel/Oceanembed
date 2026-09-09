@@ -27,6 +27,8 @@ import { waterShape } from "../field/waterShape";
 import { createTemperaturePrism } from "./TemperaturePrism";
 import { createLocationProbe } from "./LocationProbe";
 import { createStackFrame } from "./StackFrame";
+import { OCEAN_VISUAL_CONFIG as V } from "../field/visualConfig";
+import { sceneBackdrop } from "../field/sceneBackdrop";
 import { useBathymetry, displayDepthValid } from "../field/bathymetry";
 
 
@@ -105,16 +107,16 @@ export default function DepthRenderer(props: DepthRendererProps) {
     const legendGroup = new THREE.Group();
     scene.add(legendGroup);
 
-    scene.background = new THREE.Color().setRGB(5 / 255, 7 / 255, 11 / 255);
-    renderer.setClearColor(scene.background);
+    const backdrop=sceneBackdrop();
+    scene.background = backdrop;
     // Soft key + fill so the land relief and slice stack read as solid surfaces
     // instead of flat colour. Lighting is presentation only: the ocean slices
     // stay MeshBasic so their colours remain the exact colormap values.
-    scene.add(new THREE.AmbientLight(0xc4dce5, 0.75));
-    const key = new THREE.DirectionalLight(0xe4f2f5, 2.35);
+    scene.add(new THREE.AmbientLight(0xc4dce5, V.terrainAmbientIntensity));
+    const key = new THREE.DirectionalLight(0xe4f2f5, V.terrainKeyIntensity);
     key.position.set(-30, 34, 18);
     scene.add(key);
-    const rim = new THREE.DirectionalLight(0x8ebcc9, 0.65);
+    const rim = new THREE.DirectionalLight(0x8ebcc9, V.terrainRimIntensity);
     rim.position.set(30, 16, -24);
     scene.add(rim);
     const camera = new THREE.PerspectiveCamera(
@@ -218,6 +220,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
       disposeGroup(group);
       disposeGroup(legendGroup);
       renderer.dispose();
+      backdrop.dispose();
       renderer.domElement.removeEventListener("webglcontextlost", lost);
       renderer.domElement.removeEventListener("pointerdown", down);
       renderer.domElement.removeEventListener("pointerup", up);
@@ -360,7 +363,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
     levels.forEach((k, i) => {
       const label = textSprite(`${k===depth ? "▶ " : ""}${f.depths[k]} m`);
       if(k===depth) (label.material as THREE.SpriteMaterial).color.set(0x16bbff);
-      label.position.set(-36, ys[i], 13);
+      label.position.set(position(44.875,5,0,1)[0]-V.labelOffsetDistance, ys[i], 13);
       group.add(label);
     });
     for (const [text, lon, lat] of [

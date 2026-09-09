@@ -40,12 +40,14 @@ export function oceanMaterial(opacity: number, surface: boolean, cells: number[]
   material.onBeforeCompile = shader => {
     shader.uniforms.waterSupport = { value: edgeMask };
     shader.uniforms.oceanEmission = { value: OCEAN_VISUAL_CONFIG.emissiveIntensity };
+    shader.uniforms.oceanGlow = { value: OCEAN_VISUAL_CONFIG.oceanGlowStrength };
     shader.vertexShader = "varying vec3 vSurfacePosition;\n" + shader.vertexShader;
     shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>",
       "#include <begin_vertex>\nvSurfacePosition = (modelMatrix * vec4(position, 1.0)).xyz;");
     shader.fragmentShader = `varying vec3 vSurfacePosition;
       uniform sampler2D waterSupport;
       uniform float oceanEmission;
+      uniform float oceanGlow;
       float waterHash(vec2 p) { return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
       float waterNoise(vec2 p) {
         vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
@@ -70,7 +72,7 @@ export function oceanMaterial(opacity: number, surface: boolean, cells: number[]
       float glint = pow(max(0.0, dot(reflect(-normalize(vec3(0.5, 1.0, 0.5)), opticalNormal), eye)), 18.0);
       float strength = ${surface ? "1.0" : "0.4"};
       diffuseColor.rgb *= 1.0 - strength * (0.09 - 0.12 * detail);
-      float sheen = min(0.13, grazing * 0.08 + glint * 0.12) * strength;
+      float sheen = min(0.13, grazing * 0.08 + glint * 0.12) * strength * oceanGlow;
       diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.85, 0.94, 1.0), sheen);
       diffuseColor.rgb *= 1.0 + oceanEmission;
       // Feather only within existing triangles; never draw into masked cells.

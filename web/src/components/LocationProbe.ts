@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { type FieldView, type Selection, isSupported } from "../field/contract";
 import { DOMAIN, horizontalCos, position } from "../field/geometry";
+import { OCEAN_VISUAL_CONFIG as V } from "../field/visualConfig";
 
 /** A visual probe for the existing canonical selection; never resolves a new cell. */
 export function createLocationProbe(f: FieldView, selection: Selection,
@@ -22,7 +23,7 @@ export function createLocationProbe(f: FieldView, selection: Selection,
   group.userData={cell,lat:f.lat[row],lon:f.lon[col]};
   const span=(DOMAIN.east-DOMAIN.west)*horizontalCos;
   const height=span*.038, bead=span*.0036, radius=span*.010;
-  const cyan=new THREE.Color().setRGB(.07,.85,1);
+  const cyan=new THREE.Color(V.probeColor);
   const material=new THREE.MeshBasicMaterial({color:cyan,toneMapped:false});
   const stem=new THREE.Mesh(new THREE.CylinderGeometry(span*.00065,span*.00065,height,12),material);
   stem.position.y=height/2; group.add(stem);
@@ -42,10 +43,13 @@ export function createLocationProbe(f: FieldView, selection: Selection,
   const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,transparent:true,depthWrite:false,toneMapped:false}));
   glow.scale.setScalar(bead*7); glow.position.y=height; group.add(glow);
   if(bottomY<y-.1) {
-    const guide=new THREE.Line(new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0,0,0),new THREE.Vector3(0,bottomY-y,0)]),
-      new THREE.LineBasicMaterial({color:cyan,transparent:true,opacity:.14,depthWrite:false,toneMapped:false}));
-    guide.renderOrder=100; group.add(guide);
+    const length=y-bottomY;
+    for(const [radius,opacity] of [[V.probeLineWidth/2,V.probeLineOpacity],[V.probeLineWidth*1.6,V.probeGlowIntensity]]) {
+      const guide=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,length,12),
+        new THREE.MeshBasicMaterial({color:cyan,transparent:true,opacity,depthWrite:false,toneMapped:false}));
+      guide.name="probe-column-guide";
+      guide.position.y=-length/2; group.add(guide);
+    }
   }
   group.traverse(object=>{object.renderOrder=100;});
   return group;
