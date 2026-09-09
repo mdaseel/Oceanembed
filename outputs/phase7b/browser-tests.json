@@ -4,7 +4,7 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\sih2\\web\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "e2e/volume.spec.ts"
+      "e2e/bathymetry.spec.ts"
     ],
     "configFile": "C:\\sih2\\web\\playwright.config.ts",
     "rootDir": "C:/sih2/web/e2e",
@@ -66,13 +66,13 @@
   },
   "suites": [
     {
-      "title": "volume.spec.ts",
-      "file": "volume.spec.ts",
+      "title": "bathymetry.spec.ts",
+      "file": "bathymetry.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "existing depth selection highlights the stack while foreground scale stays pixel-identical",
+          "title": "real bathymetry masks depth footprints and labels raw below-seafloor profile",
           "ok": true,
           "tags": [],
           "tests": [
@@ -87,12 +87,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8687,
+                  "duration": 9627,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-09T11:58:07.238Z",
+                  "startTime": "2026-09-09T14:49:18.123Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -100,9 +100,43 @@
               "status": "expected"
             }
           ],
-          "id": "30685a6c0e3dbeec97fc-d2bab5b4cc9994f30880",
-          "file": "volume.spec.ts",
-          "line": 3,
+          "id": "aafa1bc97f9c728559d2-a2e3a613498517072150",
+          "file": "bathymetry.spec.ts",
+          "line": 2,
+          "column": 1
+        },
+        {
+          "title": "missing bathymetry never silently renders unsupported deep water",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3617,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-09T14:49:28.130Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "aafa1bc97f9c728559d2-79da19c17a86caf7ad5c",
+          "file": "bathymetry.spec.ts",
+          "line": 26,
           "column": 1
         }
       ]
@@ -110,9 +144,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-09T11:58:06.692Z",
-    "duration": 9845.470000000001,
-    "expected": 1,
+    "startTime": "2026-09-09T14:49:17.519Z",
+    "duration": 14733.879,
+    "expected": 2,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { useBathymetry, displayDepthValid } from "../field/bathymetry";
 import {
   profile,
   format,
@@ -16,6 +17,9 @@ export function Profile({
   depth: number;
 }) {
   const rows = profile(field, selection);
+  const {data:bathymetry,error:bathymetryError}=useBathymetry();
+  const depthValid=(d:number)=>displayDepthValid(field,bathymetry,selection.row,selection.col,d);
+  const localDepth=bathymetry?.depths[selection.row*field.lon.length+selection.col];
   return (
     <section className="panel profile-panel">
       <div className="panel-heading">
@@ -46,11 +50,17 @@ export function Profile({
             </p>
           )}
           <Suspense fallback={<p className="empty">Loading profile chart…</p>}>
+            <p className="muted small" data-testid="profile-bathymetry">
+              {localDepth!==undefined && Number.isFinite(localDepth)
+                ? `Local ETOPO water depth: ${localDepth.toFixed(1)} m. Below-seafloor points are hidden in the chart; the table retains raw model values.`
+                : bathymetryError ? "Bathymetry unavailable: physical depth validity unknown; chart points hidden. Raw values remain in the table."
+                : "Physical depth support is being verified; raw values remain in the table."}
+            </p>
             <Plot
               data={[
                 {
                   x: rows.map((r) =>
-                    Number.isFinite(r.temperature) ? r.temperature : null,
+                    depthValid(r.depth) && Number.isFinite(r.temperature) ? r.temperature : null,
                   ),
                   y: rows.map((r) => r.depth),
                   name: "OceanEmbed L2",
@@ -63,7 +73,7 @@ export function Profile({
                 },
                 {
                   x: rows.map((r) =>
-                    Number.isFinite(r.climatology) ? r.climatology : null,
+                    depthValid(r.depth) && Number.isFinite(r.climatology) ? r.climatology : null,
                   ),
                   y: rows.map((r) => r.depth),
                   name: "L0 climatology",
@@ -123,6 +133,7 @@ export function Profile({
                     <th>L2 °C</th>
                     <th>L0 °C</th>
                     <th>Δ °C</th>
+                    <th>Physical depth support</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -132,6 +143,9 @@ export function Profile({
                       <td>{format(r.temperature)}</td>
                       <td>{format(r.climatology)}</td>
                       <td>{format(r.anomaly)}</td>
+                      <td>{localDepth===undefined || !Number.isFinite(localDepth) ? "Unverified"
+                        : selection.status!=="OK" ? "Unsupported ocean cell"
+                        : r.depth>localDepth ? "Below seafloor — raw output only" : "Within local water depth"}</td>
                     </tr>
                   ))}
                 </tbody>

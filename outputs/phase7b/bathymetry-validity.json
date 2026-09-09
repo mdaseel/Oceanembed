@@ -1,0 +1,13 @@
+{
+  "date": "2021-06-15",
+  "display_cell_counts": {
+    "0": 11136,
+    "30": 10816,
+    "100": 9785,
+    "300": 9520,
+    "1000": 9111
+  },
+  "example_20N_70E_water_depth_m": 73.2326388888887,
+  "raw_arrays_changed": false,
+  "source": "ETOPO 2022 v1 60s stride3"
+}

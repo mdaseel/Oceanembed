@@ -27,6 +27,7 @@ import { waterShape } from "../field/waterShape";
 import { createTemperaturePrism } from "./TemperaturePrism";
 import { createLocationProbe } from "./LocationProbe";
 import { createStackFrame } from "./StackFrame";
+import { useBathymetry, displayDepthValid } from "../field/bathymetry";
 
 
 export interface DepthRendererProps {
@@ -51,6 +52,7 @@ export interface DepthRendererProps {
 }
 /** Canonical reusable renderer. No replay import, transport, filesystem or inference. */
 export default function DepthRenderer(props: DepthRendererProps) {
+  const {data:bathymetry,error:bathymetryError}=useBathymetry();
   const host = useRef<HTMLDivElement>(null);
   const controlRef = useRef<OrbitControls | null>(null);
   const probeRef = useRef<THREE.Group | null>(null);
@@ -273,6 +275,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
         palette,
         y,
         depthColor,
+        (r,c)=>displayDepthValid(f,bathymetry,r,c,f.depths[k]),
       );
       if (!data.positions.length) return;
       const curve = waterShape(data.cells, f.lat.length, f.lon.length,
@@ -296,6 +299,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
       const mesh = new THREE.Mesh(waterGeometry, oceanMaterial(fade, i === 0, data.cells, f.lat.length, f.lon.length));
       mesh.userData.cells = data.cells;
       mesh.userData.topSurface = i === 0;
+      mesh.userData.depthMetres = f.depths[k];
       if (selected) {
         // Only the selected sheet is pickable, and its geometry stays exactly
         // two triangles per grid cell — the click maths depends on that, so the
@@ -317,6 +321,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
         slab,
         y,
         depthColor,
+        (r,c)=>displayDepthValid(f,bathymetry,r,c,f.depths[k]),
       );
       if (body.positions.length) {
         const wallMaterial = material();
@@ -342,6 +347,8 @@ export default function DepthRenderer(props: DepthRendererProps) {
     }
 
     group.add(createStackFrame(levels,ys,depth,slab));
+    if(host.current) host.current.dataset.depthCellCounts=JSON.stringify(Object.fromEntries(levels.map(k=>[f.depths[k],
+      group.children.find(o=>o.userData.depthMetres===f.depths[k])?.userData.cells.length ?? 0])));
     if(host.current) host.current.dataset.highlightedDepth=String(f.depths[depth]);
 
     // Edge-only scientific frame; gaps remain empty and no panels are added.
@@ -382,6 +389,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
     ready,
     terrain,
     terrainExaggeration,
+    bathymetry,
     // Selection updates the separate lightweight probe below.
   ]);
   // World-space model beside the stack: only the active scale can rebuild or
@@ -406,7 +414,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
       host.current.dataset.probePosition=probe.children.length ? probe.position.toArray().join(",") : "";
     }
   }, [f,props.selection.row,props.selection.col,props.selection.status,layer,depth,
-    exaggeration,clip[0],clip[1],palette,scaleMode,explode,layerCount,ready,terrain,terrainExaggeration]);
+    exaggeration,clip[0],clip[1],palette,scaleMode,explode,layerCount,ready,terrain,terrainExaggeration,bathymetry]);
   if (failed)
     return (
       <div>
@@ -439,6 +447,11 @@ export default function DepthRenderer(props: DepthRendererProps) {
         </Button>
       </div>
       <div ref={host} className="depth-renderer" data-testid="depth-renderer" />
+      <p className="muted small" data-testid="bathymetry-context">
+        {bathymetry ? "Depth footprints constrained by local ETOPO 2022 bathymetry; raw model outputs are unchanged."
+          : bathymetryError ? "Bathymetry unavailable — ocean layers hidden because physical depth support cannot be verified."
+          : "Loading local bathymetry — depth layers hidden until verified…"}
+      </p>
       {terrain ? (
         <div className="three-toolbar" data-testid="terrain-context">
           <label className="small muted">

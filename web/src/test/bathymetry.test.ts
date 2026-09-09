@@ -1,0 +1,36 @@
+import { readFileSync } from "node:fs";
+import { it, expect } from "vitest";
+import { adaptReplay } from "../field/replayAdapter";
+import { displayDepthValid, type Bathymetry } from "../field/bathymetry";
+import { planeGeometry, skirtGeometry } from "../field/geometry";
+import { rangeFor } from "../field/colors";
+const f=adaptReplay(JSON.parse(readFileSync("../outputs/phase7b/test-field.json","utf8"))).field;
+const metadata=JSON.parse(readFileSync("public/assets/bathymetry/metadata.json","utf8"));
+const raw=readFileSync("public/assets/bathymetry/depth.bin");
+const depths=Float64Array.from({length:101*241},(_,i)=>raw.readDoubleLE(i*8));
+const bathy:Bathymetry={metadata,depths};
+it("uses physical depth independently of L0, exact boundary and missing support",()=>{
+  const cell=f.ocean.findIndex((v,i)=>!!v && !!f.inputValid[i]);
+  const r=Math.floor(cell/241),c=cell%241;
+  const b={...bathy,depths:depths.slice()}; b.depths[cell]=65;
+  for(const depth of f.depths) expect(displayDepthValid(f,b,r,c,depth)).toBe(depth<=65);
+  b.depths[cell]=820; expect(displayDepthValid(f,b,r,c,700)).toBe(true); expect(displayDepthValid(f,b,r,c,1000)).toBe(false);
+  b.depths[cell]=1000; expect(displayDepthValid(f,b,r,c,1000)).toBe(true);
+  const changed={...f,climatology:f.climatology.map(()=>NaN),climatologyDefined:f.climatologyDefined.map(()=>0)};
+  expect(displayDepthValid(changed,b,r,c,1000)).toBe(true);
+  b.depths[cell]=NaN; expect(displayDepthValid(f,b,r,c,0)).toBe(false);
+  expect(displayDepthValid(f,null,r,c,0)).toBe(false);
+});
+it("real ETOPO changes deep footprints, leaves raw arrays intact and ignores exaggeration",()=>{
+  const before=f.temperature.slice(),range=rangeFor(f,"temperature",[0,14],"field");
+  const make=(k:number,exag:number)=>planeGeometry(f,"temperature",k,exag,range,"thermal",undefined,undefined,(r,c)=>displayDepthValid(f,bathy,r,c,f.depths[k]));
+  const surface=make(0,1),deep=make(14,1);
+  expect(deep.cells.length).toBeLessThan(surface.cells.length);
+  expect(deep.cells.length).toBeGreaterThan(0);
+  expect(deep.cells.every(cell=>depths[cell]>=1000)).toBe(true);
+  expect(make(14,100000).cells).toEqual(deep.cells);
+  const wall=skirtGeometry(f,"temperature",14,700,range,"thermal",.8,0,undefined,()=>false);
+  expect(wall.positions).toHaveLength(0);
+  expect(f.temperature).toEqual(before);
+  expect(metadata.lat).toEqual(Array.from(f.lat)); expect(metadata.lon).toEqual(Array.from(f.lon));
+});

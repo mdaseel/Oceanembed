@@ -153,6 +153,7 @@ export function planeGeometry(
   /** Scene height to draw this layer at. Omitted = its true depth. */
   y?: number,
   colorFn: typeof color = color,
+  displayValid: (row:number,col:number)=>boolean = () => true,
 ) {
   const baseY = y ?? depthY(f.depths[depth], exaggeration);
   const vertices: number[] = [],
@@ -169,7 +170,7 @@ export function planeGeometry(
   for (let r = 0; r < f.lat.length; r++)
     for (let c = 0; c < f.lon.length; c++) {
       const value = f[layer][offset(f, r, c, depth)];
-      if (!isSupported(f, r, c) || !Number.isFinite(value)) continue;
+      if (!isSupported(f, r, c) || !Number.isFinite(value) || !displayValid(r,c)) continue;
       const rgb = colorFn(value, range, layer, palette).map((x) => x / 255);
       for (const [dx, dy] of corners) {
         vertices.push(
@@ -294,6 +295,7 @@ export function skirtGeometry(
   /** Scene height of the layer's top face. Omitted = its true depth. */
   y?: number,
   colorFn: typeof color = color,
+  displayValid: (row:number,col:number)=>boolean = () => true,
 ) {
   const baseY = y ?? depthY(f.depths[depth], exaggeration);
   const vertices: number[] = [];
@@ -305,6 +307,7 @@ export function skirtGeometry(
     r < f.lat.length &&
     c < nlon &&
     isSupported(f, r, c) &&
+    displayValid(r,c) &&
     Number.isFinite(f[layer][offset(f, r, c, depth)]);
   for (let r = 0; r < f.lat.length; r++)
     for (let c = 0; c < nlon; c++) {
