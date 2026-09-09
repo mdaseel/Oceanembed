@@ -170,9 +170,11 @@ test("3D orbit pan zoom clipping depth selection and frame rate", async ({
   // are still exercised, below, after this measurement.
   //
   // Same constants the renderer uses — imported, never re-typed here.
+  const sceneWidth=b.width;
+  const aspect=sceneWidth/b.height;
   const camera = new PerspectiveCamera(
-    CAMERA.fov,
-    b.width / b.height,
+    2*Math.atan(Math.tan(CAMERA.fov*Math.PI/360)*Math.max(1,1.2/aspect))*180/Math.PI,
+    aspect,
     CAMERA.near,
     CAMERA.far,
   );
@@ -207,7 +209,7 @@ test("3D orbit pan zoom clipping depth selection and frame rate", async ({
   ).project(camera);
   await canvas.click({
     position: {
-      x: ((projected.x + 1) / 2) * b.width,
+      x: ((projected.x + 1) / 2) * sceneWidth,
       y: ((1 - projected.y) / 2) * b.height,
     },
   });

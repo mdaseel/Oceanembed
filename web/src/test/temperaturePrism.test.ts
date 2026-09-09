@@ -17,6 +17,9 @@ it("creates a world-space prism outside the ocean with the active palette", () =
     expect(Array.from(data.slice(0,3))).toEqual(depthColor(-4,range,"anomaly","thermal"));
     expect(Array.from(data.slice(-4,-1))).toEqual(depthColor(4,range,"anomaly","thermal"));
     expect(model.userData.ticks[3]).toBe(0);
+    const separators=model.children.filter(o=>o.name==="legend-separator");
+    expect(separators.map(o=>o.userData.value)).toEqual(model.userData.ticks);
+    expect(separators).toHaveLength(7);
     const camera=new THREE.PerspectiveCamera(38,1,0.1,500);
     camera.position.set(76,49,62); camera.lookAt(0,-12,0); camera.updateMatrixWorld();
     const before=model.position.clone().project(camera);

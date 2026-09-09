@@ -26,6 +26,8 @@ import { depthColor, depthGradient } from "../field/depthColors";
 import { waterShape } from "../field/waterShape";
 import { createTemperaturePrism } from "./TemperaturePrism";
 import { createLocationProbe } from "./LocationProbe";
+import { createStackFrame } from "./StackFrame";
+
 
 export interface DepthRendererProps {
   field: FieldView;
@@ -57,6 +59,8 @@ export default function DepthRenderer(props: DepthRendererProps) {
     camera: THREE.PerspectiveCamera;
     renderer: THREE.WebGLRenderer;
     scene: THREE.Scene;
+
+    legendGroup: THREE.Group;
   } | null>(null);
   const latest = useRef(props);
   latest.current = props;
@@ -95,7 +99,12 @@ export default function DepthRenderer(props: DepthRendererProps) {
     );
     renderer.domElement.dataset.testid = "depth-canvas";
     const scene = new THREE.Scene();
+
+    const legendGroup = new THREE.Group();
+    scene.add(legendGroup);
+
     scene.background = new THREE.Color().setRGB(5 / 255, 7 / 255, 11 / 255);
+    renderer.setClearColor(scene.background);
     // Soft key + fill so the land relief and slice stack read as solid surfaces
     // instead of flat colour. Lighting is presentation only: the ocean slices
     // stay MeshBasic so their colours remain the exact colormap values.
@@ -124,7 +133,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
     controlRef.current = controls;
     const group = new THREE.Group();
     scene.add(group);
-    sceneData.current = { group, camera, renderer, scene };
+    sceneData.current = { group, camera, renderer, scene, legendGroup };
     const resize = new ResizeObserver(() => {
       const w = element.clientWidth,
         h = element.clientHeight;
@@ -169,10 +178,12 @@ export default function DepthRenderer(props: DepthRendererProps) {
       )
         return;
       const rect = renderer.domElement.getBoundingClientRect();
+      const mainWidth=rect.width;
+
       const ray = new THREE.Raycaster();
       ray.setFromCamera(
         new THREE.Vector2(
-          ((e.clientX - rect.left) / rect.width) * 2 - 1,
+          ((e.clientX - rect.left) / mainWidth) * 2 - 1,
           (-(e.clientY - rect.top) / rect.height) * 2 + 1,
         ),
         camera,
@@ -203,6 +214,7 @@ export default function DepthRenderer(props: DepthRendererProps) {
       controls.dispose();
       if (probeRef.current) { disposeGroup(probeRef.current); probeRef.current = null; }
       disposeGroup(group);
+      disposeGroup(legendGroup);
       renderer.dispose();
       renderer.domElement.removeEventListener("webglcontextlost", lost);
       renderer.domElement.removeEventListener("pointerdown", down);
@@ -329,19 +341,18 @@ export default function DepthRenderer(props: DepthRendererProps) {
       group.add(landMesh);
     }
 
-    group.add(createTemperaturePrism(range,layer,palette,ys[0],ys[ys.length-1]));
+    group.add(createStackFrame(levels,ys,depth,slab));
+    if(host.current) host.current.dataset.highlightedDepth=String(f.depths[depth]);
 
-    // NO container prism. An enclosing box around the whole stack was tried and
-    // removed: it reads as an aquarium, adds base volume the data does not
-    // have, and buries the vertical separation that is the whole point of the
-    // view. The water footprint itself defines each sheet.
+    // Edge-only scientific frame; gaps remain empty and no panels are added.
     //
     // Every sheet is labelled with its OWN true depth in metres. That matters
     // most when the stack is exploded, because a layer's height is then a
     // legibility device rather than a measurement — the label, not the
     // position, is what states the depth.
     levels.forEach((k, i) => {
-      const label = textSprite(`${f.depths[k]} m`);
+      const label = textSprite(`${k===depth ? "▶ " : ""}${f.depths[k]} m`);
+      if(k===depth) (label.material as THREE.SpriteMaterial).color.set(0x16bbff);
       label.position.set(-36, ys[i], 13);
       group.add(label);
     });
@@ -373,6 +384,16 @@ export default function DepthRenderer(props: DepthRendererProps) {
     terrainExaggeration,
     // Selection updates the separate lightweight probe below.
   ]);
+  // World-space model beside the stack: only the active scale can rebuild or
+  // recolor it. It shares the ocean camera for orbit, pan and zoom.
+  useEffect(() => {
+    if(!sceneData.current) return;
+    const {legendGroup}=sceneData.current;
+    disposeGroup(legendGroup);
+    const prism=createTemperaturePrism(range,layer,palette,0,-24);
+
+    legendGroup.add(prism);
+  },[ready,range.min,range.max,range.count,layer,palette]);
   useEffect(() => {
     if (!sceneData.current) return;
     const {scene,group}=sceneData.current;

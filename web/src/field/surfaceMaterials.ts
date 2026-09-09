@@ -1,5 +1,6 @@
 /** Display-only surface finishes. No displacement, model values or masks. */
 import * as THREE from "three";
+import { OCEAN_VISUAL_CONFIG } from "./visualConfig";
 
 /** Interpolate display RGB only inside fully supported four-cell patches.
  * Geometry, cell ordering, masks and scientific scalar arrays remain intact.
@@ -38,11 +39,13 @@ export function oceanMaterial(opacity: number, surface: boolean, cells: number[]
   material.addEventListener("dispose", () => edgeMask.dispose());
   material.onBeforeCompile = shader => {
     shader.uniforms.waterSupport = { value: edgeMask };
+    shader.uniforms.oceanEmission = { value: OCEAN_VISUAL_CONFIG.emissiveIntensity };
     shader.vertexShader = "varying vec3 vSurfacePosition;\n" + shader.vertexShader;
     shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>",
       "#include <begin_vertex>\nvSurfacePosition = (modelMatrix * vec4(position, 1.0)).xyz;");
     shader.fragmentShader = `varying vec3 vSurfacePosition;
       uniform sampler2D waterSupport;
+      uniform float oceanEmission;
       float waterHash(vec2 p) { return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
       float waterNoise(vec2 p) {
         vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
@@ -69,6 +72,7 @@ export function oceanMaterial(opacity: number, surface: boolean, cells: number[]
       diffuseColor.rgb *= 1.0 - strength * (0.09 - 0.12 * detail);
       float sheen = min(0.13, grazing * 0.08 + glint * 0.12) * strength;
       diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.85, 0.94, 1.0), sheen);
+      diffuseColor.rgb *= 1.0 + oceanEmission;
       // Feather only within existing triangles; never draw into masked cells.
       vec2 supportUV = vec2((p.x / 0.95371695075 + 30.125) / 60.25,
                             (12.625 - p.y) / 25.25);

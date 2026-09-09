@@ -2,6 +2,7 @@ import * as THREE from "three";
 import type { Layer, Palette } from "../field/contract";
 import type { Range } from "../field/colors";
 import { depthColor } from "../field/depthColors";
+import { OCEAN_VISUAL_CONFIG } from "../field/visualConfig";
 
 export function prismTicks(range: Range, layer: Layer) {
   if (!range.count || !Number.isFinite(range.min) || !Number.isFinite(range.max)) return [];
@@ -18,7 +19,7 @@ export function createTemperaturePrism(range: Range, layer: Layer, palette: Pale
   const ticks = prismTicks(range,layer);
   if (!ticks.length) return group;
   const height = Math.max(10, Math.abs(surfaceY-bottomY));
-  group.position.set(34, surfaceY-height/2, -17);
+  group.position.set(OCEAN_VISUAL_CONFIG.legendPosition[0], surfaceY-height/2, OCEAN_VISUAL_CONFIG.legendPosition[2]);
   group.userData = { legend:true, ticks, title:layer === "anomaly" ? "Temperature Anomaly (°C)" : "Temperature (°C)" };
   const pixels = new Uint8Array(1024*4);
   for (let i=0;i<1024;i++) pixels.set([
@@ -43,6 +44,12 @@ export function createTemperaturePrism(range: Range, layer: Layer, palette: Pale
   caption.position.set(0,-height/2-1.4,0); group.add(caption);
   for (const value of ticks) {
     const t = range.min===range.max ? .5 : (value-range.min)/(range.max-range.min);
+    const y=t*height-height/2;
+    const separator=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-1.61,y,-1.61),new THREE.Vector3(1.61,y,-1.61),
+      new THREE.Vector3(1.61,y,1.61),new THREE.Vector3(-1.61,y,1.61)]),
+      new THREE.LineBasicMaterial({color:0xd5e6f2,transparent:true,opacity:OCEAN_VISUAL_CONFIG.legendSeparatorOpacity,toneMapped:false}));
+    separator.name="legend-separator"; separator.userData.value=value; group.add(separator);
     const text = label(value===0 ? "0" : value.toFixed(2),8);
     text.position.set(2.5,t*height-height/2,-1.6); group.add(text);
     const line = new THREE.BufferGeometry().setFromPoints([

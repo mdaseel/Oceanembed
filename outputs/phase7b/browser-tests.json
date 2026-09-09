@@ -4,7 +4,7 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\sih2\\web\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "e2e/probe.spec.ts"
+      "e2e/volume.spec.ts"
     ],
     "configFile": "C:\\sih2\\web\\playwright.config.ts",
     "rootDir": "C:/sih2/web/e2e",
@@ -66,13 +66,13 @@
   },
   "suites": [
     {
-      "title": "probe.spec.ts",
-      "file": "probe.spec.ts",
+      "title": "volume.spec.ts",
+      "file": "volume.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "probe follows shared selection, stays on top through depth changes, and hides invalid cells",
+          "title": "existing depth selection highlights the stack while foreground scale stays pixel-identical",
           "ok": true,
           "tags": [],
           "tests": [
@@ -87,12 +87,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4676,
+                  "duration": 8687,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-09T10:17:49.615Z",
+                  "startTime": "2026-09-09T11:58:07.238Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -100,9 +100,9 @@
               "status": "expected"
             }
           ],
-          "id": "9223f0ac28d4fb57516f-59a02c42e584d134465b",
-          "file": "probe.spec.ts",
-          "line": 2,
+          "id": "30685a6c0e3dbeec97fc-d2bab5b4cc9994f30880",
+          "file": "volume.spec.ts",
+          "line": 3,
           "column": 1
         }
       ]
@@ -110,8 +110,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-09T10:17:49.112Z",
-    "duration": 5769.812,
+    "startTime": "2026-09-09T11:58:06.692Z",
+    "duration": 9845.470000000001,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,
