@@ -1,0 +1,23 @@
+import { test, expect } from "@playwright/test";
+test("prism renders in the ocean canvas through orbit and anomaly changes", async ({ page }) => {
+  const errors: string[]=[];
+  page.on("pageerror", error=>errors.push(error.message));
+  await page.goto("/#depth");
+  await expect(page.getByTestId("terrain-context")).toBeVisible();
+  const view=page.getByTestId("depth-renderer");
+  await expect(view.locator("canvas")).toHaveCount(1);
+  await expect(view.locator(".temperature-prism")).toHaveCount(0);
+  const box=(await page.getByTestId("depth-canvas").boundingBox())!;
+  await page.mouse.move(box.x+box.width*.45,box.y+box.height*.45);
+  await page.mouse.down();
+  await page.mouse.move(box.x+box.width*.52,box.y+box.height*.5,{steps:12});
+  await page.mouse.up();
+  await page.waitForTimeout(500);
+  await view.screenshot({path:"../outputs/phase7b/prism-model-orbit.png"});
+  await page.getByRole("button",{name:"Reset camera"}).click();
+  await view.screenshot({path:"../outputs/phase7b/temperature-prism-model.png"});
+  await page.getByLabel("Display layer").selectOption("anomaly");
+  await page.waitForTimeout(500);
+  await view.screenshot({path:"../outputs/phase7b/anomaly-prism-model.png"});
+  expect(errors).toEqual([]);
+});

@@ -9,13 +9,13 @@
     "height": 560
   },
   "samples_fps": [
-    133.3,
-    142.7,
-    142.7,
-    143.4,
-    143.3
+    85,
+    144,
+    143.3,
+    144,
+    144
   ],
-  "median_fps": 142.7,
+  "median_fps": 144,
   "noDepthInference": true,
   "interactions": [
     "orbit",

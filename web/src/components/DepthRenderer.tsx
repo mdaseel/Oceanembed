@@ -24,6 +24,7 @@ import { loadTerrain, terrainGeometry, type TerrainData } from "../field/terrain
 import { landMaterial, oceanMaterial, smoothWaterColors } from "../field/surfaceMaterials";
 import { depthColor, depthGradient } from "../field/depthColors";
 import { waterShape } from "../field/waterShape";
+import { createTemperaturePrism } from "./TemperaturePrism";
 
 export interface DepthRendererProps {
   field: FieldView;
@@ -322,6 +323,8 @@ export default function DepthRenderer(props: DepthRendererProps) {
       landMesh.renderOrder = 1;
       group.add(landMesh);
     }
+
+    group.add(createTemperaturePrism(range,layer,palette,ys[0],ys[ys.length-1]));
 
     // NO container prism. An enclosing box around the whole stack was tried and
     // removed: it reads as an aquarium, adds base volume the data does not

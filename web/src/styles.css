@@ -758,6 +758,7 @@ td {
   grid-template-columns: minmax(0, 1fr);
 }
 .depth-renderer {
+  position: relative;
   height: 560px;
   width: 100%;
   contain: inline-size;
