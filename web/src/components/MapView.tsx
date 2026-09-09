@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { rangeFor, type ScaleMode } from "../field/colors";
 import { depthColor as color, depthGradient } from "../field/depthColors";
 import {
@@ -6,9 +6,9 @@ import {
   type Layer,
   type Palette,
   type Selection,
-  offset,
 } from "../field/contract";
 import { Colorbar } from "./Colorbar";
+import { currentMapRelief, loadMapRelief, mapRaster } from "../field/mapAppearance";
 export interface MapProps {
   field: FieldView;
   layer: Layer;
@@ -24,6 +24,7 @@ const W = 1440,
   top = 45,
   width = 1320,
   height = 555;
+const rasterCache = new WeakMap<FieldView, Map<string, Uint8ClampedArray>>();
 export function drawMap(
   canvas: HTMLCanvasElement,
   {
@@ -43,27 +44,28 @@ export function drawMap(
   const range = rangeFor(f, layer, [depth], scaleMode),
     cw = width / f.lon.length,
     ch = height / f.lat.length;
-  for (let r = 0; r < f.lat.length; r++)
-    for (let col = 0; col < f.lon.length; col++) {
-      const i = r * f.lon.length + col,
-        v = f[layer][offset(f, r, col, depth)];
-      // Land is a neutral dark grey, matching the 3D view; cells with no valid
-      // input for this date stay near-black. Neither is ever coloured by
-      // temperature, and neither carries any elevation.
-      c.fillStyle = !f.ocean[i]
-        ? "#182a30"
-        : !f.inputValid[i] || !Number.isFinite(v)
-          ? "#0d1119"
-          : `rgb(${color(v, range, layer, palette).join(",")})`;
-      c.fillRect(
-        left + col * cw,
-        top + (f.lat.length - 1 - r) * ch,
-        cw + 0.25,
-        ch + 0.25,
-      );
-    }
+  let cached = rasterCache.get(f);
+  if (!cached) rasterCache.set(f, cached = new Map());
+  const key = `${layer}/${depth}/${palette}/${range.min}/${range.max}`;
+  let pixels = cached.get(key);
+  if (!pixels) {
+    pixels = mapRaster(f,layer,depth,palette,range,width,height);
+    if (cached.size >= 6) cached.delete(cached.keys().next().value!);
+    cached.set(key,pixels);
+  }
+  const imageData = c.createImageData(width,height);
+  if (imageData?.data) {
+    imageData.data.set(pixels);
+    c.putImageData(imageData,left,top);
+  }
+  const relief = currentMapRelief();
+  if (relief) {
+    c.imageSmoothingEnabled = true;
+    c.imageSmoothingQuality = "high";
+    c.drawImage(relief,left,top,width,height);
+  }
   c.font = "17px system-ui";
-  c.strokeStyle = "#a2bad52b";
+  c.strokeStyle = "#a2bad512";
   c.lineWidth = 1;
   for (let lon = 45; lon <= 105; lon += 10) {
     const x = left + ((lon - 45) / 0.25 + 0.5) * cw;
@@ -89,6 +91,17 @@ export function drawMap(
     left,
     28,
   );
+  if (relief) {
+    c.font = "500 18px system-ui";
+    c.fillStyle = "#91b2be";
+    c.textAlign = "center";
+    for (const [name,lon,lat] of [
+      ["I N D I A",78,23], ["ARABIA",49.5,24], ["MYANMAR",96,22],
+    ] as const) {
+      c.fillText(name,left+((lon-45)/.25+.5)*cw,top+((30-lat)/.25+.5)*ch);
+    }
+    c.textAlign = "start";
+  }
   if (selection.row >= 0) {
     const x = left + (selection.col + 0.5) * cw,
       y = top + (f.lat.length - selection.row - 0.5) * ch;
@@ -103,10 +116,10 @@ export function drawMap(
     c.arc(x, y, 12, 0, Math.PI * 2);
     c.stroke();
   }
-  c.font = "16px system-ui";
+  c.font = "14px system-ui";
   c.fillStyle = "#a3b4cb";
   c.fillText(
-    `Equirectangular grid · neutral land / dark unavailable · no spatial interpolation · color scale: ${
+    `Smooth display interpolation · dark = unavailable · ${relief ? "ETOPO shaded land" : "land relief unavailable/loading"} · scale: ${
       scaleMode === "field"
         ? "whole reconstruction, all 15 depths (compare dates using their displayed ranges)"
         : "this depth only (NOT comparable across depths or dates)"
@@ -137,6 +150,12 @@ export function drawMap(
 }
 export function MapView(props: MapProps) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const [reliefReady, setReliefReady] = useState(!!currentMapRelief());
+  useEffect(() => {
+    let active = true;
+    loadMapRelief().then(() => { if (active) setReliefReady(true); }).catch(() => {});
+    return () => { active = false; };
+  }, []);
   useEffect(() => {
     if (ref.current) drawMap(ref.current, props);
   }, [
@@ -146,6 +165,7 @@ export function MapView(props: MapProps) {
     props.palette,
     props.selection,
     props.scaleMode,
+    reliefReady,
   ]);
   return (
     <>
@@ -153,6 +173,7 @@ export function MapView(props: MapProps) {
         ref={ref}
         className="map-canvas"
         data-testid="field-map"
+        data-relief={reliefReady ? "ready" : "unavailable"}
         aria-label="North Indian Ocean map. Click to select a grid cell, or use the coordinate form."
         role="img"
         onClick={(event) => {

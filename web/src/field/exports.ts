@@ -1,5 +1,6 @@
 import { profile, type FieldView, type Selection } from "./contract";
 import { drawMap, type MapProps } from "../components/MapView";
+import { loadMapRelief } from "./mapAppearance";
 export function download(blob: Blob, name: string) {
   const url = URL.createObjectURL(blob),
     a = document.createElement("a");
@@ -51,6 +52,7 @@ export function profileCsv(f: FieldView, selection: Selection) {
   return [header.join(","), ...lines].join("\r\n");
 }
 export async function mapPng(props: Omit<MapProps, "onSelect">) {
+  await loadMapRelief().catch(() => null);
   const canvas = document.createElement("canvas");
   drawMap(canvas, props);
   const blob = await new Promise<Blob | null>((resolve) =>

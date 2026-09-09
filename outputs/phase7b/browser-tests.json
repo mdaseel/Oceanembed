@@ -86,12 +86,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 9779,
+                  "duration": 10646,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-08T09:02:59.424Z",
+                  "startTime": "2026-09-08T09:18:45.114Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -120,12 +120,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16822,
+                  "duration": 17981,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-08T09:03:09.469Z",
+                  "startTime": "2026-09-08T09:18:56.070Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -154,12 +154,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3458,
+                  "duration": 3332,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-08T09:03:26.305Z",
+                  "startTime": "2026-09-08T09:19:14.069Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -188,12 +188,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2685,
+                  "duration": 2759,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-08T09:03:29.777Z",
+                  "startTime": "2026-09-08T09:19:17.416Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -215,6 +215,40 @@
       "line": 0,
       "specs": [
         {
+          "title": "2D map loads local ETOPO relief with the scientific map intact",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2870,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-08T09:19:20.210Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b1c58c11f97ca81ac327-3b2df423bee6e3116431",
+          "file": "terrain.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
           "title": "real local DEM renders offline and terrain control leaves field requests and selection unchanged",
           "ok": true,
           "tags": [],
@@ -230,12 +264,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12773,
+                  "duration": 13324,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-08T09:03:32.486Z",
+                  "startTime": "2026-09-08T09:19:23.092Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -245,7 +279,7 @@
           ],
           "id": "b1c58c11f97ca81ac327-df1dffa43d061c3a19b8",
           "file": "terrain.spec.ts",
-          "line": 4,
+          "line": 12,
           "column": 1
         },
         {
@@ -264,12 +298,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3220,
+                  "duration": 3420,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-08T09:03:45.273Z",
+                  "startTime": "2026-09-08T09:19:36.433Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -279,7 +313,7 @@
           ],
           "id": "b1c58c11f97ca81ac327-48a55d35b92ece314956",
           "file": "terrain.spec.ts",
-          "line": 40,
+          "line": 48,
           "column": 1
         }
       ]
@@ -287,9 +321,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-08T09:02:58.889Z",
-    "duration": 50080.898,
-    "expected": 6,
+    "startTime": "2026-09-08T09:18:44.581Z",
+    "duration": 55798.082,
+    "expected": 7,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

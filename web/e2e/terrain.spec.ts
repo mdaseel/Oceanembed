@@ -1,6 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
 
+test("2D map loads local ETOPO relief with the scientific map intact", async ({ page }) => {
+  await page.goto("/");
+  const map = page.getByTestId("field-map");
+  await expect(map).toHaveAttribute("data-relief", "ready");
+  await map.screenshot({ path: "../outputs/phase7b/terrain/relief-map.png" });
+  await expect(page.getByTestId("inference-source")).toHaveText("LIVE_MODEL_RUN");
+});
+
 test("real local DEM renders offline and terrain control leaves field requests and selection unchanged", async ({ page, context }) => {
   let fields = 0;
   const foreign: string[] = [];
