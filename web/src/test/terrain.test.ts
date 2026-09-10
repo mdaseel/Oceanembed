@@ -41,18 +41,28 @@ describe("static DEM context", () => {
     }
     expect(data.coordinates).toEqual(copy);
     a.dispose(); b.dispose();
-  });
+    // Builds two full 620k-triangle geometries; the default 5s budget is too
+    // tight for real work of this size and made the result depend on load.
+  }, 30000);
   it("gently smooths display relief without altering the DEM or coastline", () => {
     const original = data.coordinates.slice();
     const heights = terrainDisplayHeights(data);
-    let changed = 0;
+    // Same assertions as before, accumulated rather than asserted per vertex:
+    // 317,826 vertices x ~3 expect() calls put this test on the edge of the
+    // default timeout, so it passed or failed with machine load. Counting
+    // violations and asserting once is exactly as strict and ~100x cheaper.
+    let changed = 0,
+      movedCoastline = 0,
+      belowFloor = 0;
     for (let i = 0; i < heights.length; i++) {
       const h = original[i * 3 + 2];
-      if (h === 0) expect(heights[i]).toBe(0);
+      if (h === 0 && heights[i] !== 0) movedCoastline++;
       if (h !== heights[i]) changed++;
-      expect(heights[i]).toBeGreaterThanOrEqual(h * 0.75 ** 2 - 0.001);
+      if (!(heights[i] >= h * 0.75 ** 2 - 0.001)) belowFloor++;
     }
+    expect(movedCoastline).toBe(0);
+    expect(belowFloor).toBe(0);
     expect(changed).toBeGreaterThan(1000);
     expect(data.coordinates).toEqual(original);
-  });
+  }, 30000);
 });

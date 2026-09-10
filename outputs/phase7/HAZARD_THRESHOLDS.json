@@ -1,0 +1,45 @@
+{
+  "protocol": "outputs/phase7/HAZARD_INDICATOR_PROTOCOL.md",
+  "indicator": "Ocean Thermal Support for Cyclone Intensification",
+  "quantity": "tchp_kj_cm2",
+  "reference_period": "2015-01-01..2020-12-31 (TRAIN split only)",
+  "stride_days": 5,
+  "n_dates_planned": 439,
+  "n_dates": 439,
+  "failed_dates": [],
+  "n_samples": 4552444,
+  "population": "TCHP defined AND PhysicalSupport.SUPPORTED, over the whole PoC domain, all seasons, one distribution",
+  "boundaries": {
+    "p50": 55.702171325683594,
+    "p75": 79.10038757324219,
+    "p90": 96.94490051269531
+  },
+  "category_rule": "TCHP < p50 LOW; >= p50 MODERATE; >= p75 ELEVATED; >= p90 HIGH",
+  "distribution_context": {
+    "min": 0.0,
+    "max": 227.7982940673828,
+    "mean": 53.30495071411133,
+    "p05": 0.0,
+    "p25": 25.267681121826172,
+    "p95": 106.56741333007812,
+    "fraction_below_50_kJ_cm2": 0.44280808286713685
+  },
+  "literature_anchor": {
+    "value_kj_cm2": 50.0,
+    "role": "DISCLOSURE ONLY - not used to set any boundary",
+    "source": "Shay et al. 2000; Mainelli et al. 2008; AOML practice",
+    "percentile_of_this_distribution": 44.280808286713686
+  },
+  "model": {
+    "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "l2_encoder_sha256": "30cfd2db9e8b6b96473c1e205280c0099a422a1ec4a3cc6d0dd6dee554db4808"
+  },
+  "bathymetry": {
+    "dataset": "NOAA ETOPO 2022",
+    "depth_sha256": "397015e1d28885ce52de25c899297bb060c20479b3245bbd6d9b6f829d4a9787",
+    "rule": "ocean cell AND local_water_depth_m >= requested_depth_m"
+  },
+  "argo_used": false,
+  "argo_2024_status": "PROTECTED - not read by this phase",
+  "wall_clock_seconds": 25.2
+}

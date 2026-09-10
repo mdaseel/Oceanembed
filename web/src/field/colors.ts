@@ -88,38 +88,75 @@ export function rangeOf(values: Iterable<number>, layer: Layer): Range {
  */
 export type ScaleMode = "field" | "slice";
 export const SCALE_MODES: ScaleMode[] = ["field", "slice"];
-/** Whole-field range, memoised per field object — it reads all 15 depths. */
-const wholeField = new WeakMap<FieldView, Partial<Record<Layer, Range>>>();
-export function fieldRange(f: FieldView, layer: Layer): Range {
+/**
+ * Physical water-column support, as a per-(cell, depth-index) predicate.
+ *
+ * Optional throughout: when it is absent every range behaves exactly as it did
+ * before physical support existed, so a view without bathymetry is unchanged
+ * rather than silently rescaled.
+ */
+export type DepthSupport = (row: number, col: number, depthIndex: number) => boolean;
+
+/** Whole-field range, memoised per field object — it reads all 15 depths.
+ *  `supportKey` distinguishes memo entries computed under different support. */
+const wholeField = new WeakMap<FieldView, Map<string, Range>>();
+export function fieldRange(
+  f: FieldView,
+  layer: Layer,
+  support?: DepthSupport,
+  supportKey = "none",
+): Range {
   let entry = wholeField.get(f);
-  if (!entry) wholeField.set(f, (entry = {}));
-  return (entry[layer] ??= rangeOf(
+  if (!entry) wholeField.set(f, (entry = new Map()));
+  const key = `${layer}/${supportKey}`;
+  const cached = entry.get(key);
+  if (cached) return cached;
+  const computed = rangeOf(
     (function* () {
       const nd = f.depths.length,
-        values = f[layer];
+        values = f[layer],
+        nc = f.lon.length;
       for (let i = 0; i < f.ocean.length; i++) {
         if (!f.ocean[i] || !f.inputValid[i]) continue;
-        for (let k = 0; k < nd; k++) yield values[i * nd + k];
+        const row = Math.floor(i / nc),
+          col = i % nc;
+        for (let k = 0; k < nd; k++) {
+          // A below-seafloor value is a real model output but not a physical
+          // one, so it must not stretch the scale the supported cells share.
+          if (support && !support(row, col, k)) continue;
+          yield values[i * nd + k];
+        }
       }
     })(),
     layer,
-  ));
+  );
+  entry.set(key, computed);
+  return computed;
 }
 export function rangeFor(
   f: FieldView,
   layer: Layer,
   depths: number[],
   mode: ScaleMode = "field",
+  support?: DepthSupport,
+  supportKey = "none",
 ): Range {
   // `actualMin` / `actualMax` / `count` always describe what is ON SCREEN, so
   // the colorbar can report the displayed data honestly whichever domain the
   // ramp is stretched over.
   const shown = rangeOf(
-    depths.flatMap((k) => Array.from(slice(f, layer, k))),
+    depths.flatMap((k) => {
+      const values = slice(f, layer, k);
+      if (!support) return Array.from(values);
+      const nc = f.lon.length;
+      return Array.from(values, (v, i) =>
+        support(Math.floor(i / nc), i % nc, k) ? v : NaN,
+      );
+    }),
     layer,
   );
   if (mode === "slice") return shown;
-  const domain = fieldRange(f, layer);
+  const domain = fieldRange(f, layer, support, supportKey);
   return domain.count ? { ...shown, min: domain.min, max: domain.max } : shown;
 }
 export function color(

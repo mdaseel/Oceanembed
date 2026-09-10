@@ -410,11 +410,14 @@ export default function DepthRenderer(props: DepthRendererProps) {
     const {scene,group}=sceneData.current;
     if (probeRef.current) { scene.remove(probeRef.current); disposeGroup(probeRef.current); }
     const surface=group.children.find(child=>child.userData.topSurface) as THREE.Mesh | undefined;
-    const probe=createLocationProbe(f,props.selection,surface,ys[ys.length-1]);
+    const selectedSurface=group.getObjectByName("selected-depth") as THREE.Mesh | undefined;
+    const probe=createLocationProbe(f,props.selection,surface,selectedSurface);
     probeRef.current=probe; scene.add(probe);
     if(host.current) {
       host.current.dataset.probeCell=probe.userData.cell?.toString() ?? "";
       host.current.dataset.probePosition=probe.children.length ? probe.position.toArray().join(",") : "";
+      host.current.dataset.probeEndpoint=probe.children.length ? String(probe.userData.endpointY) : "";
+      host.current.dataset.probeDepthValid=String(probe.userData.depthValid ?? false);
     }
   }, [f,props.selection.row,props.selection.col,props.selection.status,layer,depth,
     exaggeration,clip[0],clip[1],palette,scaleMode,explode,layerCount,ready,terrain,terrainExaggeration,bathymetry]);

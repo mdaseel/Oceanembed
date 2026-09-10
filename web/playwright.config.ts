@@ -10,7 +10,9 @@ export default defineConfig({
     ["json", { outputFile: "../outputs/phase7b/browser-tests.json" }],
   ],
   use: {
-    baseURL: "http://127.0.0.1:8000",
+    // Defaults to the documented port; overridable so a verification server can
+    // run alongside an app the developer already has open on 8000.
+    baseURL: process.env.OCEANEMBED_BASE_URL ?? "http://127.0.0.1:8000",
     channel: "msedge",
     headless: true,
     viewport: { width: 1440, height: 1050 },

@@ -14,24 +14,45 @@ export function loadMapRelief() {
   });
 }
 
+/** Land, missing input, or no finite model value. */
+export const MISSING_RGB: [number, number, number] = [10, 22, 30];
+/** Ocean with a real prediction, but no water column at the selected depth.
+ * Neutral charcoal: deliberately unlike the cold end of every temperature ramp
+ * (thermal 48,18,59 · viridis 68,1,84 · cividis 0,34,78) and lighter than the
+ * missing-data colour, so "not applicable here" cannot be read as "cold". */
+export const UNSUPPORTED_DEPTH_RGB: [number, number, number] = [48, 52, 58];
+
 /** Bilinear scalar display resampling, gated by the ORIGINAL containing cell.
  * Missing/land pixels never receive invented values. Weights only use directly
  * adjacent supported cells. No model array or selection coordinate is changed.
+ *
+ * ``displayValid`` carries physical water-column support. It is supplied by the
+ * caller from the SAME ``displayDepthValid`` utility the 3D renderer uses, so
+ * the two views cannot disagree about where the seafloor is. A cell that fails
+ * it keeps its raw value untouched and is merely drawn as unsupported, and it
+ * is never smoothed into or out of, because a feathered edge would imply a
+ * measurement in rock.
  */
 export function mapRaster(f: FieldView, layer: Layer, depth: number, palette: Palette,
-  range: Range, width: number, height: number) {
+  range: Range, width: number, height: number,
+  displayValid: (row: number, col: number) => boolean = () => true) {
   const out = new Uint8ClampedArray(width * height * 4);
   const nr = f.lat.length, nc = f.lon.length;
   const sample = (r: number, c: number) => {
     const cell = r*nc+c;
-    return f.ocean[cell] && f.inputValid[cell] ? f[layer][offset(f,r,c,depth)] : NaN;
+    return f.ocean[cell] && f.inputValid[cell] && displayValid(r,c)
+      ? f[layer][offset(f,r,c,depth)] : NaN;
   };
   for (let y=0; y<height; y++) for (let x=0; x<width; x++) {
     const rr = nr - .5 - (y+.5)/height*nr, cc = (x+.5)/width*nc - .5;
     const r = Math.max(0,Math.min(nr-1,Math.round(rr)));
     const c = Math.max(0,Math.min(nc-1,Math.round(cc)));
+    const cell = r*nc+c;
     let value = sample(r,c);
-    let rgb = [10,22,30];
+    // Three distinct outcomes, never merged: no data, no water column, a value.
+    let rgb: number[] = f.ocean[cell] && f.inputValid[cell] && !displayValid(r,c)
+      ? UNSUPPORTED_DEPTH_RGB as unknown as number[]
+      : MISSING_RGB as unknown as number[];
     if (Number.isFinite(value)) {
       const r0 = Math.max(0,Math.min(nr-1,Math.floor(rr)));
       const c0 = Math.max(0,Math.min(nc-1,Math.floor(cc)));
@@ -48,7 +69,7 @@ export function mapRaster(f: FieldView, layer: Layer, depth: number, palette: Pa
       const coverage = values.reduce((sum,v,i) => sum + (Number.isFinite(v) ? weights[i] : 0),0);
       const t = Math.max(0,Math.min(1,(coverage-.4)/.6));
       const alpha = t*t*(3-2*t);
-      rgb = rgb.map((v,i) => [10,22,30][i]*(1-alpha)+v*alpha);
+      rgb = rgb.map((v,i) => MISSING_RGB[i]*(1-alpha)+v*alpha);
     }
     const i = (y*width+x)*4;
     out.set([...rgb,255],i);

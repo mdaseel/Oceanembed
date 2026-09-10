@@ -1,0 +1,51 @@
+{
+  "protocol": "outputs/phase7/D26_TCHP_EVALUATION_PROTOCOL.md",
+  "dates_preregistered": 216,
+  "dates_evaluated": 216,
+  "failed_dates": [],
+  "test_split": {
+    "start": "2022-01-01",
+    "end": "2024-12-15",
+    "stride_days": 5
+  },
+  "stages": {
+    "A": "native GLORYS, 36 levels, regrid_horizontal(linear)",
+    "B": "model_ready temp_<d>m, 15 mandated depths",
+    "C": "replay_field(date).temperature, frozen L2"
+  },
+  "constants": {
+    "rho0_kg_m3": 1023.035344728,
+    "cp0_J_kg_K": 3991.86795711963,
+    "rho_cp_J_m3_K": 4083822.011620538,
+    "standard": "TEOS-10 (IOC/SCOR/IAPSO 2010)"
+  },
+  "basins": {
+    "arabian_sea": {
+      "lat": [
+        8.0,
+        25.0
+      ],
+      "lon": [
+        50.0,
+        77.0
+      ]
+    },
+    "bay_of_bengal": {
+      "lat": [
+        5.0,
+        22.0
+      ],
+      "lon": [
+        80.0,
+        100.0
+      ]
+    }
+  },
+  "model": {
+    "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "l2_encoder_sha256": "30cfd2db9e8b6b96473c1e205280c0099a422a1ec4a3cc6d0dd6dee554db4808"
+  },
+  "argo_used": false,
+  "argo_2024_status": "PROTECTED - not read by this phase",
+  "wall_clock_seconds": 158.1
+}

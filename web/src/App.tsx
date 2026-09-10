@@ -25,16 +25,22 @@ import {
   ChevronLeft,
   ChevronRight,
   Info,
+  Flame,
 } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { MapView } from "./components/MapView";
+import { DiagnosticMap } from "./components/DiagnosticMap";
 import { Profile } from "./components/Profile";
 import { getJson, loadReplay } from "./field/api";
 import {
+  DIAGNOSTIC_UNIT,
+  asLayer,
+  diagnosticAt,
   format,
+  isDiagnostic,
   offset,
   resolve,
-  type Layer,
+  type MapLayer,
   type Palette,
 } from "./field/contract";
 import { type ScaleMode } from "./field/colors";
@@ -43,9 +49,11 @@ import { download, mapPng, profileCsv } from "./field/exports";
 const DepthRenderer = lazy(() => import("./components/DepthRenderer"));
 const Validation = lazy(() => import("./components/Validation"));
 const MultiDate = lazy(() => import("./components/MultiDate"));
+const HazardTab = lazy(() => import("./components/Hazard"));
 const routes = [
   { id: "replay", name: "Historical Replay", icon: Map },
   { id: "depth", name: "3D Depth View", icon: Layers3 },
+  { id: "hazard", name: "Ocean Hazard Indicators", icon: Flame },
   { id: "validation", name: "Provenance & Validation", icon: ShieldCheck },
   { id: "exports", name: "Exports", icon: Download },
   { id: "settings", name: "Settings", icon: Settings2 },
@@ -70,7 +78,11 @@ export default function App() {
     [error, setError] = useState("");
   const [record, setRecord] = useState<string[]>([]),
     [depth, setDepth] = useState(7),
-    [layer, setLayer] = useState<Layer>("temperature");
+    // One control, four choices. The two depth-integrated diagnostics are map
+    // layers only; `asLayer` gives the depth-indexed layer the 3D view needs.
+    [display, setDisplay] = useState<MapLayer>("temperature");
+  const layer = asLayer(display),
+    diagnosticView = isDiagnostic(display);
   const [lat, setLat] = useState(String(initialSettings.lat ?? 15.25)),
     [lon, setLon] = useState(String(initialSettings.lon ?? 87.75));
   const [coords, setCoords] = useState<[number, number]>([
@@ -321,7 +333,7 @@ export default function App() {
             </div>
             <span className="mode-badge">HISTORICAL REPLAY</span>
           </div>
-          {(scientificView || route === "exports") && (
+          {(scientificView || route === "exports" || route === "hazard") && (
             <section className="controls panel">
               <div className="date-control">
                 <label htmlFor="historical-date">HISTORICAL DATE</label>
@@ -375,11 +387,17 @@ export default function App() {
                 DISPLAY LAYER
                 <select
                   aria-label="Display layer"
-                  value={layer}
-                  onChange={(e) => setLayer(e.target.value as Layer)}
+                  value={display}
+                  onChange={(e) => setDisplay(e.target.value as MapLayer)}
                 >
                   <option value="temperature">Reconstructed temperature</option>
                   <option value="anomaly">Anomaly from climatology</option>
+                  {data?.field.diagnostics && (
+                    <>
+                      <option value="d26">D26 · 26 °C isotherm depth (m)</option>
+                      <option value="tchp">TCHP · heat potential (kJ/cm²)</option>
+                    </>
+                  )}
                 </select>
               </label>
               <Button
@@ -548,6 +566,37 @@ export default function App() {
                           value={f.provenance.n_supported_cells.toLocaleString()}
                           unit="cells"
                         />
+                        {f.diagnostics &&
+                          (["d26", "tchp"] as const).map((kind) => {
+                            const d = diagnosticAt(f, kind, selection);
+                            return (
+                              <Stat
+                                key={kind}
+                                label={
+                                  kind === "d26"
+                                    ? "D26 · 26 °C ISOTHERM DEPTH"
+                                    : "TCHP · HEAT POTENTIAL"
+                                }
+                                icon={kind === "d26" ? Waves : Flame}
+                                value={
+                                  !d || !Number.isFinite(d.value)
+                                    ? "No 26 °C crossing"
+                                    : d.physical === "SUPPORTED"
+                                      ? format(d.value, 1)
+                                      : "Below local seafloor"
+                                }
+                                unit={
+                                  !d || !Number.isFinite(d.value)
+                                    ? d?.status === "SURFACE_BELOW_26"
+                                      ? "column below 26 °C"
+                                      : "not a value"
+                                    : d.physical === "SUPPORTED"
+                                      ? DIAGNOSTIC_UNIT[kind]
+                                      : `raw ${format(d.value, 1)} ${DIAGNOSTIC_UNIT[kind]} — no water column`
+                                }
+                              />
+                            );
+                          })}
                       </div>
                       <div className="explorer-grid">
                         <div className="map-column">
@@ -687,6 +736,14 @@ export default function App() {
                                 )}
                               </>
                             )}
+                            {route === "depth" && diagnosticView && (
+                              <p className="notice" data-testid="diagnostic-3d-note">
+                                D26 and TCHP are depth-integrated surfaces, so
+                                they have no 3D depth stack. The volume below
+                                shows reconstructed temperature; switch to the
+                                map view to see the selected diagnostic.
+                              </p>
+                            )}
                             {route === "depth" && enable3d ? (
                               <Suspense
                                 fallback={
@@ -709,6 +766,13 @@ export default function App() {
                                   layerCount={layerCount}
                                 />
                               </Suspense>
+                            ) : diagnosticView && isDiagnostic(display) ? (
+                              <DiagnosticMap
+                                field={f}
+                                kind={display}
+                                selection={selection}
+                                onSelect={select}
+                              />
                             ) : (
                               <MapView
                                 field={f}
@@ -909,6 +973,22 @@ export default function App() {
                         <MultiDate date={date} coords={coords} depth={depth} />
                       </Suspense>
                     </>
+                  ) : route === "hazard" ? (
+                    <Suspense
+                      fallback={
+                        <p className="empty">Loading hazard indicators…</p>
+                      }
+                    >
+                      <HazardTab
+                        field={f}
+                        selection={selection}
+                        onSelect={select}
+                        onDate={(d) => {
+                          setDate(d);
+                          void request(d);
+                        }}
+                      />
+                    </Suspense>
                   ) : route === "exports" ? (
                     <section className="panel">
                       <span className="eyebrow">

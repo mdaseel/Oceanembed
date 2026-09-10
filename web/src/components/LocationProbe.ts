@@ -5,7 +5,7 @@ import { OCEAN_VISUAL_CONFIG as V } from "../field/visualConfig";
 
 /** A visual probe for the existing canonical selection; never resolves a new cell. */
 export function createLocationProbe(f: FieldView, selection: Selection,
-  surface: THREE.Mesh | undefined, bottomY: number) {
+  surface: THREE.Mesh | undefined, selectedSurface: THREE.Mesh | undefined) {
   const group = new THREE.Group();
   group.name = "selected-location-probe";
   const {row,col,status}=selection;
@@ -21,6 +21,14 @@ export function createLocationProbe(f: FieldView, selection: Selection,
   const [x,,z]=position(f.lon[col],f.lat[row],0,1);
   group.position.set(x,y,z);
   group.userData={cell,lat:f.lat[row],lon:f.lon[col]};
+  // Sample the actual selected sheet: layout, curvature and bathymetry are
+  // already applied. A missing cell has no valid downward probe extent.
+  const selectedIndex=(selectedSurface?.userData.cells as number[] | undefined)?.indexOf(cell) ?? -1;
+  const selectedVertices=selectedSurface?.geometry.getAttribute("position");
+  const bottomY=selectedIndex>=0 && selectedVertices
+    ? (selectedVertices.getY(selectedIndex*6)+selectedVertices.getY(selectedIndex*6+2))/2 : y;
+  group.userData.endpointY=bottomY;
+  group.userData.depthValid=selectedIndex>=0;
   const span=(DOMAIN.east-DOMAIN.west)*horizontalCos;
   const height=span*.038, bead=span*.0036, radius=span*.010;
   const cyan=new THREE.Color(V.probeColor);
@@ -42,7 +50,7 @@ export function createLocationProbe(f: FieldView, selection: Selection,
   const glowTexture=new THREE.DataTexture(pixels,64,64); glowTexture.needsUpdate=true;
   const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,transparent:true,depthWrite:false,toneMapped:false}));
   glow.scale.setScalar(bead*7); glow.position.y=height; group.add(glow);
-  if(bottomY<y-.1) {
+  if(bottomY<y-1e-6) {
     const length=y-bottomY;
     for(const [radius,opacity] of [[V.probeLineWidth/2,V.probeLineOpacity],[V.probeLineWidth*1.6,V.probeGlowIntensity]]) {
       const guide=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,length,12),
