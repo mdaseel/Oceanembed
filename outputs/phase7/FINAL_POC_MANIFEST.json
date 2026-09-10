@@ -1,0 +1,276 @@
+{
+  "manifest": "OceanEmbed Phase 7 final PoC freeze",
+  "phase": "7E",
+  "generated_utc": "2026-09-10T18:34:13+00:00",
+  "git": {
+    "source_freeze_commit": "9fb32ba16e30b8670ccc03b3ad93f332ebf168cd",
+    "branch": "main",
+    "source_tree_clean_excluding_freeze_metadata": true,
+    "uncommitted_at_generation": [
+      "PHASE7_FINAL_POC_REPORT.md",
+      "outputs/phase7/FINAL_POC_MANIFEST.json"
+    ],
+    "freeze_metadata_committed_separately": [
+      "outputs/phase7/FINAL_POC_MANIFEST.json",
+      "PHASE7_FINAL_POC_REPORT.md"
+    ],
+    "note": "source_freeze_commit is the commit holding the code and scientific artifacts this manifest describes. This manifest and the final report are committed immediately afterwards, because a manifest cannot record the hash of the commit that contains it. The freeze claim is that nothing OUTSIDE freeze_metadata_committed_separately was uncommitted when this was generated."
+  },
+  "scientific_core": {
+    "final_core": "existing frozen L2 Spatial Satellite Embedding Engine",
+    "model_class": "oceanembed.ml.l2_model.L2EmbeddingModel",
+    "checkpoint_path": "outputs\\models\\phase6b_l2_final.pt",
+    "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "l2_encoder_sha256": "30cfd2db9e8b6b96473c1e205280c0099a422a1ec4a3cc6d0dd6dee554db4808",
+    "checkpoint_file_sha256": "81979a6541927ff5c6b0a13c5ce7cdbcd486040d16a304dcdc10b2962a586e35",
+    "latent_dim": 32,
+    "patch": 33,
+    "receptive_field": 33,
+    "n_parameters": 136335,
+    "retrained_in_phase7": false,
+    "architecture_closed": "ARCHITECTURE_CLOSURE_REPORT.md"
+  },
+  "frozen_artifacts": {
+    "feature_scaler_sha256": "49671ce760b0dca5c1c82cb184dae91908cc064abfdea8cc7eb2f5bc3c320467",
+    "target_scaler_sha256": "5b6f359db0d228dd7d3acf775ab8a6eea76dd521e7b4568ff1873c832e89e93b",
+    "climatology_sha256": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5"
+  },
+  "inputs_and_targets": {
+    "surface_inputs": [
+      "sst",
+      "sss",
+      "sla",
+      "current_u",
+      "current_v",
+      "wind_u",
+      "wind_v"
+    ],
+    "depths_m": [
+      0,
+      5,
+      10,
+      20,
+      30,
+      50,
+      75,
+      100,
+      125,
+      150,
+      200,
+      300,
+      500,
+      700,
+      1000
+    ],
+    "nominal_zero_m_note": "Nominal 0 m is the shallowest GLORYS target level (approximately 0.494 m), not the OSTIA sea-surface-temperature input. The two are physically related but are not the same quantity and are not fully independent.",
+    "deep_skill_note": "Deep-ocean daily anomaly skill is weaker and more climatology-dominant at 500-1000 m. Interpret L2 departures from climatology cautiously at those depths.",
+    "target_used_for_inference": false,
+    "argo_used_for_inference": false
+  },
+  "replay_api": {
+    "version": "7A",
+    "field_primitive": "oceanembed.replay.replay_field(date)",
+    "point_primitive": "oceanembed.replay.replay_point(date, lat, lon)",
+    "point_derives_from_field": true,
+    "field_shape": [
+      101,
+      241,
+      15
+    ],
+    "processing_version": "6B.1",
+    "grid_version": "5.0-30.0N_45.0-105.0E_0.25deg",
+    "transport_schema": "oceanembed.field-view.v1",
+    "cache_format_version": 1,
+    "cache_semantics": "provenance-keyed; identity includes date, model, scaler and climatology hashes, processing and grid version; only real frozen-L2 output is ever stored; a mismatch is a miss, never a silent reuse"
+  },
+  "diagnostics": {
+    "algorithm_version": "7C.1",
+    "d26": "shallowest downward 26 degC crossing, linear interpolation between bracketing levels, never extrapolated",
+    "tchp": "rho0 * cp0 * integral 0..D26 of (T - 26 degC) dz, kJ/cm2",
+    "threshold_degC": 26.0,
+    "rho0_kg_m3": 1023.035344728,
+    "cp0_J_kg_K": 3991.86795711963,
+    "rho_cp_J_m3_K": 4083822.011620538,
+    "constants_source": "TEOS-10 (IOC/SCOR/IAPSO 2010) via gsw; cp0 is the defined reference heat capacity, derived from the library's own identity, not copied",
+    "convention_family": "Leipper & Volgenau (1972); operational form used by NOAA/AOML (Shay et al. 2000; Goni et al. 1996)",
+    "convention_spread_note": "published rho*Cp conventions span about 8 percent; OceanEmbed runs about 5 percent below the frequently quoted 1026 x 4178 pair",
+    "physical_support_rule": "ocean cell AND local_water_depth_m >= requested_depth_m",
+    "bathymetry": {
+      "dataset": "NOAA ETOPO 2022",
+      "version": "v1, ice surface, 60 arc-second product",
+      "depth_sha256": "397015e1d28885ce52de25c899297bb060c20479b3245bbd6d9b6f829d4a9787",
+      "sampling_caveat": "point samples at canonical cell centres, not cell minima: a 0.25 degree cell spanning a shelf edge is represented by its centre depth alone"
+    }
+  },
+  "hazard_indicator": {
+    "name": "Ocean Thermal Support for Cyclone Intensification",
+    "version": "7D.1",
+    "categorising_quantity": "tchp_kj_cm2",
+    "boundaries_kj_cm2": {
+      "p50": 55.702171325683594,
+      "p75": 79.10038757324219,
+      "p90": 96.94490051269531,
+      "reference_period": "2015-01-01..2020-12-31 (TRAIN split only)",
+      "n_dates": 439,
+      "n_samples": 4552444,
+      "quantity": "tchp_kj_cm2"
+    },
+    "reference_period": "2015-01-01..2020-12-31 (TRAIN split only)",
+    "frontend_status": "SHIPPED - historical only, route 'hazard'",
+    "connected_to_live_data": false,
+    "numeric_cyclone_probability": false,
+    "non_prediction_statement": "This indicator describes the oceanic thermal environment relevant to cyclone intensification. It does not predict cyclone genesis, track, landfall, category, or exact future intensity.",
+    "reconstruction_error_kj_cm2": {
+      "mae": 11.47,
+      "rmse": 15.83,
+      "bias": 5.8,
+      "source": "Phase 7C, whole NIO, B vs C"
+    }
+  },
+  "event": {
+    "name": "Cyclone Mocha (2023)",
+    "basin": "Bay of Bengal",
+    "window": [
+      "2023-05-05",
+      "2023-05-22"
+    ],
+    "peak": "2023-05-13",
+    "landfall": "2023-05-14",
+    "selection_rule": "most intense NIO cyclone inside the LOCKED TEST SPLIT by IMD peak 3-minute sustained wind, tie-broken on minimum central pressure, requiring a complete surface-input record",
+    "selected_before_error_inspection": true,
+    "track_source": "IBTrACS v04r01 / IMD RSMC New Delhi, NOAA NCEI, bundled offline; static context only"
+  },
+  "demonstration": {
+    "default_date": "2021-06-15",
+    "default_location": [
+      15.25,
+      87.75
+    ],
+    "default_selection_rule": "central Bay of Bengal, chosen by geography in Phase 7B, not by prediction error",
+    "offline": true,
+    "launch": "Start-OceanEmbed.cmd or python scripts/poc/serve.py"
+  },
+  "frontend": {
+    "framework": "React + TypeScript + Vite",
+    "3d_engine": "three.js (Cesium evaluated and not adopted; see PHASE7B_HISTORICAL_POC_REPORT.md)",
+    "charts": "Plotly",
+    "routes": [
+      "replay",
+      "depth",
+      "hazard",
+      "validation",
+      "exports",
+      "settings"
+    ],
+    "dependency_versions": {
+      "@radix-ui/react-slot": "1.3.3",
+      "class-variance-authority": "0.7.1",
+      "clsx": "2.1.1",
+      "lucide-react": "1.42.0",
+      "plotly.js-basic-dist-min": "4.0.0",
+      "react": "19.2.8",
+      "react-dom": "19.2.8",
+      "react-markdown": "10.1.0",
+      "react-plotly.js": "4.1.0",
+      "remark-gfm": "4.0.1",
+      "tailwind-merge": "3.6.0",
+      "three": "0.185.1"
+    }
+  },
+  "documents": {
+    "diagnostic_evaluation_protocol": {
+      "path": "outputs/phase7/D26_TCHP_EVALUATION_PROTOCOL.md",
+      "sha256": "94f77a8139743b53390f6b50a5aed11ef537e84bbaf05b9329d465e97b944018"
+    },
+    "event_selection": {
+      "path": "outputs/phase7/EVENT_SELECTION.md",
+      "sha256": "02d93993dabd80fbc8a61115c3714ab809dcd95b37a93db11e417e20ede65203"
+    },
+    "hazard_indicator_protocol": {
+      "path": "outputs/phase7/HAZARD_INDICATOR_PROTOCOL.md",
+      "sha256": "5a3190625bd8938cfdd1ebf2d345137a8cf9351c07f7b29a41f1e1d8c5d7fae7"
+    },
+    "hazard_thresholds": {
+      "path": "outputs/phase7/HAZARD_THRESHOLDS.json",
+      "sha256": "02dac829271dbb2443243979ca18857d14ae25586a5f381a90cadb978f08edbe"
+    },
+    "final_2024_argo_preregistration": {
+      "path": "outputs/phase7/FINAL_2024_ARGO_PREREGISTRATION.md",
+      "sha256": "406399ddac942587ff45c9b98b9a5b3d6a16f838c241d1e1aa55bdddabef5f2d"
+    },
+    "phase7a_report": {
+      "path": "PHASE7_HISTORICAL_REPLAY_REPORT.md",
+      "sha256": "19f46a08b42f1a82ac704d7d80a43d582f30ca59b0752058b446af49c66d3879"
+    },
+    "phase7b_report": {
+      "path": "PHASE7B_HISTORICAL_POC_REPORT.md",
+      "sha256": "30c3e5aa5a287ce822b54bd8c45b0411d01c1d921e4c7094ea877098f2014173"
+    },
+    "phase7c_report": {
+      "path": "PHASE7C_D26_TCHP_REPORT.md",
+      "sha256": "e48f2ea120fca1666f53e0fce612d00a9db8e3cdbb6d753884dc637c8f3850ea"
+    },
+    "phase7d_report": {
+      "path": "PHASE7D_EVENT_REPLAY_REPORT.md",
+      "sha256": "b4fbd999da0791916bdfe7d79e1128a98784f1bc82607898718520d81a4b3d80"
+    }
+  },
+  "tables": {
+    "phase6b_grid_metrics": {
+      "path": "outputs/tables/phase6b_l2_metrics_by_depth_test.csv",
+      "sha256": "06c4f26ed7734919e290c4f705e041974e33acf446967810cd19e9ce863b42c2"
+    },
+    "phase6c_argo_metrics": {
+      "path": "outputs/tables/phase6c_argo_metrics_by_depth.csv",
+      "sha256": "109b908315be7d5201979845e0dcc696feab49888111349b16f91bb069add2ac"
+    },
+    "phase7c_d26_tchp_metrics": {
+      "path": "outputs/tables/phase7c_d26_tchp_metrics.csv",
+      "sha256": "6bde423d4b1f689de8f3b582194940c9ebe4877e28c9d7d25a8464a666dff23c"
+    },
+    "phase7c_status_counts": {
+      "path": "outputs/tables/phase7c_d26_tchp_status_counts.csv",
+      "sha256": "dd8b606ef01104864c552535162eac03f62eaf6fbe85ddd6f93a50f196292536"
+    },
+    "phase7c_crossing_disagreement": {
+      "path": "outputs/tables/phase7c_d26_crossing_disagreement.csv",
+      "sha256": "887a882c93dc40ed0941ce170c00335b5637f4c1907ee50b0065974ee01e8502"
+    }
+  },
+  "static_assets": {
+    "terrain_mesh": {
+      "path": "web/public/assets/terrain/land.bin",
+      "sha256": "574e85bdf4879820cece3d8e46eec845c8ef92244541e57f3688159bfa096d19"
+    },
+    "bathymetry_depth": {
+      "path": "web/public/assets/bathymetry/depth.bin",
+      "sha256": "397015e1d28885ce52de25c899297bb060c20479b3245bbd6d9b6f829d4a9787"
+    },
+    "event_track": {
+      "path": "web/public/assets/event/track.json",
+      "sha256": "c45a0d14d58dda2011271cce5b6d84c31debcfd748bd8a2020675c3facb868b0"
+    }
+  },
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "status": {
+    "nrt_status": "NOT STARTED",
+    "argo_2024_status": "PROTECTED",
+    "argo_2024_preregistration": "outputs/phase7/FINAL_2024_ARGO_PREREGISTRATION.md",
+    "phase8a_started": false,
+    "phase8b_started": false
+  },
+  "known_limitations": [
+    "Deep-ocean daily anomaly skill at 500-1000 m is weaker and more climatology-dominant; disclosed throughout the UI.",
+    "The frozen L2 emits all 15 depths wherever surface inputs are valid and has no concept of the seafloor; about 7-8 percent of D26 results would otherwise sit below the local seabed. These are qualified as INSUFFICIENT_WATER_COLUMN_SUPPORT for display, with raw values preserved and exported unchanged.",
+    "Bathymetry is point-sampled at canonical cell centres, not cell minima, so a 0.25 degree cell spanning a shelf edge is represented by its centre depth alone.",
+    "TCHP values depend on the adopted rho*Cp convention; OceanEmbed's TEOS-10 constants are not numerically interchangeable with operational products using different constants.",
+    "The hazard categories are relative to this basin's own history; a LOW label does not mean insufficient heat for a cyclone.",
+    "The hazard rule uses one quantity and cannot see salinity stratification or barrier layers, which matter in the Bay of Bengal and which OceanEmbed does not reconstruct.",
+    "The Phase 7C TCHP reconstruction error is roughly half a hazard category wide, so adjacent categories are not distinguishable at a single cell.",
+    "Argo is an external observational check, not perfectly independent truth: GLORYS assimilates in-situ observations.",
+    "The Phase 7C application benchmark used the locked test split, which had already been opened for the Phase 6B and 6C results; it is historical application validation, not a pristine test set."
+  ]
+}
