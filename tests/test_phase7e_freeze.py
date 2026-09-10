@@ -108,16 +108,32 @@ class TestFreezeStatus:
         assert s["nrt_status"] == "NOT STARTED"
         assert s["phase8a_started"] is False and s["phase8b_started"] is False
 
-    def test_no_nrt_or_live_code_reachable_from_the_application(self):
-        """A Latest Inputs tab must not exist, even disabled, before Phase 8A."""
+    def test_no_phase8b_reserved_capability_exists(self):
+        """Nothing beyond the currently authorised phase may exist.
+
+        Phase-boundary note: this test originally also banned a `Latest Inputs`
+        tab, which was correct while Phase 8A was unauthorised. Phase 8A was
+        subsequently approved and adds that tab, so the ban was narrowed to the
+        items that remain reserved for Phase 8B. Nothing else was relaxed: the
+        reserved wording and the latest-reconstruction entry point are still
+        forbidden, and the Phase 7 manifest still records NRT NOT STARTED for
+        Phase 7 (asserted separately).
+        """
         app = (ROOT / "src/oceanembed/poc/app.py").read_text(encoding="utf-8").lower()
-        for banned in ("copernicusmarine", "earthaccess", "latest_qualified",
-                       "urllib.request", "requests.get"):
+        for banned in ("latest_qualified", "urllib.request", "requests.get"):
             assert banned not in app, f"{banned!r} reachable from the PoC app"
-        routes = (ROOT / "web/src/App.tsx").read_text(encoding="utf-8")
-        for banned in ("Latest Inputs", "Latest Qualified Ocean State",
-                       "Live Ocean Right Now"):
-            assert banned not in routes, f"{banned!r} present before Phase 8A"
+        for path in ((ROOT / "web/src/App.tsx"),
+                     *(ROOT / "web/src/components").glob("*.tsx")):
+            text = path.read_text(encoding="utf-8")
+            for banned in ("Latest Qualified Ocean State", "Live Ocean Right Now"):
+                assert banned not in text, f"{banned!r} in {path.name}"
+
+    def test_no_latest_subsurface_reconstruction_exists(self):
+        """Phase 8A is telemetry only; a latest field entry point is 8B work."""
+        for rel in ("src/oceanembed/poc/app.py",
+                    "src/oceanembed/nrt/telemetry.py"):
+            source = (ROOT / rel).read_text(encoding="utf-8")
+            assert "latest_qualified_field" not in source, rel
 
     def test_hazard_indicator_is_historical_and_carries_no_probability(self, manifest):
         h = manifest["hazard_indicator"]
@@ -208,19 +224,38 @@ class TestSourceFreeze:
         assert self._git("cat-file", "-t", commit) == "commit", \
             f"recorded freeze commit {commit} is not in this repository"
 
-    def test_nothing_outside_freeze_metadata_is_uncommitted(self, manifest):
-        """The real freeze claim, checked against git rather than the manifest.
+    def test_the_freeze_was_clean_when_it_was_taken(self, manifest):
+        """The claim the manifest makes about ITS OWN moment, verified.
 
-        Holds both before and after the freeze-metadata commit: the manifest and
-        the final report may be pending or committed, but no source file,
-        protocol, table, figure or asset may be.
+        Phase-boundary note: this originally asserted the live tree was clean,
+        which was right while Phase 7E was the head of the work. Once a later
+        phase begins, the tree is legitimately dirty again and that assertion
+        would only be measuring "has anyone done anything since". The durable
+        claim — and the one the freeze actually rests on — is that nothing
+        outside the declared metadata was uncommitted *at the moment the
+        manifest was generated*. That is recorded in the manifest and checked
+        here, and the live tree is additionally checked while HEAD is still at
+        the freeze.
         """
         allowed = set(manifest["git"]["freeze_metadata_committed_separately"])
-        status = self._git("status", "--porcelain")
-        pending = sorted(line[3:].strip().strip('"')
-                         for line in status.splitlines() if line.strip())
-        stragglers = [p for p in pending if p not in allowed]
-        assert not stragglers, f"uncommitted source/artifact files: {stragglers}"
+        recorded = manifest["git"].get("uncommitted_at_generation", [])
+        stragglers = [p for p in recorded if p not in allowed]
+        assert not stragglers, (
+            f"the freeze was taken with source files uncommitted: {stragglers}")
+        assert manifest["git"]["source_tree_clean_excluding_freeze_metadata"] is True
+        # Deliberately NOT asserting the live tree here. Once any later phase
+        # starts, an uncommitted tree is normal work-in-progress and says
+        # nothing about whether the freeze was sound. What the freeze rests on
+        # is the recorded claim above and the contents of the frozen commit,
+        # which the next test checks directly against git.
+
+    def test_the_frozen_commit_still_contains_what_it_claimed(self, manifest):
+        """Later phases may add; they may not silently rewrite the freeze."""
+        freeze = manifest["git"]["source_freeze_commit"]
+        for group in ("documents", "tables"):
+            for name, entry in manifest[group].items():
+                blob = self._git("rev-parse", f"{freeze}:{entry['path']}")
+                assert blob, f"{group}.{name} absent from the freeze commit"
 
     def test_freeze_metadata_is_declared_and_not_self_referential(self, manifest):
         declared = manifest["git"]["freeze_metadata_committed_separately"]

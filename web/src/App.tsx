@@ -50,10 +50,12 @@ const DepthRenderer = lazy(() => import("./components/DepthRenderer"));
 const Validation = lazy(() => import("./components/Validation"));
 const MultiDate = lazy(() => import("./components/MultiDate"));
 const HazardTab = lazy(() => import("./components/Hazard"));
+const LatestInputsTab = lazy(() => import("./components/LatestInputs"));
 const routes = [
   { id: "replay", name: "Historical Replay", icon: Map },
   { id: "depth", name: "3D Depth View", icon: Layers3 },
   { id: "hazard", name: "Ocean Hazard Indicators", icon: Flame },
+  { id: "latest", name: "Latest Inputs", icon: RefreshCw },
   { id: "validation", name: "Provenance & Validation", icon: ShieldCheck },
   { id: "exports", name: "Exports", icon: Download },
   { id: "settings", name: "Settings", icon: Settings2 },
@@ -410,7 +412,16 @@ export default function App() {
               </Button>
             </section>
           )}
-          {route === "validation" ? (
+          {route === "latest" ? (
+            // Deliberately outside the replay-data guard: Latest Inputs needs
+            // no replay result, and a failure on either side must never take
+            // the other down.
+            <Suspense
+              fallback={<p className="empty">Loading latest inputs…</p>}
+            >
+              <LatestInputsTab />
+            </Suspense>
+          ) : route === "validation" ? (
             <Suspense
               fallback={<p className="empty">Loading validation page…</p>}
             >

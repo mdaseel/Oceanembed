@@ -47,3 +47,7 @@ web/*.tsbuildinfo
 outputs/phase7b/*.log
 outputs/phase7b/test-field.json
 outputs/phase7/replay_cache/
+# Phase 8A: NRT products fetched from the provider, not project artifacts.
+outputs/phase8a/cache/
+# Runtime telemetry snapshot: rewritten on every successful refresh.
+outputs/phase8a/last_successful_telemetry.json

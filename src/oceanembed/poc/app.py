@@ -59,9 +59,21 @@ app = FastAPI(title="OceanEmbed Historical PoC", version="7B", lifespan=lifespan
 app.add_middleware(GZipMiddleware, minimum_size=1000, compresslevel=3)
 
 
+#: Endpoints that must NOT take the shared engine lock. Live telemetry can take
+#: tens of seconds against a remote provider, and Historical Replay must never
+#: be blocked by it — a slow or dead network cannot be allowed to take the
+#: offline science down with it. These touch no xarray store and no replay cache.
+UNLOCKED_PREFIXES = ("/api/latest",)
+
+
 @app.middleware("http")
 async def local_transport(request, call_next):
     # xarray/netCDF and the shared replay cache are serialized in one process.
+    if request.url.path.startswith(UNLOCKED_PREFIXES):
+        response = await call_next(request)
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
     if request.url.path.startswith("/api/"):
         lock = getattr(app.state, "engine_lock", None)
         if lock is None:
@@ -292,6 +304,49 @@ def event_series() -> dict:
         "independence_note": EVENT["independence_note"],
         "series": rows,
     }
+
+
+@app.get("/api/latest/cached")
+def latest_cached() -> dict:
+    """Instant: the last SUCCESSFUL telemetry, or nothing. Never a live fetch.
+
+    Lets the tab render immediately while the live attempt runs, without ever
+    presenting the cache as fresh — it is returned under its own state and
+    label, with the staleness measured now.
+    """
+    from ..nrt import telemetry as T
+    cached = T.load_snapshot()
+    if not cached:
+        return {"mode": "LATEST_INPUTS", "phase": "8A", "is_cached": True,
+                "state": T.OverallState.OFFLINE_OR_SOURCE_UNAVAILABLE.value,
+                "sources": [], "has_snapshot": False,
+                "unavailable_label": "DATA SOURCE CURRENTLY UNAVAILABLE",
+                "subsurface_reconstruction": T.NOT_CERTIFIED,
+                "why_these_inputs": T.WHY_THESE_INPUTS}
+    generated = cached.get("generated_utc")
+    staleness = None
+    if generated:
+        staleness = round((pd.Timestamp.utcnow().tz_localize(None)
+                           - pd.Timestamp(generated)).total_seconds() / 3600.0, 2)
+    return {**cached, "is_cached": True, "has_snapshot": True,
+            "state": T.OverallState.CACHED_TELEMETRY_NOT_CURRENT.value,
+            "cached_generated_utc": generated,
+            "cached_staleness_hours": staleness,
+            "cache_label": "LAST SUCCESSFUL TELEMETRY - NOT CURRENT",
+            "subsurface_reconstruction": T.NOT_CERTIFIED,
+            "why_these_inputs": T.WHY_THESE_INPUTS}
+
+
+@app.get("/api/latest")
+def latest(region: bool = True) -> dict:
+    """Attempt a real live fetch of the two NRT inputs. Telemetry only.
+
+    Defined as a sync endpoint so FastAPI runs it in a worker thread: a slow
+    provider must not block the event loop, and it never takes the engine lock.
+    No model is run here and no subsurface field is produced.
+    """
+    from ..nrt import telemetry as T
+    return T.telemetry_payload(with_region=region)
 
 
 @app.get("/api/evidence")

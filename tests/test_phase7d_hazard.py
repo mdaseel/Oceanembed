@@ -359,13 +359,31 @@ class TestTransport:
 
 # ------------------------------------------------------- discipline
 class TestDiscipline:
-    def test_no_nrt_or_live_code_introduced(self):
+    def test_no_nrt_reaches_the_hazard_or_event_path(self):
+        """The indicator and the event replay stay HISTORICAL.
+
+        Phase-boundary note: this originally banned any NRT reference in
+        `poc/app.py` too, which was correct while Phase 8A was unauthorised.
+        Phase 8A was subsequently approved and adds telemetry endpoints to that
+        module. The ban is therefore narrowed to what Phase 7D actually
+        guarantees — that no live source reaches the hazard indicator or the
+        event replay — and that guarantee is now checked at the function level
+        rather than by the presence of a substring in a shared file.
+        """
         for rel in ("src/oceanembed/diagnostics/hazard.py",
-                    "src/oceanembed/poc/app.py",
+                    "src/oceanembed/diagnostics/thermal.py",
                     "scripts/poc/build_event_track.py"):
             source = (ROOT / rel).read_text(encoding="utf-8").lower()
-            for banned in ("copernicusmarine", "earthaccess", "nrt"):
+            for banned in ("copernicusmarine", "earthaccess", "nrt", "telemetry"):
                 assert banned not in source, f"{banned!r} in {rel}"
+
+        app = (ROOT / "src/oceanembed/poc/app.py").read_text(encoding="utf-8")
+        # The hazard block and the event series must not consume telemetry.
+        for marker in ("def hazard_block(", "def event_series("):
+            body = app.split(marker)[1].split("\n@app.")[0]
+            for banned in ("telemetry", "nrt", "latest"):
+                assert banned not in body.lower(), \
+                    f"{banned!r} reached {marker.strip('def (')}"
 
     def test_only_the_build_script_touches_the_network(self):
         """The application must stay offline; only build time may fetch."""
