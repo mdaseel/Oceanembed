@@ -82,6 +82,22 @@ def harmonise_smos_sss(ds: xr.Dataset, use_rain_corrected: bool = False,
     return to_canonical(normalise_time_daily(out))
 
 
+def harmonise_multiobs_sss(ds: xr.Dataset) -> xr.Dataset:
+    """MULTIOBS NRT SSS: exactly the training SSS treatment (data/loaders.py).
+
+    ``sos`` -> ``sss``, singleton depth dropped, PSU, no conversion. ``dos`` is
+    not requested or used. Nothing is filled: a NaN stays a NaN.
+    """
+    ds = rename_coords(ds)
+    out = ds[["sos"]].rename({"sos": "sss"})
+    if "depth" in out.dims:
+        assert out.sizes["depth"] == 1, f"unexpected depth size {out.sizes['depth']}"
+        out = out.squeeze("depth", drop=True)
+    out["sss"].attrs = {"units": "PSU", "original_name": "sos",
+                        "original_units": ".001", "unit_conversion": "none"}
+    return to_canonical(normalise_time_daily(out))
+
+
 def harmonise_wind_hourly(ds: xr.Dataset) -> xr.Dataset:
     """Copernicus NRT wind: hourly -> DAILY MEAN OF U AND V INDEPENDENTLY.
 

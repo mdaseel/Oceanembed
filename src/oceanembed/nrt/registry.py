@@ -82,6 +82,20 @@ PRODUCTS = {
         temporal_extent=["2024-01-01", "2026-09-04"],
         auth="earthaccess login", access="earthaccess / OPeNDAP",
         doc="https://podaac.jpl.nasa.gov/dataset/SMAP_RSS_L2_SSS_NRT_V6"),
+    # Added in Phase 8B (catalogue checked 2026-09-11). The NRT dataset of the
+    # SAME product as the training SSS; it was never audited in Phase 6C-D.
+    "sss_nrt_multiobs": dict(
+        channel="sss", role="nrt_candidate_3", provider="Copernicus Marine",
+        product_id="MULTIOBS_GLO_PHY_S_SURFACE_MYNRT_015_013",
+        dataset_id="cmems_obs-mob_glo_phy-sss_nrt_multi_P1D", doi="10.48670/moi-00051",
+        variables=["sos"], cf_standard_name="sea_surface_salinity",
+        units="1e-3 (PSU)", target_units="PSU", conversion="none",
+        spatial_resolution_deg=0.125, temporal_resolution="daily",
+        processing_level="L4", coverage="gap-free",
+        source_type="multi-observation L4 analysis (NRT dataset of the training product)",
+        temporal_extent=["2024-01-01", "2026-09-05"],
+        auth="copernicusmarine login", access="copernicusmarine.subset",
+        doc="https://data.marine.copernicus.eu/product/MULTIOBS_GLO_PHY_S_SURFACE_MYNRT_015_013"),
 
     # ------------------------------------------------------------------ SLA
     "sla_reference": dict(

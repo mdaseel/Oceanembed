@@ -1,0 +1,29 @@
+{
+  "product_key": "sss_nrt_multiobs",
+  "product_id": "MULTIOBS_GLO_PHY_S_SURFACE_MYNRT_015_013",
+  "dataset_id": "cmems_obs-mob_glo_phy-sss_nrt_multi_P1D",
+  "doi": "10.48670/moi-00051",
+  "window": [
+    "2024-07-01",
+    "2024-12-15"
+  ],
+  "download_pad_deg": 1.0,
+  "box": {
+    "minimum_longitude": 44.0,
+    "maximum_longitude": 106.0,
+    "minimum_latitude": 4.0,
+    "maximum_latitude": 31.0
+  },
+  "raw_file": "data/raw/nrt/sss_nrt_multiobs/sss_nrt_multiobs_2024-07-01_2024-12-15.nc",
+  "raw_bytes": 72018512,
+  "raw_sha256": "22cebda67d66a7ff47cc39f52b61ad33d68f465a34c47267d60eb1e68670c63e",
+  "canonical_file": "data/processed/nrt/sss_nrt_multiobs_canonical.nc",
+  "canonical_n_times": 168,
+  "canonical_first": "2024-07-01",
+  "canonical_last": "2024-12-15",
+  "harmonisation": "nrt.harmonize.harmonise_multiobs_sss (sos -> sss, PSU, no conversion, singleton depth dropped, training regrid)",
+  "replay_mode": "RETROSPECTIVE",
+  "note": "pulled from today's archive state; says nothing about what was retrievable on the original date",
+  "downloaded_after_protocol_commit": "5b69dda",
+  "credentials_handled_by_this_script": false
+}
