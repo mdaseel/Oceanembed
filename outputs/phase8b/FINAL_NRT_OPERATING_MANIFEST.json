@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-11T17:40:39+00:00",
+  "generated_utc": "2026-09-11T18:36:30+00:00",
   "phase": "8B",
   "protocol": "outputs/phase8b/NRT_SUBSURFACE_QUALIFICATION_PROTOCOL.md",
   "protocol_commit": "5b69dda",
@@ -99,7 +99,9 @@
     "No observational (in-situ) validation of the operational stack exists: the NRT products begin in 2024, 2022-2023 Argo predates them and 2024 Argo is protected. The hindcast reference is the GLORYS12V1 reanalysis, which assimilates observations and is not independent truth.",
     "Operational inputs move the reconstruction materially: at 100 m the stack shift is s = 0.43 of the frozen model's own error (band MATERIAL; verdict NRT_STACK_VIABLE_WITH_MONITORING).",
     "SLA (all-satellite DUACS NRT) and currents (OSCAR NRT) were decided SUBSTITUTE_WITH_MONITORING in Phase 6C-D.",
-    "D26 is NOT QUALIFIED in the operational mode (detectably worse than historical replay in the whole NIO and the Bay of Bengal) and is withheld.",
+    "D26 is withheld as a standalone operational diagnostic because its depth error degraded significantly. TCHP was independently evaluated end-to-end and passed its frozen non-inferiority criterion. The internal 26\u00b0C crossing required for TCHP calculation is not exposed as a qualified D26 product.",
+    "Latest Ocean Hazard Indicators are qualified by transfer from the frozen TCHP rule; not observationally validated as a cyclone forecast.",
+    "Scientific input-stack qualification and operational timeliness are separate. The reconstruction is valid for the common valid date of all seven inputs, which trails the retrieval time by the reconstruction lag shown with it. Operational timeliness has not been separately certified; the field is never 'the ocean now'.",
     "Deep-ocean daily anomaly skill is weaker and more climatology-dominant at 500-1000 m; a low deep RMSE is not strong deep anomaly skill.",
     "The reconstruction is valid for the common valid date of all seven inputs, which trails the retrieval time; it is not the ocean 'now'.",
     "Arabian Sea: the operational mode did not beat climatology at 300, 500 m in the hindcast.",
@@ -188,5 +190,5 @@
     "outputs/tables/phase8b_d26_tchp_metrics.csv": "beb8b52589c7bf111878f834ae997b39462866bf8ee318f62432e8fd3b302224",
     "outputs/tables/phase8b_daily_coverage.csv": "0076e7b0842f0a492253f006d2222b0c0e126c4be0bde36b9d4f579d3659eccb"
   },
-  "source_commit": "db4a7c45d1103f0120409a65af5429f749ae66e5"
+  "source_commit": "ed148966adc2fa636fb374d791a288590fd8f09e"
 }

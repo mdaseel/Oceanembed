@@ -34,6 +34,24 @@ A genuine latest qualified reconstruction was produced from the live providers:
 **valid 2026-09-03**, retrieved 2026-09-11 17:17 UTC — **8.7 days** before
 retrieval, because OSCAR NRT currents set the common date.
 
+**Two separate axes.** The qualification is a statement about scientific
+compatibility of the input stack at its common valid date; it is not evidence
+that an 8.7-day-old reconstruction is timely enough for operational decision
+support.
+
+| axis | status |
+|---|---|
+| Scientific input-stack compatibility | **QUALIFIED WITH LIMITATIONS** |
+| Operational recency | **Not certified** — current reconstruction lag 8.7 days |
+
+> Scientific input-stack qualification and operational timeliness are separate.
+> This field is valid for 2026-09-03 and was retrieved with an 8.7-day
+> reconstruction lag. Operational timeliness has not been separately certified.
+
+No lag threshold was invented after seeing this result. A future
+production-hardening phase could pre-register one before examining subsequent
+availability.
+
 ---
 
 ## 1. Which seven operational product/channel policies were evaluated?
@@ -183,6 +201,15 @@ value at all, the frontend contract rejects a withheld diagnostic that carries
 one, and no layer, tile or export offers it. TCHP is at least as good as
 historical replay.
 
+**Why TCHP can pass when D26 fails.** TCHP needs the 26 °C crossing to set its
+integration limit, but its error is an *integrated heat-content* error, not the
+depth error of the crossing, and it was tested end-to-end on its own:
+
+> D26 is withheld as a standalone operational diagnostic because its depth error
+> degraded significantly. TCHP was independently evaluated end-to-end and passed
+> its frozen non-inferiority criterion. The internal 26°C crossing required for
+> TCHP calculation is not exposed as a qualified D26 product.
+
 ## 10. Did the historical hazard indicator transfer?
 
 Yes, by the pre-registered rule: the Phase 7D indicator is a fixed function of
@@ -190,6 +217,13 @@ TCHP with frozen thresholds (55.70 / 79.10 / 96.94 kJ/cm², **not retuned**), so
 transfer follows TCHP. Descriptively, N and R agree on the category at **88.1 %**
 of 631,008 cell-days. The latest indicator carries the non-prediction statement
 and no numeric probability. The Phase 7D protocol file is unchanged.
+
+The protocol status `QUALIFIED` must not be read as a validated operational
+cyclone hazard system. The human-facing wording, in the tab and in the served
+scope note, is:
+
+> Qualified by transfer from the frozen TCHP rule; not observationally
+> validated as a cyclone forecast.
 
 ## 11. Was a latest 15-depth map actually certified?
 
@@ -297,15 +331,43 @@ live run and the rehearsal.
    The durable replacement is stricter in one respect: the qualified tab name is
    never hard-coded in the frontend and can only arrive from the decision
    artifact.
-8. **One pre-existing test fails, not caused by 8B:**
-   `tests/test_display_bathymetry.py::test_local_bundle_reproducible_and_same_terrain_source`.
-   - The ETOPO source and the committed `depth.bin` both still match their recorded SHA-256s.
-   - The asset and its builder are untouched since Phase 8A.
-   - Regridding today reproduces the NaN pattern exactly, but 4,602 of 24,341 cells differ by at most **1.06 × 10⁻⁵ m**.
-   - The test compares raw bytes, so this floating-point-level variation fails it.
+8. **Bathymetry reproducibility test — resolved in the hardening pass (§17).**
+   `tests/test_display_bathymetry.py::test_local_bundle_reproducible_and_same_terrain_source`
+   compared a regenerated regrid to the committed `depth.bin` byte for byte.
+   Regridding today reproduces the NaN pattern exactly, but 4,602 of 24,341
+   cells differ by at most **1.06 × 10⁻⁵ m** — floating-point / library-level
+   variation, not a change to the asset (both SHA-256s still match).
 
-   The 3D bathymetry path is frozen by standing instruction, so neither the asset
-   nor the test was altered. That decision is left to review.
+---
+
+## 17. Final hardening pass (after scientific review)
+
+The Phase 8B scientific result was accepted on review. This pass changed
+**wording and one test only**. Nothing was re-run or redefined: not the 56-date
+hindcast, the gates, the product choices, the SSS mode, the D26/TCHP equations,
+the hazard thresholds, the bathymetry asset, the 3D renderer, or the model. No
+Argo was opened.
+
+1. **Green freeze — bathymetry test.** The test now separates two claims:
+   - **Artifact identity** stays exact. The SHA-256 of the committed ETOPO source and of the committed `depth.bin` must match `metadata.json`, and the test now hashes the stored bytes rather than the regenerated ones.
+   - **Regeneration** is numerical: identical NaN pattern, and values within **1 × 10⁻⁴ m** (`REGEN_ATOL_M`, absolute, `rtol = 0`).
+
+   That is a tenth of a millimetre on the stored float64 metres, 10× the observed variation, and far below ETOPO's vertical resolution or any 0.25° effect. `depth.bin` was not regenerated.
+2. **Timeliness separated from qualification** (§0), in the report and as a
+   prominent notice in the tab built from the field's own effective date and lag.
+   No lag threshold was invented.
+3. **Why TCHP passes when D26 fails** (§9), shown wherever the latest diagnostic
+   statuses appear. No latest D26 value is exposed.
+4. **Hazard transfer wording** (§10) in the tab, the hazard panel and the served
+   scope note. Protocol status and thresholds unchanged; the non-prediction
+   statement and the absence of any numeric probability are unchanged.
+
+Verified after the pass, from git: the Phase 8B protocol, decision, fetch
+manifest, hindcast tables and decision-rule/registry/harmonisation code are
+byte-identical to `705aa80`; the 3D renderer family, map, profile, bathymetry
+asset, hazard thresholds and protocol, D26/TCHP code and replay engine are
+byte-identical to the Phase 7 freeze `9fb32ba`; the Phase 7 manifest's hashed
+artifacts still verify; frozen L2 hashes unchanged; 2024 Argo not opened.
 
 ---
 
@@ -317,9 +379,10 @@ Complete NRT seven-channel contract: QUALIFIED WITH LIMITATIONS
 SSS operating mode: SSS_MULTIOBS_NRT_SAME_DATE (MULTIOBS NRT L4, same valid date, no persistence)
 Hindcast-the-NRT: COMPLETED
 Latest 15-depth subsurface reconstruction: QUALIFIED WITH LIMITATIONS
+Operational timeliness: NOT CERTIFIED (current reconstruction lag 8.7 days)
 Latest D26: NOT QUALIFIED
 Latest TCHP: QUALIFIED
-Latest Ocean Hazard Indicators: QUALIFIED
+Latest Ocean Hazard Indicators: QUALIFIED (by transfer from frozen TCHP rule; not observationally validated)
 Latest tab name: LATEST QUALIFIED OCEAN STATE
 Shared Phase-7B 3D renderer reused (no second implementation): YES
 Phase 7B 3D regression tests still passing: YES
@@ -327,10 +390,10 @@ Offline historical demo: WORKING
 Offline latest-state behavior: SAFE
 Connection recovery without app restart: PASS
 2024 Argo: PROTECTED
-Full test suite: 836 passed (698 pytest · 105 Vitest · 33 Playwright); 1 pre-existing failure, not 8B (§16.8)
+Full test suite: 837 / 837 passing (699 pytest · 105 Vitest · 33 Playwright)
 ```
 
-**PHASE 8B COMPLETE — AWAITING REVIEW.**
+**PHASE 8B COMPLETE — HARDENING PASS COMPLETE, FULL SUITE GREEN — AWAITING FINAL SIGN-OFF.**
 Do not begin any post-8B research, production-hardening phase, new
 cyclone-probability model, architecture change, or protected 2024 Argo
 evaluation without separate explicit approval.
