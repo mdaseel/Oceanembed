@@ -1,0 +1,192 @@
+{
+  "generated_utc": "2026-09-11T17:40:39+00:00",
+  "phase": "8B",
+  "protocol": "outputs/phase8b/NRT_SUBSURFACE_QUALIFICATION_PROTOCOL.md",
+  "protocol_commit": "5b69dda",
+  "question": "Can the COMPLETE frozen-L2 seven-channel operational input contract support a scientifically qualified latest available 15-depth subsurface temperature reconstruction?",
+  "operating_policy": {
+    "name": "NRT_STACK_V1 / COMMON_VALID_DATE / SSS_MULTIOBS_NRT_SAME_DATE",
+    "stack": "NRT_STACK_V1",
+    "alignment": "COMMON_VALID_DATE",
+    "sss_policy": "SSS_MULTIOBS_NRT_SAME_DATE",
+    "persistence_envelope_days": 0,
+    "policy_version": "8B.1"
+  },
+  "products": {
+    "sst_nrt": {
+      "channels": [
+        "sst"
+      ],
+      "product_id": "SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001",
+      "dataset_id": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
+      "doi": "10.48670/moi-00165",
+      "provider": "Copernicus Marine"
+    },
+    "sss_nrt_multiobs": {
+      "channels": [
+        "sss"
+      ],
+      "product_id": "MULTIOBS_GLO_PHY_S_SURFACE_MYNRT_015_013",
+      "dataset_id": "cmems_obs-mob_glo_phy-sss_nrt_multi_P1D",
+      "doi": "10.48670/moi-00051",
+      "provider": "Copernicus Marine"
+    },
+    "sla_nrt": {
+      "channels": [
+        "sla"
+      ],
+      "product_id": "SEALEVEL_GLO_PHY_L4_NRT_008_046",
+      "dataset_id": "cmems_obs-sl_glo_phy-ssh_nrt_allsat-l4-duacs-0.125deg_P1D",
+      "doi": "10.48670/moi-00149",
+      "provider": "Copernicus Marine"
+    },
+    "currents_nrt": {
+      "channels": [
+        "current_u",
+        "current_v"
+      ],
+      "product_id": "OSCAR_L4_OC_NRT_V2.0",
+      "dataset_id": "OSCAR_L4_OC_NRT_V2.0",
+      "doi": null,
+      "provider": "NASA PO.DAAC"
+    },
+    "wind_nrt": {
+      "channels": [
+        "wind_u",
+        "wind_v"
+      ],
+      "product_id": "WIND_GLO_PHY_L4_NRT_012_004",
+      "dataset_id": "cmems_obs-wind_glo_phy_nrt_l4_0.125deg_PT1H",
+      "doi": "10.48670/moi-00305",
+      "provider": "Copernicus Marine"
+    }
+  },
+  "temporal_alignment": "COMMON_VALID_DATE - every channel valid on the same day; D = min over products of the newest complete day",
+  "sss_operating_mode": "SSS_MULTIOBS_NRT_SAME_DATE",
+  "persistence_envelope_days": 0,
+  "hindcast": {
+    "n_dates_preregistered": 56,
+    "n_dates_used": 56,
+    "window": [
+      "2024-07-01",
+      "2024-12-13"
+    ],
+    "reference": "GLORYS12V1 reanalysis (assimilating; not independent)",
+    "replay_mode": "RETROSPECTIVE"
+  },
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true
+  },
+  "stack_verdict": "NRT_STACK_VIABLE_WITH_MONITORING",
+  "status": {
+    "frozen_l2_preserved": true,
+    "complete_nrt_seven_channel_contract": "QUALIFIED WITH LIMITATIONS",
+    "latest_15_depth_reconstruction": "QUALIFIED WITH LIMITATIONS",
+    "latest_d26": "NOT QUALIFIED",
+    "latest_tchp": "QUALIFIED",
+    "latest_ocean_hazard_indicators": "QUALIFIED",
+    "latest_tab_name": "LATEST QUALIFIED OCEAN STATE",
+    "qualified_reachable_in_8b": false,
+    "qualified_unreachable_reason": "QUALIFIED requires an independent observational hindcast of the operational stack. The NRT products exist only from 2024, 2022-2023 Argo predates them, and 2024 Argo is protected, so no permitted data supports one.",
+    "operational_resilience": "PASS",
+    "argo_2024": "PROTECTED"
+  },
+  "limitations": [
+    "No observational (in-situ) validation of the operational stack exists: the NRT products begin in 2024, 2022-2023 Argo predates them and 2024 Argo is protected. The hindcast reference is the GLORYS12V1 reanalysis, which assimilates observations and is not independent truth.",
+    "Operational inputs move the reconstruction materially: at 100 m the stack shift is s = 0.43 of the frozen model's own error (band MATERIAL; verdict NRT_STACK_VIABLE_WITH_MONITORING).",
+    "SLA (all-satellite DUACS NRT) and currents (OSCAR NRT) were decided SUBSTITUTE_WITH_MONITORING in Phase 6C-D.",
+    "D26 is NOT QUALIFIED in the operational mode (detectably worse than historical replay in the whole NIO and the Bay of Bengal) and is withheld.",
+    "Deep-ocean daily anomaly skill is weaker and more climatology-dominant at 500-1000 m; a low deep RMSE is not strong deep anomaly skill.",
+    "The reconstruction is valid for the common valid date of all seven inputs, which trails the retrieval time; it is not the ocean 'now'.",
+    "Arabian Sea: the operational mode did not beat climatology at 300, 500 m in the hindcast.",
+    "Bay Of Bengal: the operational mode did not beat climatology at 700 m in the hindcast."
+  ],
+  "latest_live_run": {
+    "effective_date": "2026-09-03",
+    "retrieval_time_utc": "2026-09-11T17:17:07",
+    "reconstruction_lag_hours": 209.29,
+    "oldest_input_age_hours": 209.29,
+    "newest_input_age_hours": 209.27,
+    "joint_mask_coverage": 0.9966276180333689,
+    "sources": [
+      {
+        "product_key": "sst_nrt",
+        "dataset_id": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
+        "state": "OK",
+        "newest_valid_time": "2026-09-10T00:00:00",
+        "product_valid_time": "2026-09-03T00:00:00",
+        "local_retrieval_time": "2026-09-11T17:16:11",
+        "age_hours": 209.27
+      },
+      {
+        "product_key": "sss_nrt_multiobs",
+        "dataset_id": "cmems_obs-mob_glo_phy-sss_nrt_multi_P1D",
+        "state": "OK",
+        "newest_valid_time": "2026-09-05T00:00:00",
+        "product_valid_time": "2026-09-03T00:00:00",
+        "local_retrieval_time": "2026-09-11T17:16:20",
+        "age_hours": 209.27
+      },
+      {
+        "product_key": "sla_nrt",
+        "dataset_id": "cmems_obs-sl_glo_phy-ssh_nrt_allsat-l4-duacs-0.125deg_P1D",
+        "state": "OK",
+        "newest_valid_time": "2026-09-11T00:00:00",
+        "product_valid_time": "2026-09-03T00:00:00",
+        "local_retrieval_time": "2026-09-11T17:16:32",
+        "age_hours": 209.28
+      },
+      {
+        "product_key": "currents_nrt",
+        "dataset_id": "OSCAR_L4_OC_NRT_V2.0",
+        "state": "OK",
+        "newest_valid_time": "2026-09-03T00:00:00",
+        "product_valid_time": "2026-09-03T00:00:00",
+        "local_retrieval_time": "2026-09-11T17:16:43",
+        "age_hours": 209.28
+      },
+      {
+        "product_key": "wind_nrt",
+        "dataset_id": "cmems_obs-wind_glo_phy_nrt_l4_0.125deg_PT1H",
+        "state": "OK",
+        "newest_valid_time": "2026-09-10T23:00:00",
+        "product_valid_time": "2026-09-03T00:00:00",
+        "local_retrieval_time": "2026-09-11T17:17:07",
+        "age_hours": 209.29
+      }
+    ]
+  },
+  "frozen_hashes": {
+    "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+    "l2_encoder_sha256": "30cfd2db9e8b6b96473c1e205280c0099a422a1ec4a3cc6d0dd6dee554db4808",
+    "l2_checkpoint_file": "81979a6541927ff5c6b0a13c5ce7cdbcd486040d16a304dcdc10b2962a586e35",
+    "feature_scaler_file": "49671ce760b0dca5c1c82cb184dae91908cc064abfdea8cc7eb2f5bc3c320467",
+    "target_scaler_file": "5b6f359db0d228dd7d3acf775ab8a6eea76dd521e7b4568ff1873c832e89e93b",
+    "climatology_file": "748af4d79bc704cc2f742e1c208bacebe781131c5ff142cddc7c334963903cd5"
+  },
+  "shared_renderer": {
+    "reused": true,
+    "component": "web/src/components/DepthRenderer.tsx",
+    "adapter": "web/src/field/replayAdapter.ts (adaptReplay) - the same for historical and latest fields",
+    "transport": "oceanembed.field-view.v1 via poc.app.field_payload"
+  },
+  "artifacts": {
+    "outputs/phase8b/NRT_SUBSURFACE_QUALIFICATION_PROTOCOL.md": "c17ef005635c8d12f741287e9b03a28aa0146f107538f917a55917183a2dcdc2",
+    "outputs/phase8b/qualification_decision.json": "f35b09a56d0c5a16efbb18b3e23b17010c358c063f1a852ccbeaf0d8aba83c4a",
+    "outputs/phase8b/fetch_manifest.json": "c5c13b31fd4df92e6ed12ac42948aa7e1167e40f311bd5e057ea1b1bed16ee97",
+    "outputs/phase8b/operational_resilience_test.json": "0028ea927849f57ae4e3b894914f36a3c523c7bd63fe8a235189006f8e5f8a43",
+    "outputs/phase8b/latest_live_run.json": "7ee5d94ff1eb6d6e9bd3632edd01f9b269bbfce94f4dc330c3319f1e7628186b",
+    "outputs/tables/phase8b_hindcast_temperature_metrics.csv": "dbd3e5f0e96bab92085a99dfd3c22e5fd025d1e16f0ead8608613e87e9acec5c",
+    "outputs/tables/phase8b_hindcast_skill.csv": "da7d5af0ab4308a6384bfa60554ec3e55c39966c2f0c8343eb74ea698f934321",
+    "outputs/tables/phase8b_hindcast_bootstrap.csv": "dca638e91796cac72282a944763bfc57581541b4fe68c291ec37f70bf7b0853e",
+    "outputs/tables/phase8b_sensitivity.csv": "d188c835248aa28c76be91dd8ded057433e72adbb3ded6fe317462d3cc1a51d7",
+    "outputs/tables/phase8b_sss_compatibility.csv": "d5109de6e452f9b2ca1260faa353053c8ab1de24c242d248e87027f219efdedd",
+    "outputs/tables/phase8b_d26_tchp_metrics.csv": "beb8b52589c7bf111878f834ae997b39462866bf8ee318f62432e8fd3b302224",
+    "outputs/tables/phase8b_daily_coverage.csv": "0076e7b0842f0a492253f006d2222b0c0e126c4be0bde36b9d4f579d3659eccb"
+  },
+  "source_commit": "db4a7c45d1103f0120409a65af5429f749ae66e5"
+}
