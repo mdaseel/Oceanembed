@@ -43,6 +43,19 @@ test("the tab name and every qualified claim come from the decision artifact", a
     "QUALIFIED WITH LIMITATIONS",
   );
   await expect(page.getByTestId("d26-withheld")).toContainText("NOT QUALIFIED");
+  // Hardening: the three human-facing statements are shown, with the real
+  // valid date and lag, and qualification is never passed off as timeliness.
+  const lagDays = (cached.meta.reconstruction_lag_hours / 24).toFixed(1);
+  const tl = page.getByTestId("timeliness-note");
+  await expect(tl).toContainText("Operational timeliness has not been separately certified");
+  await expect(tl).toContainText(`valid for ${cached.effective_date}`);
+  await expect(tl).toContainText(`${lagDays}-day reconstruction lag`);
+  await expect(page.getByTestId("d26-withheld")).toContainText(
+    "not exposed as a qualified D26 product",
+  );
+  await expect(page.getByTestId("hazard-transfer-note")).toContainText(
+    "not observationally validated as a cyclone forecast",
+  );
   await expect(page.getByTestId("limitations")).toContainText("observational");
   await expect(page.getByTestId("effective-date")).toContainText(cached.effective_date);
   await expect(page.locator('[data-testid="latest-sources"] tbody tr')).toHaveCount(5);
@@ -86,6 +99,9 @@ test("the latest field is drawn by the SAME map, 3D renderer and profile, unchan
   await expect(page.getByTestId("depth-renderer")).toBeVisible();
 
   await expect(page.getByTestId("latest-hazard")).toContainText("does not predict");
+  await expect(page.getByTestId("latest-hazard-transfer")).toContainText(
+    "not observationally validated as a cyclone forecast",
+  );
   await page.locator("main").screenshot({ path: "../outputs/phase8b/latest-qualified.png" });
 });
 

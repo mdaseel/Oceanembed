@@ -1044,7 +1044,11 @@ export default function App() {
                       )}
                       {latestMode && (
                         <Suspense fallback={null}>
-                          <LatestHazardPanel field={f} selection={selection} />
+                          <LatestHazardPanel
+                            field={f}
+                            selection={selection}
+                            note={qual?.hazard_transfer_note}
+                          />
                         </Suspense>
                       )}
                     </>

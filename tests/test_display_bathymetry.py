@@ -24,12 +24,31 @@ def test_bathymetry_rejects_unknown_sign():
     import pytest
     with pytest.raises(ValueError): module.regrid_depth(xr.DataArray([1]))
 
+#: Regeneration tolerance, metres. One tenth of a millimetre: far below ETOPO's
+#: vertical resolution and irrelevant at the 0.25 deg application grid.
+REGEN_ATOL_M = 1e-4
+
 def test_local_bundle_reproducible_and_same_terrain_source():
+    """Two different claims, checked two different ways.
+
+    Artifact identity: the committed ETOPO source and the committed depth.bin
+    are pinned by EXACT SHA-256, so the bundle the app ships cannot change.
+
+    Reproducibility: re-running the regrid on another run or environment can
+    differ at floating-point / library level (observed <= 1.06e-5 m), so the
+    regenerated field is compared numerically - identical NaN pattern, values
+    within REGEN_ATOL_M - rather than byte for byte.
+    """
     import json,hashlib
-    with xr.open_dataset(module.SOURCE) as ds: depth=module.regrid_depth(ds.z)
-    actual=np.asarray(depth,dtype="<f8").tobytes()
     out=ROOT/"web/public/assets/bathymetry"
-    assert actual==(out/"depth.bin").read_bytes()
     meta=json.loads((out/"metadata.json").read_text())
+    stored_bytes=(out/"depth.bin").read_bytes()
     assert hashlib.sha256(module.SOURCE.read_bytes()).hexdigest()==meta["sourceSha256"]
-    assert hashlib.sha256(actual).hexdigest()==meta["depthSha256"]
+    assert hashlib.sha256(stored_bytes).hexdigest()==meta["depthSha256"]
+
+    with xr.open_dataset(module.SOURCE) as ds: depth=module.regrid_depth(ds.z)
+    actual=np.asarray(depth,dtype="<f8").ravel()
+    stored=np.frombuffer(stored_bytes,dtype="<f8")
+    assert actual.shape==stored.shape
+    np.testing.assert_array_equal(np.isnan(actual),np.isnan(stored))
+    np.testing.assert_allclose(actual,stored,rtol=0,atol=REGEN_ATOL_M,equal_nan=True)

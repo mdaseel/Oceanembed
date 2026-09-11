@@ -376,9 +376,11 @@ def latest(region: bool = True) -> dict:
 
 # ------------------------------------------------------------------ Phase 8B
 LATEST_HAZARD_SCOPE = (
-    "Latest qualified mode. The Phase 7D indicator logic and thresholds are "
-    "unchanged; its transfer to the operational stack was qualified under the "
-    "Phase 8B protocol (section 9) because TCHP was. It describes the ocean "
+    "Latest qualified mode. Qualified by transfer from the frozen TCHP rule; not "
+    "observationally validated as a cyclone forecast. The Phase 7D indicator logic "
+    "and thresholds are unchanged; its transfer to the operational stack was "
+    "qualified under the Phase 8B protocol (section 9) because TCHP was. It "
+    "describes the ocean "
     "thermal environment on the effective date. No numeric cyclone probability "
     "is produced.")
 

@@ -40,6 +40,9 @@ export interface Qualification {
   protocol: string;
   protocol_commit?: string;
   qualified_unreachable_reason?: string;
+  timeliness_note?: string;
+  d26_tchp_explanation?: string;
+  hazard_transfer_note?: string;
 }
 interface Source {
   product_key: string;
@@ -152,6 +155,22 @@ export default function LatestQualified({
           {qualification.qualified_unreachable_reason}
         </p>
 
+        {payload?.effective_date && (
+          <p className="notice" data-testid="timeliness-note">
+            <strong>Operational timeliness not certified.</strong> Scientific
+            input-stack qualification and operational timeliness are separate.
+            This field is valid for <strong>{payload.effective_date}</strong> and
+            was retrieved with a{" "}
+            <strong>
+              {m.reconstruction_lag_hours == null
+                ? "—"
+                : `${(m.reconstruction_lag_hours / 24).toFixed(1)}-day`}
+            </strong>{" "}
+            reconstruction lag. Operational timeliness has not been separately
+            certified. This is not the ocean now.
+          </p>
+        )}
+
         {busy && (
           <p className="muted small" role="status" data-testid="latest-busy">
             Retrieving all seven inputs for their common valid date. Nothing is
@@ -236,12 +255,19 @@ export default function LatestQualified({
           </div>
         </div>
 
-        <p className="notice" data-testid="d26-withheld">
-          <strong>D26 · {qualification.d26_category}</strong> in the operational
-          mode and withheld — it was detectably worse than historical replay in
-          the pre-registered hindcast. TCHP · {qualification.tchp_category}.
-          Ocean Hazard Indicators · {qualification.latest_hazard_indicators}.
-        </p>
+        <div className="notice" data-testid="d26-withheld">
+          <p>
+            <strong>D26 · {qualification.d26_category}</strong> (withheld) ·{" "}
+            <strong>TCHP · {qualification.tchp_category}</strong> ·{" "}
+            <strong>
+              Ocean Hazard Indicators · {qualification.latest_hazard_indicators}
+            </strong>
+          </p>
+          <p className="small">{qualification.d26_tchp_explanation}</p>
+          <p className="small" data-testid="hazard-transfer-note">
+            {qualification.hazard_transfer_note}
+          </p>
+        </div>
         <p className="muted small">
           Historical Replay and historical Ocean Hazard Indicators are local
           capabilities and remain fully available regardless of this state.
@@ -322,9 +348,11 @@ export default function LatestQualified({
 export function LatestHazardPanel({
   field,
   selection,
+  note,
 }: {
   field: FieldView;
   selection: Selection;
+  note?: string;
 }) {
   const h = field.hazard;
   if (!h) return null;
@@ -333,6 +361,11 @@ export function LatestHazardPanel({
     <section className="panel" data-testid="latest-hazard">
       <span className="eyebrow">OCEAN HAZARD INDICATORS · LATEST QUALIFIED MODE</span>
       <h2>{h.indicator}</h2>
+      {note && (
+        <p className="muted" data-testid="latest-hazard-transfer">
+          {note}
+        </p>
+      )}
       <p>
         Selected cell:{" "}
         <strong data-testid="latest-hazard-level">

@@ -294,6 +294,16 @@ class TestApi:
         assert q["tab_name"] == "Latest Qualified Ocean State"
         assert q["d26_category"] == "NOT QUALIFIED"
         assert any("observational" in x for x in q["limitations"])
+        # Hardening: qualification, timeliness, D26/TCHP and hazard transfer are
+        # stated as separate claims, and none widens a frozen category.
+        assert "Operational timeliness has not been separately certified" in \
+            q["timeliness_note"]
+        assert "not exposed as a qualified D26 product" in q["d26_tchp_explanation"]
+        assert "not observationally validated as a cyclone forecast" in \
+            q["hazard_transfer_note"]
+        for note in (q["timeliness_note"], q["d26_tchp_explanation"],
+                     q["hazard_transfer_note"]):
+            assert note in q["limitations"]
 
     def test_live_payload_uses_the_historical_transport(self, client):
         p = client.get("/api/latest/qualified").json()
@@ -307,6 +317,9 @@ class TestApi:
         assert all(v is None for row in f["diagnostics"]["d26_m"] for v in row)
         assert any(v is not None for row in f["diagnostics"]["tchp_kj_cm2"] for v in row)
         assert "does not predict" in f["hazard"]["non_prediction_statement"].lower()
+        assert f["hazard"]["scope_note"].startswith(
+            "Latest qualified mode. Qualified by transfer from the frozen TCHP rule; "
+            "not observationally validated as a cyclone forecast.")
         assert "probability" not in json.dumps(f["hazard"]["category_counts"]).lower()
         assert f["provenance"]["operating_mode"] == LQ.OPERATING_MODE
         assert set(f["surface_inputs"]) == {"sst", "sss", "sla", "current_u",

@@ -82,6 +82,23 @@ NOT_QUALIFIED_LABEL = "LATEST SUBSURFACE RECONSTRUCTION NOT QUALIFIED"
 QUALIFIED_TAB = "Latest Qualified Ocean State"
 UNQUALIFIED_TAB = "Latest Inputs"
 
+#: Human-facing statements added in the Phase 8B hardening pass. They explain
+#: the frozen results; they change no category, gate or threshold.
+TIMELINESS_NOTE = (
+    "Scientific input-stack qualification and operational timeliness are separate. "
+    "The reconstruction is valid for the common valid date of all seven inputs, "
+    "which trails the retrieval time by the reconstruction lag shown with it. "
+    "Operational timeliness has not been separately certified; the field is never "
+    "'the ocean now'.")
+D26_TCHP_EXPLANATION = (
+    "D26 is withheld as a standalone operational diagnostic because its depth error "
+    "degraded significantly. TCHP was independently evaluated end-to-end and passed "
+    "its frozen non-inferiority criterion. The internal 26°C crossing required for "
+    "TCHP calculation is not exposed as a qualified D26 product.")
+HAZARD_TRANSFER_NOTE = (
+    "Latest Ocean Hazard Indicators are qualified by transfer from the frozen TCHP "
+    "rule; not observationally validated as a cyclone forecast.")
+
 CLIMATOLOGY_NOTE = (
     "isfinite(climatology) records CLIMATOLOGY DEPTH-SUPPORT availability - where "
     "the frozen L0 has coefficients. It is NOT a bathymetry product and NOT an "
@@ -142,8 +159,9 @@ def qualification_summary(path: Path | None = None) -> dict:
         f"{d['stack_verdict']}).",
         "SLA (all-satellite DUACS NRT) and currents (OSCAR NRT) were decided "
         "SUBSTITUTE_WITH_MONITORING in Phase 6C-D.",
-        "D26 is NOT QUALIFIED in the operational mode (detectably worse than "
-        "historical replay in the whole NIO and the Bay of Bengal) and is withheld.",
+        D26_TCHP_EXPLANATION,
+        HAZARD_TRANSFER_NOTE,
+        TIMELINESS_NOTE,
         "Deep-ocean daily anomaly skill is weaker and more climatology-dominant at "
         "500-1000 m; a low deep RMSE is not strong deep anomaly skill.",
         "The reconstruction is valid for the common valid date of all seven inputs, "
@@ -166,6 +184,9 @@ def qualification_summary(path: Path | None = None) -> dict:
         "qualified_reachable_in_8b": d.get("qualified_reachable_in_8b", False),
         "qualified_unreachable_reason": d.get("qualified_unreachable_reason"),
         "limitations": limitations if ok else [],
+        "timeliness_note": TIMELINESS_NOTE,
+        "d26_tchp_explanation": D26_TCHP_EXPLANATION,
+        "hazard_transfer_note": HAZARD_TRANSFER_NOTE,
         "policy": POLICY,
         "products": {k: PRODUCTS[k]["dataset_id"] for k in PRODUCT_CHANNELS},
         "stack_verdict": d.get("stack_verdict"),
