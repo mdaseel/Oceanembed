@@ -23,17 +23,19 @@ polled. Measured live during verification:
 State: `ONLINE_CURRENT`. Downloads were 1.16 MB (SST) and 389 KB (SLA) for the
 5–30 °N / 45–105 °E box, one day each.
 
-Coverage near 50 % is expected and is not a defect: roughly half that box is
-land. It is reported as the fraction of retrieved cells carrying a finite value,
-with the raw counts beside it, rather than as a bare percentage.
+**NIO coverage is the fraction of finite cells in the retrieved native-grid NIO
+rectangle**, reported with the raw counts beside it rather than as a bare
+percentage. Much of the non-finite area is associated with land, but this is
+**not** an inference-readiness or ocean-only coverage metric.
 
 **Products and the catalogue poll are reused from the Phase 6C-D registry**
 (`src/oceanembed/nrt/registry.py`, `discover.poll_product`). No NRT download
 machinery was duplicated.
 
-**Credentials were never entered, read or logged by this work.** The
-`copernicusmarine` client resolves its own stored login; a missing or rejected
-one surfaces as an ordinary source failure with its own state.
+**OceanEmbed code does not directly inspect, store, print or log credential
+values; authentication is delegated to the configured Copernicus Marine
+client.** A missing or rejected login surfaces as an ordinary source failure
+with its own state.
 
 ## 2. Provenance is stated, never invented
 
@@ -56,8 +58,8 @@ Two rules the code enforces rather than merely intends:
 
 A third route, **Latest Inputs**, sits beside Historical Replay, 3D Depth View
 and Ocean Hazard Indicators. It shows the connectivity state, whether the
-reading is fresh or cached, the source-by-source table above, and — prominently
-— what does not exist:
+reading is a live retrieval or cached, the source-by-source table above, and —
+prominently — what does not exist:
 
 ```
 SUBSURFACE NRT RECONSTRUCTION NOT YET CERTIFIED
@@ -217,9 +219,11 @@ artifacts still verify.
 
 ## 8. Limitations, stated
 
-- **Coverage is measured, not qualified.** ~50 % finite cells is a land fraction,
-  not an assessment of whether the field is fit for inference. No qualification
-  claim is made about either input.
+- **Coverage is measured, not qualified.** ~50 % is the finite-cell fraction of
+  the retrieved native-grid rectangle. Much of the non-finite area is associated
+  with land, but it is not an ocean-only coverage metric and not an assessment
+  of whether the field is fit for inference. No qualification claim is made
+  about either input.
 - **Data age is real and non-trivial**: SST was 43.5 h old at retrieval. Whether
   that age is acceptable for operational inference is a Phase 8B question.
 - **Only two of seven channels are touched.** The frozen L2 requires all seven,

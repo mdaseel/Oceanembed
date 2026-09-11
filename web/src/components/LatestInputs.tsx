@@ -51,14 +51,30 @@ interface Telemetry {
   elapsed_seconds?: number;
 }
 
+// Jury-facing text describes connectivity and retrieval only. Phase 8A measures
+// data age; it does not qualify whether that age is acceptable for inference,
+// so nothing here may read as "current" or "fresh" in that sense. The internal
+// state names are unchanged.
 const STATE_TEXT: Record<string, string> = {
-  ONLINE_CURRENT: "All sources current",
+  ONLINE_CURRENT: "All requested sources reachable",
   ONLINE_PARTIAL: "PARTIAL SOURCE AVAILABILITY",
   OFFLINE_OR_SOURCE_UNAVAILABLE: "Offline or source unavailable",
   CACHED_TELEMETRY_NOT_CURRENT: "Showing last successful telemetry — NOT CURRENT",
 };
+const stateText = (t: Telemetry) =>
+  t.state === "ONLINE_CURRENT" &&
+  t.sources.length > 0 &&
+  t.sources.every((s) => s.state === "OK")
+    ? "Both requested sources retrieved"
+    : (STATE_TEXT[t.state] ?? t.state);
+const RETRIEVAL_TEXT: Record<string, string> = {
+  ONLINE_CURRENT: "Successful",
+  ONLINE_PARTIAL: "Partial",
+  OFFLINE_OR_SOURCE_UNAVAILABLE: "Failed",
+};
 const SOURCE_TEXT: Record<string, string> = {
   OK: "Retrieved",
+  CATALOGUE_ONLY: "Catalogue answered; region not requested",
   COVERAGE_UNAVAILABLE: "Catalogue answered; region not retrieved",
   AUTH_FAILED: "Provider rejected or missing credentials",
   UNREACHABLE: "No answer from provider",
@@ -115,23 +131,40 @@ export default function LatestInputs() {
 
         <p className="notice" data-testid="not-certified">
           <strong>{data?.subsurface_reconstruction ?? "SUBSURFACE NRT RECONSTRUCTION NOT YET CERTIFIED"}</strong>
+          <br />
+          <strong data-testid="not-produced">LATEST SUBSURFACE FIELD: NOT PRODUCED</strong>
         </p>
 
         <div className="stats-grid">
           <div className="stat" data-testid="telemetry-state">
             <span>CONNECTIVITY STATE</span>
-            <strong>{data ? (STATE_TEXT[data.state] ?? data.state) : "Checking…"}</strong>
+            <strong>{data ? stateText(data) : "Checking…"}</strong>
             <span className="small muted">{data?.state ?? ""}</span>
           </div>
-          <div className="stat">
-            <span>FRESH TELEMETRY</span>
+          <div className="stat" data-testid="live-retrieval">
+            <span>LIVE RETRIEVAL</span>
             <strong>
-              {data?.is_cached ? "No — cached" : data ? "Yes" : "—"}
+              {data?.is_cached
+                ? "No — cached"
+                : data
+                  ? (RETRIEVAL_TEXT[data.state] ?? data.state)
+                  : "—"}
             </strong>
-            {data?.is_cached && data.cached_staleness_hours != null && (
+            {data?.is_cached && data.cached_staleness_hours != null ? (
               <span className="small muted">
                 cached {age(data.cached_staleness_hours)} ago
               </span>
+            ) : (
+              sources.some((s) => s.data_age_hours != null) && (
+                <span className="small muted">
+                  data age{" "}
+                  {sources
+                    .filter((s) => s.data_age_hours != null)
+                    .map((s) => `${s.channel.toUpperCase()} ${age(s.data_age_hours)}`)
+                    .join(" · ")}
+                  {" "}— measured, not qualified for inference
+                </span>
+              )
             )}
           </div>
           <div className="stat">
@@ -240,11 +273,24 @@ export default function LatestInputs() {
             . The table above is the cached reading, not this attempt.
           </p>
         )}
+        <p className="muted small" data-testid="coverage-note">
+          NIO coverage is the fraction of finite cells in the retrieved
+          native-grid North Indian Ocean rectangle (5–30°N, 45–105°E). Much of
+          the non-finite area is associated with land, but this is{" "}
+          <strong>not</strong> an inference-readiness or ocean-only coverage
+          metric.
+        </p>
         <p className="muted small">
           Product valid time and local retrieval time are stored and shown
           separately, and a provider-side generation time appears only when the
           provider actually states one. Nothing here is an invented acquisition
-          time.
+          time. Data age is measured and shown; whether that age is acceptable
+          for inference has not been qualified.
+        </p>
+        <p className="muted small" data-testid="credential-note">
+          OceanEmbed code does not directly inspect, store, print or log
+          credential values; authentication is delegated to the configured
+          Copernicus Marine client.
         </p>
       </section>
 

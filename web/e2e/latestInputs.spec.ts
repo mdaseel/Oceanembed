@@ -62,6 +62,19 @@ test("latest inputs reports telemetry and never a reconstruction", async ({ page
     "SUBSURFACE NRT RECONSTRUCTION NOT YET CERTIFIED",
   );
   await expect(page.getByTestId("telemetry-state")).toContainText("ONLINE_CURRENT");
+  await expect(page.getByTestId("telemetry-state")).toContainText(
+    "Both requested sources retrieved",
+  );
+  // Retrieval is reported; inference fitness is not claimed.
+  await expect(page.getByTestId("live-retrieval")).toContainText("LIVE RETRIEVAL");
+  await expect(page.getByTestId("live-retrieval")).toContainText("Successful");
+  await expect(page.getByTestId("live-retrieval")).toContainText("SST 43.5 h");
+  await expect(page.getByTestId("coverage-note")).toContainText(
+    "not an inference-readiness or ocean-only coverage metric",
+  );
+  await expect(page.getByTestId("credential-note")).toContainText(
+    "authentication is delegated to the configured Copernicus Marine client",
+  );
 
   // Both inputs, reported separately, with the two clocks kept apart.
   const rows = page.locator('[data-testid="source-table"] tbody tr');
@@ -77,7 +90,11 @@ test("latest inputs reports telemetry and never a reconstruction", async ({ page
   expect(body).not.toMatch(/\d+\.\d+\s*°C/);
   expect(body).not.toMatch(/kJ\/cm/);
   expect(body).not.toContain("Latest Qualified Ocean State");
-  await expect(page.getByText("NOT PRODUCED")).toBeVisible();
+  expect(body).not.toContain("FRESH TELEMETRY");
+  expect(body).not.toContain("All sources current");
+  await expect(page.getByTestId("not-produced")).toHaveText(
+    "LATEST SUBSURFACE FIELD: NOT PRODUCED",
+  );
 
   await page.getByRole("button", { name: "Why these inputs?" }).click();
   await expect(page.getByTestId("why-these-inputs")).toContainText("does NOT mean");

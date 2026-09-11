@@ -14,9 +14,10 @@ frozen L2 can accept arbitrary values in them. The full seven-channel
 operational contract is a Phase 8B question and is not answered here.
 
 Product definitions and the catalogue poll are reused from the Phase 6C-D
-registry rather than redefined. Credentials are never read, written or logged
-by this module; ``copernicusmarine`` resolves its own stored login, and a
-missing or rejected login is reported as an ordinary source failure.
+registry rather than redefined. OceanEmbed code does not directly inspect,
+store, print or log credential values; authentication is delegated to the
+configured Copernicus Marine client, and a missing or rejected login is
+reported as an ordinary source failure.
 """
 from __future__ import annotations
 
