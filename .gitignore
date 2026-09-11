@@ -51,3 +51,5 @@ outputs/phase7/replay_cache/
 outputs/phase8a/cache/
 # Runtime telemetry snapshot: rewritten on every successful refresh.
 outputs/phase8a/last_successful_telemetry.json
+outputs/phase8b/cache/
+outputs/phase8b/latest_snapshot/

@@ -315,10 +315,19 @@ class TestResilienceArtifact:
 # ------------------------------------------------------- discipline
 class TestStillNotAuthorized:
     def test_no_latest_subsurface_inference_anywhere(self):
+        """The Phase 8A telemetry endpoint runs no model.
+
+        Phase-boundary note (Phase 8B): this also banned `latest_qualified_field`
+        anywhere in the app, correct while 8B was unauthorised. 8B qualified a
+        latest mode and provides a gated latest path (nrt/latest.py, pinned in
+        tests/test_phase8b_latest.py), so the ban was narrowed to what 8A itself
+        guarantees: the telemetry endpoint never reaches inference.
+        """
         app = (ROOT / "src/oceanembed/poc/app.py").read_text(encoding="utf-8")
-        assert "latest_qualified_field" not in app
-        # The only replay entry points remain the historical ones.
-        assert "def latest(" in app and "replay_field" not in app.split("def latest(")[1][:600]
+        assert "def latest(" in app
+        body = app.split("def latest(")[1][:600]
+        for banned in ("replay_field", "run_prepared", "_infer"):
+            assert banned not in body, banned
 
     def test_no_sss_fallback_or_quantile_mapping_introduced(self):
         for rel in ("src/oceanembed/nrt/telemetry.py",

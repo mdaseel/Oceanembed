@@ -47,6 +47,14 @@ export interface Diagnostics {
   tchpPhysical: Uint8Array;
   physicalLabels: Record<number, string>;
   physicalCounts: Record<string, number>;
+  /**
+   * Diagnostics the source may NOT show. A withheld kind carries no value at
+   * all - every cell is NaN - so no layer, tile or export can present it. Used
+   * by the Phase 8B latest mode, where D26 is not operationally qualified.
+   */
+  withheld?: DiagnosticKind[];
+  /** Per-kind qualification category, when the source states one. */
+  qualification?: Record<string, string>;
 }
 export interface Provenance {
   model_name: string;
@@ -263,12 +271,19 @@ export function validateField(f: FieldView): FieldView {
     )
       throw Error("Diagnostic shape mismatch");
     // Re-check the backend's own invariant rather than trusting it: a defined
-    // D26 must carry an OK status, and a NaN must never be read as a zero.
+    // D26 must carry an OK status, and a NaN must never be read as a zero. A
+    // withheld diagnostic must carry no value anywhere.
+    const d26Withheld = !!d.withheld?.includes("d26"),
+      tchpWithheld = !!d.withheld?.includes("tchp");
     for (let i = 0; i < n; i++) {
       const label = d.statusLabels[d.status[i]];
-      if (Number.isFinite(d.d26[i]) !== (label === "OK"))
+      if (d26Withheld) {
+        if (Number.isFinite(d.d26[i])) throw Error("Withheld D26 carries a value");
+      } else if (Number.isFinite(d.d26[i]) !== (label === "OK"))
         throw Error("D26 value disagrees with its status");
-      if (
+      if (tchpWithheld) {
+        if (Number.isFinite(d.tchp[i])) throw Error("Withheld TCHP carries a value");
+      } else if (
         Number.isFinite(d.tchp[i]) !==
         (label === "OK" || label === "SURFACE_BELOW_26")
       )

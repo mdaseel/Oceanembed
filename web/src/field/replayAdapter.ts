@@ -45,6 +45,8 @@ export interface ReplayPayload {
     tchp_physical_status: number[][];
     physical_status_labels: Record<string, string>;
     physical_status_counts: Record<string, number>;
+    withheld?: string[];
+    qualification?: Record<string, string>;
   };
   hazard?: {
     indicator: string;
@@ -114,6 +116,10 @@ export function adaptReplay(p: ReplayPayload): ReplayData {
         Object.entries(d.physical_status_labels).map(([k, v]) => [Number(k), v]),
       ),
       physicalCounts: d.physical_status_counts,
+      withheld: (d.withheld ?? []).filter(
+        (k): k is "d26" | "tchp" => k === "d26" || k === "tchp",
+      ),
+      qualification: d.qualification,
     };
   }
   let hazard: Hazard | undefined;

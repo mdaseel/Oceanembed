@@ -13,6 +13,7 @@ import xarray as xr
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
+from starlette.concurrency import run_in_threadpool
 from starlette.middleware.gzip import GZipMiddleware
 
 from ..config import REPO_ROOT
@@ -24,6 +25,7 @@ from ..diagnostics import (CONVENTION, D26Status, DISPLAY_VALID_RULE,
 from ..diagnostics.hazard import (INDICATOR_NAME, NON_PREDICTION_STATEMENT,
                                   PROTOCOL_PATH, TCHP_ERROR_KJ_CM2,
                                   ThermalSupport, categorize, load_thresholds)
+from ..nrt.latest import LatestRefused
 from ..replay import api as replay_api
 from ..replay.contract import OutsideDomain
 from ..replay.engine import _PRODUCTS, _UNITS
@@ -104,6 +106,24 @@ def view_payload(view) -> dict:
     when = pd.Timestamp(view.date)
     ds = e._store(when.year)
     t = e._time_index(ds, when)
+    surface = {
+        name: {"values": replay_api._nan_to_none(ds[name].isel(time=t).values),
+               "units": _UNITS[name], "product": _PRODUCTS[name]}
+        for name in view.provenance["surface_inputs"]
+    }
+    return field_payload(view, surface)
+
+
+def field_payload(view, surface_inputs: dict, withheld: tuple = (),
+                  qualification: dict | None = None,
+                  hazard_scope: str | None = None) -> dict:
+    """The one field-view transport, whatever the source of the field.
+
+    Historical Replay and the Phase 8B latest mode both go through here, so the
+    frontend receives the same schema from both and adapts both with the same
+    adapter. ``withheld`` names diagnostics the source may not show; a withheld
+    diagnostic is transported with no value at all.
+    """
     # Derived on the server from the SAME authoritative field the map and the
     # profile use, so a D26 shown on the map and a D26 shown for a clicked cell
     # cannot come from two different calculations.
@@ -112,6 +132,7 @@ def view_payload(view) -> dict:
     # It qualifies the presentation; it never edits a raw model value.
     water = local_water_depth(strict=False)
     d26_phys, tchp_phys = qualify(diag, water)
+    blank = np.full(diag.d26.shape, np.nan)
     return {
         "schema": "oceanembed.field-view.v1",
         "date": view.date,
@@ -123,14 +144,13 @@ def view_payload(view) -> dict:
         "ocean_mask": view.ocean_mask.tolist(),
         "surface_input_valid": view.surface_input_valid.tolist(),
         "climatology_defined": view.climatology_defined.tolist(),
-        "surface_inputs": {
-            name: {"values": replay_api._nan_to_none(ds[name].isel(time=t).values),
-                   "units": _UNITS[name], "product": _PRODUCTS[name]}
-            for name in view.provenance["surface_inputs"]
-        },
+        "surface_inputs": surface_inputs,
         "diagnostics": {
-            "d26_m": replay_api._nan_to_none(diag.d26),
-            "tchp_kj_cm2": replay_api._nan_to_none(diag.tchp),
+            "d26_m": replay_api._nan_to_none(blank if "d26" in withheld else diag.d26),
+            "tchp_kj_cm2": replay_api._nan_to_none(
+                blank if "tchp" in withheld else diag.tchp),
+            "withheld": list(withheld),
+            "qualification": qualification,
             "status": diag.status.astype(int).tolist(),
             "status_labels": {int(s): s.name for s in D26Status},
             "status_counts": diag.counts(),
@@ -157,13 +177,20 @@ def view_payload(view) -> dict:
                 for d in view.depths},
         },
         "hazard": hazard_block(diag, d26_phys, tchp_phys,
-                               view.ocean_mask & view.surface_input_valid),
+                               view.ocean_mask & view.surface_input_valid,
+                               scope_note=hazard_scope),
         "provenance": view.provenance,
         "credits": CREDITS,
     }
 
 
-def hazard_block(diag, d26_phys, tchp_phys, population) -> dict:
+HISTORICAL_HAZARD_SCOPE = (
+    "Historical only. Not connected to live or near-real-time data. No "
+    "numeric cyclone probability is produced.")
+
+
+def hazard_block(diag, d26_phys, tchp_phys, population,
+                 scope_note: str | None = None) -> dict:
     """Ocean Thermal Support, derived from the SAME diagnostics shown elsewhere.
 
     No second inference path and no client-side recomputation. A category exists
@@ -192,9 +219,7 @@ def hazard_block(diag, d26_phys, tchp_phys, population) -> dict:
             "The category summarises a reconstruction, not a measurement. The "
             "Phase 7C TCHP error is comparable to a category width, so adjacent "
             "categories are not distinguishable at a single cell."),
-        "scope_note": (
-            "Historical only. Not connected to live or near-real-time data. No "
-            "numeric cyclone probability is produced."),
+        "scope_note": scope_note or HISTORICAL_HAZARD_SCOPE,
     }
 
 
@@ -347,6 +372,132 @@ def latest(region: bool = True) -> dict:
     """
     from ..nrt import telemetry as T
     return T.telemetry_payload(with_region=region)
+
+
+# ------------------------------------------------------------------ Phase 8B
+LATEST_HAZARD_SCOPE = (
+    "Latest qualified mode. The Phase 7D indicator logic and thresholds are "
+    "unchanged; its transfer to the operational stack was qualified under the "
+    "Phase 8B protocol (section 9) because TCHP was. It describes the ocean "
+    "thermal environment on the effective date. No numeric cyclone probability "
+    "is produced.")
+
+
+def _engine_lock():
+    lock = getattr(app.state, "engine_lock", None)
+    if lock is None:
+        app.state.engine_lock = lock = asyncio.Lock()
+    return lock
+
+
+def latest_state_payload(result, state: str, summary: dict,
+                         label: str | None = None, live_attempt: dict | None = None
+                         ) -> dict:
+    """A latest field in the SAME field-view transport as Historical Replay."""
+    from ..nrt import latest as LQ
+    from ..nrt.registry import PRODUCTS
+    by_channel = {ch: s for s in result.sources for ch in s["channels"]}
+    surface = {
+        ch: {"values": replay_api._nan_to_none(result.surface[ch]),
+             "units": _UNITS[ch],
+             "product": (f"{PRODUCTS[by_channel[ch]['product_key']]['product_id']} "
+                         f"(NRT, valid {result.view.date})")}
+        for ch in result.view.provenance["surface_inputs"]
+    }
+    withheld = tuple(k for k in ("d26", "tchp")
+                     if summary.get(f"{k}_category") != "QUALIFIED")
+    field = field_payload(
+        result.view, surface, withheld=withheld,
+        qualification={"d26": summary.get("d26_category"),
+                       "tchp": summary.get("tchp_category")},
+        hazard_scope=LATEST_HAZARD_SCOPE)
+    if summary.get("latest_hazard_indicators") != "QUALIFIED":
+        field.pop("hazard", None)
+    return {"mode": "LATEST_QUALIFIED_OCEAN_STATE", "phase": "8B", "state": state,
+            "label": label, "qualification": summary,
+            "effective_date": result.view.date, "sources": result.sources,
+            "meta": result.meta, "live_attempt": live_attempt,
+            "policy": LQ.POLICY, "field": field}
+
+
+def _latest_fallback(engine, summary: dict, live_attempt: dict) -> dict:
+    from ..nrt import latest as LQ
+    snap = LQ.load_snapshot(engine)
+    if snap is not None:
+        return latest_state_payload(snap, LQ.SNAPSHOT_STATE, summary,
+                                    LQ.SNAPSHOT_LABEL, live_attempt)
+    return {"mode": "LATEST_QUALIFIED_OCEAN_STATE", "phase": "8B",
+            "state": LQ.UNAVAILABLE_STATE, "label": LQ.UNAVAILABLE_LABEL,
+            "qualification": summary, "live_attempt": live_attempt,
+            "policy": LQ.POLICY, "field": None}
+
+
+def _not_qualified(summary: dict) -> dict:
+    from ..nrt import latest as LQ
+    return {"mode": "LATEST_QUALIFIED_OCEAN_STATE", "phase": "8B",
+            "state": LQ.NOT_QUALIFIED_STATE, "label": LQ.NOT_QUALIFIED_LABEL,
+            "qualification": summary, "field": None}
+
+
+@app.get("/api/latest/qualification")
+def latest_qualification() -> dict:
+    """What the UI may claim, read from the frozen decision artifact only."""
+    from ..nrt import latest as LQ
+    return LQ.qualification_summary()
+
+
+@app.get("/api/latest/qualified/cached")
+async def latest_qualified_cached():
+    """Instant: the last qualified snapshot, labelled NOT CURRENT, or nothing."""
+    from ..nrt import latest as LQ
+    summary = LQ.qualification_summary()
+    if not summary["qualified"]:
+        return JSONResponse(_not_qualified(summary))
+    async with _engine_lock():
+        payload = await run_in_threadpool(
+            _latest_fallback, replay_api.engine(), summary,
+            {"attempted": False, "reason": "cached view requested"})
+    return JSONResponse(payload)
+
+
+@app.get("/api/latest/qualified")
+async def latest_qualified():
+    """Attempt a new latest qualified reconstruction from the complete stack.
+
+    Retrieval and the L1-L5 checks run WITHOUT the engine lock, so a slow or
+    dead provider never blocks Historical Replay. Only the frozen inference
+    itself takes the lock. Any refusal returns the last qualified snapshot,
+    labelled NOT CURRENT, or the unavailable state - never a partial stack.
+    """
+    from ..nrt import latest as LQ
+    summary = LQ.qualification_summary()
+    if not summary["qualified"]:
+        return JSONResponse(_not_qualified(summary))
+    engine = replay_api.engine()
+    async with _engine_lock():
+        await run_in_threadpool(LQ.reference_cells, engine)
+    try:
+        prepared = await run_in_threadpool(LQ.prepare_stack, engine)
+    except LatestRefused as exc:
+        async with _engine_lock():
+            payload = await run_in_threadpool(
+                _latest_fallback, engine, summary,
+                {"attempted": True, "reasons": exc.reasons, "sources": exc.sources,
+                 "effective_date": exc.effective_date})
+        return JSONResponse(payload)
+    except Exception as exc:  # noqa: BLE001 - an unexpected failure is still a refusal
+        async with _engine_lock():
+            payload = await run_in_threadpool(
+                _latest_fallback, engine, summary,
+                {"attempted": True, "reasons": [f"{type(exc).__name__}: {exc}"],
+                 "sources": []})
+        return JSONResponse(payload)
+    async with _engine_lock():
+        result = await run_in_threadpool(LQ.run_prepared, engine, prepared)
+        LQ.save_snapshot(result)
+        payload = await run_in_threadpool(latest_state_payload, result,
+                                          LQ.LIVE_STATE, summary)
+    return JSONResponse(payload)
 
 
 @app.get("/api/evidence")

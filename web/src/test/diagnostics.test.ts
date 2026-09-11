@@ -135,6 +135,33 @@ describe("field contract validation of diagnostics", () => {
     const d = diagnostics({ d26: new Float64Array(5) });
     expect(() => validateField(field(d))).toThrow(/shape/i);
   });
+
+  // Phase 8B: the latest mode withholds D26 (not operationally qualified).
+  it("accepts a withheld D26 that carries no value anywhere", () => {
+    const d = diagnostics({
+      d26: new Float64Array(N).fill(NaN),
+      withheld: ["d26"],
+    });
+    expect(() => validateField(field(d))).not.toThrow();
+  });
+
+  it("rejects a withheld D26 that still carries a value", () => {
+    const d = diagnostics({
+      d26: new Float64Array(N).fill(NaN),
+      withheld: ["d26"],
+    });
+    d.d26[42] = 80;
+    expect(() => validateField(field(d))).toThrow(/Withheld D26/);
+  });
+
+  it("keeps the full TCHP check when only D26 is withheld", () => {
+    const d = diagnostics({
+      d26: new Float64Array(N).fill(NaN),
+      withheld: ["d26"],
+    });
+    d.tchp[9] = NaN; // status OK, so TCHP must be defined
+    expect(() => validateField(field(d))).toThrow(/TCHP/);
+  });
 });
 
 describe("reading a diagnostic at a cell", () => {

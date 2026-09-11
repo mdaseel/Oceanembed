@@ -51,6 +51,13 @@ const Validation = lazy(() => import("./components/Validation"));
 const MultiDate = lazy(() => import("./components/MultiDate"));
 const HazardTab = lazy(() => import("./components/Hazard"));
 const LatestInputsTab = lazy(() => import("./components/LatestInputs"));
+const LatestQualifiedTab = lazy(() => import("./components/LatestQualified"));
+const LatestHazardPanel = lazy(() =>
+  import("./components/LatestQualified").then((m) => ({
+    default: m.LatestHazardPanel,
+  })),
+);
+import type { Qualification } from "./components/LatestQualified";
 const routes = [
   { id: "replay", name: "Historical Replay", icon: Map },
   { id: "depth", name: "3D Depth View", icon: Layers3 },
@@ -83,8 +90,11 @@ export default function App() {
     // One control, four choices. The two depth-integrated diagnostics are map
     // layers only; `asLayer` gives the depth-indexed layer the 3D view needs.
     [display, setDisplay] = useState<MapLayer>("temperature");
-  const layer = asLayer(display),
-    diagnosticView = isDiagnostic(display);
+  // Phase 8B: the latest tab's name and every qualified claim come from the
+  // frozen qualification artifact on the server, never from this file.
+  const [qual, setQual] = useState<Qualification | null>(null),
+    [latestData, setLatestData] = useState<ReplayData | null>(null),
+    [latest3d, setLatest3d] = useState(false);
   const [lat, setLat] = useState(String(initialSettings.lat ?? 15.25)),
     [lon, setLon] = useState(String(initialSettings.lon ?? 87.75));
   const [coords, setCoords] = useState<[number, number]>([
@@ -141,6 +151,9 @@ export default function App() {
     getJson<{ date_range: string[] }>("/api/health")
       .then((r) => setRecord(r.date_range))
       .catch(() => {});
+    getJson<Qualification>("/api/latest/qualification")
+      .then(setQual)
+      .catch(() => setQual(null));
     return () => pending.current?.abort();
   }, [request]);
   useEffect(() => {
@@ -151,8 +164,21 @@ export default function App() {
     window.addEventListener("hashchange", change);
     return () => window.removeEventListener("hashchange", change);
   }, []);
-  const f = data?.field,
+  // One explorer, two sources. In the qualified latest mode the SAME map, 3D
+  // renderer and profile below are handed the latest field instead of the
+  // historical one; nothing about how they draw it changes.
+  const latestMode = route === "latest" && !!qual?.qualified;
+  const source = latestMode ? latestData : data;
+  const f = source?.field,
     selection = f ? resolve(f, ...coords) : null;
+  const withheld = f?.diagnostics?.withheld ?? [];
+  const shown: MapLayer =
+    isDiagnostic(display) && withheld.includes(display) ? "temperature" : display;
+  const layer = asLayer(shown),
+    diagnosticView = isDiagnostic(shown);
+  const threeD = latestMode ? latest3d : route === "depth";
+  const setThreeD = (v: boolean) =>
+    latestMode ? setLatest3d(v) : navigate(v ? "depth" : "replay");
   const select = (a: number, b: number) => {
     setCoords([a, b]);
     setLat(String(a));
@@ -176,7 +202,8 @@ export default function App() {
     if (k < clip[0] || k > clip[1])
       setClip([Math.min(k, clip[0]), Math.max(k, clip[1])]);
   };
-  const scientificView = route === "replay" || route === "depth";
+  const scientificView =
+    route === "replay" || route === "depth" || (latestMode && !!latestData);
   async function exportAction(action: () => Promise<void> | void) {
     setExportError("");
     setExportBusy(true);
@@ -248,7 +275,9 @@ export default function App() {
               aria-current={route === item.id ? "page" : undefined}
             >
               <item.icon size={18} />
-              <span>{item.name}</span>
+              <span>
+                {(item.id === "latest" && qual?.tab_name) || item.name}
+              </span>
               {route === item.id && <span className="nav-dot" />}
             </a>
           ))}
@@ -285,7 +314,9 @@ export default function App() {
           <div className="breadcrumb">
             WORKSPACE <ChevronRight size={13} />
             <span>
-              {routes.find((r) => r.id === route)?.name || "Historical Replay"}
+              {(route === "latest" && qual?.tab_name) ||
+                routes.find((r) => r.id === route)?.name ||
+                "Historical Replay"}
             </span>
           </div>
           <form
@@ -314,10 +345,14 @@ export default function App() {
           <div className="page-title">
             <div>
               <span className="eyebrow">
-                NORTH INDIAN OCEAN / HISTORICAL REPLAY
+                {latestMode && qual
+                  ? `NORTH INDIAN OCEAN / ${qual.tab_name.toUpperCase()}`
+                  : "NORTH INDIAN OCEAN / HISTORICAL REPLAY"}
               </span>
               <h1>
-                {route === "depth"
+                {latestMode
+                  ? "The latest available qualified reconstruction."
+                  : route === "depth"
                   ? "Explore the ocean in depth."
                   : route === "validation"
                     ? "Evidence behind the reconstruction."
@@ -328,15 +363,20 @@ export default function App() {
                         : "The surface tells a deeper story."}
               </h1>
               <p className="muted">
-                {route === "replay" || route === "depth"
-                  ? "Reconstructed Subsurface Temperature · 5–30°N, 45–105°E · 0.25° grid"
-                  : "One frozen scientific core. Transparent inputs, outputs and provenance."}
+                {latestMode
+                  ? `Valid ${f?.effectiveDate ?? "—"} · the common date of all seven near-real-time inputs, not the ocean “now” · 5–30°N, 45–105°E`
+                  : route === "replay" || route === "depth"
+                    ? "Reconstructed Subsurface Temperature · 5–30°N, 45–105°E · 0.25° grid"
+                    : "One frozen scientific core. Transparent inputs, outputs and provenance."}
               </p>
             </div>
-            <span className="mode-badge">HISTORICAL REPLAY</span>
+            <span className="mode-badge">
+              {latestMode && qual ? qual.banner : "HISTORICAL REPLAY"}
+            </span>
           </div>
           {(scientificView || route === "exports" || route === "hazard") && (
             <section className="controls panel">
+              {!latestMode && (
               <div className="date-control">
                 <label htmlFor="historical-date">HISTORICAL DATE</label>
                 <div className="action-row">
@@ -370,6 +410,7 @@ export default function App() {
                   </Button>
                 </div>
               </div>
+              )}
               <label>
                 DEPTH
                 <select
@@ -389,30 +430,36 @@ export default function App() {
                 DISPLAY LAYER
                 <select
                   aria-label="Display layer"
-                  value={display}
+                  value={shown}
                   onChange={(e) => setDisplay(e.target.value as MapLayer)}
                 >
                   <option value="temperature">Reconstructed temperature</option>
                   <option value="anomaly">Anomaly from climatology</option>
-                  {data?.field.diagnostics && (
+                  {f?.diagnostics && (
                     <>
-                      <option value="d26">D26 · 26 °C isotherm depth (m)</option>
-                      <option value="tchp">TCHP · heat potential (kJ/cm²)</option>
+                      {!withheld.includes("d26") && (
+                        <option value="d26">D26 · 26 °C isotherm depth (m)</option>
+                      )}
+                      {!withheld.includes("tchp") && (
+                        <option value="tchp">TCHP · heat potential (kJ/cm²)</option>
+                      )}
                     </>
                   )}
                 </select>
               </label>
-              <Button
-                variant="outline"
-                disabled={loading || !date}
-                onClick={() => void request(date, true)}
-              >
-                <RefreshCw size={15} className={loading ? "spin" : ""} />
-                Run frozen L2
-              </Button>
+              {!latestMode && (
+                <Button
+                  variant="outline"
+                  disabled={loading || !date}
+                  onClick={() => void request(date, true)}
+                >
+                  <RefreshCw size={15} className={loading ? "spin" : ""} />
+                  Run frozen L2
+                </Button>
+              )}
             </section>
           )}
-          {route === "latest" ? (
+          {route === "latest" && !latestMode ? (
             // Deliberately outside the replay-data guard: Latest Inputs needs
             // no replay result, and a failure on either side must never take
             // the other down.
@@ -516,7 +563,19 @@ export default function App() {
             </section>
           ) : (
             <>
-              {loading && (
+              {latestMode && qual && (
+                <Suspense
+                  fallback={
+                    <p className="empty">Loading latest qualified state…</p>
+                  }
+                >
+                  <LatestQualifiedTab
+                    qualification={qual}
+                    onData={setLatestData}
+                  />
+                </Suspense>
+              )}
+              {!latestMode && loading && (
                 <div className="loading-state panel" role="status">
                   <Waves className="spin" />
                   <h2>Reconstructing {date}</h2>
@@ -527,7 +586,7 @@ export default function App() {
                   <div className="loading-line" />
                 </div>
               )}
-              {error && (
+              {!latestMode && error && (
                 <section className="panel error-state" role="alert">
                   <h2>Historical reconstruction unavailable</h2>
                   <p>{error}</p>
@@ -536,7 +595,7 @@ export default function App() {
                   </Button>
                 </section>
               )}
-              {!loading && !error && f && data && selection && (
+              {(latestMode || (!loading && !error)) && f && source && selection && (
                 <>
                   {scientificView ? (
                     <>
@@ -578,7 +637,9 @@ export default function App() {
                           unit="cells"
                         />
                         {f.diagnostics &&
-                          (["d26", "tchp"] as const).map((kind) => {
+                          (["d26", "tchp"] as const)
+                            .filter((k) => !withheld.includes(k))
+                            .map((kind) => {
                             const d = diagnosticAt(f, kind, selection);
                             return (
                               <Stat
@@ -615,12 +676,12 @@ export default function App() {
                             <div className="panel-heading">
                               <div>
                                 <span className="eyebrow">
-                                  {route === "depth"
+                                  {threeD
                                     ? "15-DEPTH RECONSTRUCTED THERMAL FIELD"
                                     : "SURFACE OBSERVATIONS → SUBSURFACE STRUCTURE"}
                                 </span>
                                 <h2>
-                                  {route === "depth"
+                                  {threeD
                                     ? "3D Depth View"
                                     : "North Indian Ocean"}
                                 </h2>
@@ -628,25 +689,21 @@ export default function App() {
                               <div className="view-switch">
                                 <Button
                                   size="sm"
-                                  variant={
-                                    route === "replay" ? "default" : "ghost"
-                                  }
-                                  onClick={() => navigate("replay")}
+                                  variant={!threeD ? "default" : "ghost"}
+                                  onClick={() => setThreeD(false)}
                                 >
                                   2D map
                                 </Button>
                                 <Button
                                   size="sm"
-                                  variant={
-                                    route === "depth" ? "default" : "ghost"
-                                  }
-                                  onClick={() => navigate("depth")}
+                                  variant={threeD ? "default" : "ghost"}
+                                  onClick={() => setThreeD(true)}
                                 >
                                   3D depth
                                 </Button>
                               </div>
                             </div>
-                            {route === "depth" && (
+                            {threeD && (
                               <>
                                 <div className="depth-controls">
                                   <label>
@@ -747,7 +804,7 @@ export default function App() {
                                 )}
                               </>
                             )}
-                            {route === "depth" && diagnosticView && (
+                            {threeD && diagnosticView && (
                               <p className="notice" data-testid="diagnostic-3d-note">
                                 D26 and TCHP are depth-integrated surfaces, so
                                 they have no 3D depth stack. The volume below
@@ -755,7 +812,7 @@ export default function App() {
                                 map view to see the selected diagnostic.
                               </p>
                             )}
-                            {route === "depth" && enable3d ? (
+                            {threeD && enable3d ? (
                               <Suspense
                                 fallback={
                                   <p className="empty">
@@ -777,10 +834,10 @@ export default function App() {
                                   layerCount={layerCount}
                                 />
                               </Suspense>
-                            ) : diagnosticView && isDiagnostic(display) ? (
+                            ) : diagnosticView && isDiagnostic(shown) ? (
                               <DiagnosticMap
                                 field={f}
-                                kind={display}
+                                kind={shown}
                                 selection={selection}
                                 onSelect={select}
                               />
@@ -873,7 +930,7 @@ export default function App() {
                               </p>
                             ) : (
                               <div className="inputs-grid">
-                                {Object.entries(data.surface).map(
+                                {Object.entries(source.surface).map(
                                   ([name, input]) => (
                                     <div key={name} className="input-tile">
                                       <span>
@@ -976,13 +1033,20 @@ export default function App() {
                           Only surface inputs at inference. {f.credits}
                         </p>
                       </section>
-                      <Suspense
-                        fallback={
-                          <p className="empty">Loading date comparison…</p>
-                        }
-                      >
-                        <MultiDate date={date} coords={coords} depth={depth} />
-                      </Suspense>
+                      {!latestMode && (
+                        <Suspense
+                          fallback={
+                            <p className="empty">Loading date comparison…</p>
+                          }
+                        >
+                          <MultiDate date={date} coords={coords} depth={depth} />
+                        </Suspense>
+                      )}
+                      {latestMode && (
+                        <Suspense fallback={null}>
+                          <LatestHazardPanel field={f} selection={selection} />
+                        </Suspense>
+                      )}
                     </>
                   ) : route === "hazard" ? (
                     <Suspense

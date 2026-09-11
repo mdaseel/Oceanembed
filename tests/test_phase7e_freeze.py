@@ -118,22 +118,44 @@ class TestFreezeStatus:
         reserved wording and the latest-reconstruction entry point are still
         forbidden, and the Phase 7 manifest still records NRT NOT STARTED for
         Phase 7 (asserted separately).
+
+        Second phase-boundary note (Phase 8B): Phase 8B was approved, and its
+        pre-registered qualification returned QUALIFIED WITH LIMITATIONS
+        (outputs/phase8b/qualification_decision.json). That is exactly the
+        condition under which the master prompt permits a latest qualified
+        entry point and the qualified tab name, so `latest_qualified` in the
+        app is no longer banned. What stays banned: a raw HTTP client in the
+        app, "Live Ocean Right Now", and HARD-CODING the qualified tab name in
+        the frontend - it may only arrive from the decision artifact through
+        /api/latest/qualification, so the UI cannot claim qualification the
+        artifact does not grant.
         """
         app = (ROOT / "src/oceanembed/poc/app.py").read_text(encoding="utf-8").lower()
-        for banned in ("latest_qualified", "urllib.request", "requests.get"):
+        for banned in ("urllib.request", "requests.get"):
             assert banned not in app, f"{banned!r} reachable from the PoC app"
-        for path in ((ROOT / "web/src/App.tsx"),
-                     *(ROOT / "web/src/components").glob("*.tsx")):
+        for path in (*(ROOT / "web/src").rglob("*.tsx"),
+                     *(ROOT / "web/src").rglob("*.ts")):
+            if "test" in path.parts:
+                continue
             text = path.read_text(encoding="utf-8")
             for banned in ("Latest Qualified Ocean State", "Live Ocean Right Now"):
                 assert banned not in text, f"{banned!r} in {path.name}"
 
     def test_no_latest_subsurface_reconstruction_exists(self):
-        """Phase 8A is telemetry only; a latest field entry point is 8B work."""
+        """No module outside the gated latest path runs inference for latest.
+
+        Phase-boundary note (Phase 8B): this originally banned any
+        `latest_qualified_field` entry point, which was correct while 8B was
+        unauthorised. 8B now provides one, in nrt/latest.py, and it refuses
+        unless the decision artifact is qualified - pinned behaviourally in
+        tests/test_phase8b_latest.py. What stays true and is checked here: the
+        telemetry module and the PoC app never call the model themselves.
+        """
         for rel in ("src/oceanembed/poc/app.py",
                     "src/oceanembed/nrt/telemetry.py"):
             source = (ROOT / rel).read_text(encoding="utf-8")
-            assert "latest_qualified_field" not in source, rel
+            for banned in ("_infer(", "embed_field", "forward_from_z"):
+                assert banned not in source, (rel, banned)
 
     def test_hazard_indicator_is_historical_and_carries_no_probability(self, manifest):
         h = manifest["hazard_indicator"]

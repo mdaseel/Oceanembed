@@ -1,0 +1,154 @@
+{
+  "state": "LATEST_QUALIFIED",
+  "effective_date": "2026-09-03",
+  "sources": [
+    {
+      "product_key": "sst_nrt",
+      "channels": [
+        "sst"
+      ],
+      "product_id": "SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001",
+      "dataset_id": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
+      "doi": "10.48670/moi-00165",
+      "provider": "Copernicus Marine",
+      "source_tier": "NRT",
+      "state": "OK",
+      "newest_valid_time": "2026-09-10T00:00:00",
+      "product_valid_time": "2026-09-03T00:00:00",
+      "local_retrieval_time": "2026-09-11T17:16:11",
+      "age_hours": 209.27,
+      "harmonisation": "nrt.harmonize.harmonise_sst",
+      "error": null
+    },
+    {
+      "product_key": "sss_nrt_multiobs",
+      "channels": [
+        "sss"
+      ],
+      "product_id": "MULTIOBS_GLO_PHY_S_SURFACE_MYNRT_015_013",
+      "dataset_id": "cmems_obs-mob_glo_phy-sss_nrt_multi_P1D",
+      "doi": "10.48670/moi-00051",
+      "provider": "Copernicus Marine",
+      "source_tier": "NRT",
+      "state": "OK",
+      "newest_valid_time": "2026-09-05T00:00:00",
+      "product_valid_time": "2026-09-03T00:00:00",
+      "local_retrieval_time": "2026-09-11T17:16:20",
+      "age_hours": 209.27,
+      "harmonisation": "nrt.harmonize.harmonise_multiobs_sss",
+      "error": null
+    },
+    {
+      "product_key": "sla_nrt",
+      "channels": [
+        "sla"
+      ],
+      "product_id": "SEALEVEL_GLO_PHY_L4_NRT_008_046",
+      "dataset_id": "cmems_obs-sl_glo_phy-ssh_nrt_allsat-l4-duacs-0.125deg_P1D",
+      "doi": "10.48670/moi-00149",
+      "provider": "Copernicus Marine",
+      "source_tier": "NRT",
+      "state": "OK",
+      "newest_valid_time": "2026-09-11T00:00:00",
+      "product_valid_time": "2026-09-03T00:00:00",
+      "local_retrieval_time": "2026-09-11T17:16:32",
+      "age_hours": 209.28,
+      "harmonisation": "nrt.harmonize.harmonise_sla",
+      "error": null
+    },
+    {
+      "product_key": "currents_nrt",
+      "channels": [
+        "current_u",
+        "current_v"
+      ],
+      "product_id": "OSCAR_L4_OC_NRT_V2.0",
+      "dataset_id": "OSCAR_L4_OC_NRT_V2.0",
+      "doi": null,
+      "provider": "NASA PO.DAAC",
+      "source_tier": "NRT",
+      "state": "OK",
+      "newest_valid_time": "2026-09-03T00:00:00",
+      "product_valid_time": "2026-09-03T00:00:00",
+      "local_retrieval_time": "2026-09-11T17:16:43",
+      "age_hours": 209.28,
+      "harmonisation": "nrt.harmonize.harmonise_oscar",
+      "error": null
+    },
+    {
+      "product_key": "wind_nrt",
+      "channels": [
+        "wind_u",
+        "wind_v"
+      ],
+      "product_id": "WIND_GLO_PHY_L4_NRT_012_004",
+      "dataset_id": "cmems_obs-wind_glo_phy_nrt_l4_0.125deg_PT1H",
+      "doi": "10.48670/moi-00305",
+      "provider": "Copernicus Marine",
+      "source_tier": "NRT",
+      "state": "OK",
+      "newest_valid_time": "2026-09-10T23:00:00",
+      "product_valid_time": "2026-09-03T00:00:00",
+      "local_retrieval_time": "2026-09-11T17:17:07",
+      "age_hours": 209.29,
+      "harmonisation": "nrt.harmonize.harmonise_wind_hourly",
+      "error": null
+    }
+  ],
+  "meta": {
+    "qualification": "QUALIFIED WITH LIMITATIONS",
+    "qualification_protocol": "outputs/phase8b/NRT_SUBSURFACE_QUALIFICATION_PROTOCOL.md",
+    "qualification_protocol_commit": "5b69dda",
+    "decision_sha256": "f35b09a56d0c5a16efbb18b3e23b17010c358c063f1a852ccbeaf0d8aba83c4a",
+    "policy": {
+      "name": "NRT_STACK_V1 / COMMON_VALID_DATE / SSS_MULTIOBS_NRT_SAME_DATE",
+      "stack": "NRT_STACK_V1",
+      "alignment": "COMMON_VALID_DATE",
+      "sss_policy": "SSS_MULTIOBS_NRT_SAME_DATE",
+      "persistence_envelope_days": 0,
+      "policy_version": "8B.1"
+    },
+    "requested_utc": "2026-09-11T17:15:41",
+    "retrieval_time_utc": "2026-09-11T17:17:07",
+    "oldest_input_age_hours": 209.29,
+    "newest_input_age_hours": 209.27,
+    "reconstruction_lag_hours": 209.29,
+    "persisted_inputs": "none - every channel is valid on the effective date",
+    "joint_mask_coverage": 0.9966276180333689,
+    "reference_coverage_mean": 1.0,
+    "d26_category": "NOT QUALIFIED",
+    "tchp_category": "QUALIFIED",
+    "latest_hazard_indicators": "QUALIFIED",
+    "replay_mode": "OPERATIONAL_LATEST"
+  },
+  "policy": {
+    "name": "NRT_STACK_V1 / COMMON_VALID_DATE / SSS_MULTIOBS_NRT_SAME_DATE",
+    "stack": "NRT_STACK_V1",
+    "alignment": "COMMON_VALID_DATE",
+    "sss_policy": "SSS_MULTIOBS_NRT_SAME_DATE",
+    "persistence_envelope_days": 0,
+    "policy_version": "8B.1"
+  },
+  "qualification": {
+    "temperature_category": "QUALIFIED WITH LIMITATIONS",
+    "d26_category": "NOT QUALIFIED",
+    "tchp_category": "QUALIFIED",
+    "latest_hazard_indicators": "QUALIFIED",
+    "decision_sha256": "f35b09a56d0c5a16efbb18b3e23b17010c358c063f1a852ccbeaf0d8aba83c4a"
+  },
+  "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+  "l2_encoder_sha256": "30cfd2db9e8b6b96473c1e205280c0099a422a1ec4a3cc6d0dd6dee554db4808",
+  "n_supported_cells": 11284,
+  "compute_seconds": 0.0724279000005481,
+  "diagnostics_withheld": [
+    "d26"
+  ],
+  "hazard_category_counts": {
+    "LOW": 5577,
+    "MODERATE": 1993,
+    "ELEVATED": 1449,
+    "HIGH": 1481,
+    "NOT_CATEGORIZED": 758
+  },
+  "argo_opened": false
+}

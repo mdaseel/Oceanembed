@@ -1,0 +1,31 @@
+{
+  "tested_at": "2026-09-11T17:15:39+00:00",
+  "phase": "8B",
+  "failure_method": "socket.getaddrinfo and socket.create_connection replaced in the SAME running process so remote DNS/connects fail below every HTTP client and SDK (loopback kept). Full cut for the outage; NASA Earthdata hosts only for the partial-stack check.",
+  "initial_latest_state_available": true,
+  "historical_replay_available_during_failure": true,
+  "historical_hazard_indicators_available_during_failure": true,
+  "stale_snapshot_displayed": true,
+  "stale_snapshot_label_visible": true,
+  "stale_snapshot_inference_source": "LAST_SUCCESSFUL_QUALIFIED_SNAPSHOT",
+  "unavailable_state_rendered": true,
+  "partial_stack_inference_blocked": true,
+  "recovery_without_restart": true,
+  "complete_stack_requalified_after_recovery": true,
+  "new_l2_inference_after_recovery": true,
+  "inference_calls_total": 2,
+  "checks": [
+    "PASS \u00b7 initial_latest_state_available \u2014 valid 2026-09-03",
+    "PASS \u00b7 historical_replay_available_during_failure \u2014 200",
+    "PASS \u00b7 historical_hazard_indicators_available_during_failure",
+    "PASS \u00b7 stale_snapshot_displayed \u2014 LAST_SUCCESSFUL_QUALIFIED_SNAPSHOT_NOT_CURRENT",
+    "PASS \u00b7 stale_snapshot_label_visible \u2014 LAST SUCCESSFUL QUALIFIED SNAPSHOT \u2014 NOT CURRENT",
+    "PASS \u00b7 unavailable_state_rendered \u2014 LATEST QUALIFIED OCEAN STATE CURRENTLY UNAVAILABLE",
+    "PASS \u00b7 partial_stack_inference_blocked \u2014 no common valid date: currents_nrt UNREACHABLE",
+    "PASS \u00b7 recovery_without_restart \u2014 LATEST_QUALIFIED",
+    "PASS \u00b7 complete_stack_requalified_after_recovery",
+    "PASS \u00b7 new_l2_inference_after_recovery"
+  ],
+  "result": "PASS",
+  "statement": "The latest qualified mode was rehearsed with the live-data path deliberately unavailable, fully and partially."
+}
