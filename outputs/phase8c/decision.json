@@ -1,0 +1,65 @@
+{
+  "decided_at": "2026-09-12T15:33:30+00:00",
+  "phase": "8C",
+  "preregistration": "outputs/phase8c/OPERATIONAL_CURRENT_SUBSTITUTION_PREREGISTRATION.md",
+  "preregistration_commit": "c01c170",
+  "candidate": {
+    "product_id": "MULTIOBS_GLO_PHY_MYNRT_015_003",
+    "dataset_id": "cmems_obs-mob_glo_phy-cur_nrt_0.25deg_P1D-m",
+    "primary_definition": "current_u = ugos + ue(15 m); current_v = vgos + ve(15 m) (geostrophic + Ekman, tide excluded)",
+    "secondary_definition": "current_u_total = uo(15 m); current_v_total = vo(15 m) (product total, tide included) - reported only"
+  },
+  "gates": {
+    "C1_C2_C3_channel_decision": "SUBSTITUTE_WITH_MONITORING",
+    "C3_pass": true,
+    "C5_skill_vs_L0": true,
+    "C6_thermocline": true,
+    "C7_basins": true,
+    "C8_observational_non_inferiority": false
+  },
+  "failed_gates": [
+    "C8_observational_non_inferiority"
+  ],
+  "decision": "SUBSTITUTE_REJECTED",
+  "integration_permitted": false,
+  "evidence": {
+    "phase3_band_vs_oscar_final": "INCOMPATIBLE_RAW",
+    "phase4_s_ratio_100m": 0.23175525588745324,
+    "phase4_band_100m": "MINOR",
+    "phase4_worst_band": "MINOR",
+    "phase5_depths_beating_L0_of_11": 11,
+    "phase6_key_depths_spanning_zero": 3,
+    "phase6_worst_degradation_pct": 1.6727431680370743,
+    "phase6_allowed_degradation_pct": 0.68,
+    "phase6_secondary_variant_worst_degradation_pct": 1.5858193428190401,
+    "phase6_secondary_variant_pass": false,
+    "phase6_control_reproduces_executed_l2": true,
+    "phase7_old_common_date": "2026-09-03",
+    "phase7_new_common_date_if_substituted": "2026-09-06",
+    "phase7_gain_days": 3,
+    "phase7_next_bottleneck": "sss_nrt_multiobs"
+  },
+  "operational_current_source": "OSCAR_L4_OC_NRT_V2.0 (unchanged)",
+  "historical_current_source": "OSCAR_L4_OC_FINAL_V2.0 (unchanged)",
+  "production_reconstruction_models": 1,
+  "l2_retrained": false,
+  "historical_replay_changed": false,
+  "argo_2024_opened": false,
+  "artifacts": {
+    "OPERATIONAL_CURRENT_SUBSTITUTION_PREREGISTRATION.md": "3e407ca5881ee42f8f46e9fe9bb00b967c111bce9158bab94d59bf2715e2f2d2",
+    "candidate_product.json": "85ba40c0d3f80394a828b4379e715a3c4e6e44f206f2790f1dd65ac62bd395e2",
+    "current_compatibility.csv": "a16c23266e301a83ac0ebcaf40cdf5840107424acadd5951ffc68f688464227f",
+    "substitution_by_depth.csv": "02cb67f96f735d7be0e0df575201676a3120d78bdfb957f26bdd912f8b8522df",
+    "target_metrics_by_depth.csv": "5416d08274a36dfbc3d6aeee3b164548debf00c69e3e5be1ccec29ea7cf15938",
+    "target_bootstrap.csv": "22f6833bdd35939b4adec6667001a2f3e14d3e2a8605392d88f4dc3d01a392c1",
+    "substitution_result.json": "3614f813de4bef1c6ac8ec36cc6aa31da18adf66cc01b33b222f67fed5b9b0df",
+    "argo_comparison.csv": "841f9036f7b64ef973822d28c4fb5c23d3ab4af72e1b6c71b3f7ef43824d7796",
+    "argo_bootstrap.csv": "14221a348cf67e47acb93dcf0a5cb069e54d120213d27c26038c81579092b5b3",
+    "argo_result.json": "6f966910ce40fa9eaa79b2c3d25b2ea2b329b4ce67ce6fb5461ccf3a7af98402",
+    "argo_comparison_total.csv": "8e2be0e2559fde0f0964504bf69618341ae12df465fc6f7e735cb38033b86379",
+    "argo_bootstrap_total.csv": "1b16d37a744d4491afd1ad5716274ef7c2374c8182ed27333642faa99dd89f6c",
+    "argo_result_total.json": "28c8d06845a717a2d5d75b242745dbc614e270cc38f51b61c86de53fdf1a766c",
+    "recency_comparison.json": "ebc49e60400de047e1815ac2d0be26c1a53b19f97556acab2791a44799251b93"
+  },
+  "source_commit": "c01c17072e617c2865363d5644f1dfd7e6168731"
+}

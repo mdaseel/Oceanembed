@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-09-12T15:26:37+00:00",
+  "per_channel_newest": {
+    "sst_nrt": "2026-09-11",
+    "sss_nrt_multiobs": "2026-09-06",
+    "sla_nrt": "2026-09-12",
+    "currents_nrt": "2026-09-03",
+    "wind_nrt": "2026-09-11",
+    "candidate_currents": "2026-09-11"
+  },
+  "newest_complete_seven_channel_date_with_oscar": "2026-09-03",
+  "newest_complete_seven_channel_date_with_candidate": "2026-09-06",
+  "gain_days": 3,
+  "current_bottleneck_with_oscar": "currents_nrt",
+  "next_bottleneck_after_substitution": "sss_nrt_multiobs",
+  "next_bottleneck_newest": "2026-09-06",
+  "candidate_dataset": "cmems_obs-mob_glo_phy-cur_nrt_0.25deg_P1D-m",
+  "discovery_errors": {},
+  "note": "The gain is limited by the next slowest mandatory channel; the candidate only moves the date as far as that channel allows.",
+  "wall_clock_seconds": 11.6
+}

@@ -1,0 +1,37 @@
+{
+  "product_id": "MULTIOBS_GLO_PHY_MYNRT_015_003",
+  "dataset_id": "cmems_obs-mob_glo_phy-cur_nrt_0.25deg_P1D-m",
+  "provider": "Copernicus Marine",
+  "primary_definition": "current_u = ugos + ue(15 m); current_v = vgos + ve(15 m) (geostrophic + Ekman, tide excluded)",
+  "secondary_definition": "current_u_total = uo(15 m); current_v_total = vo(15 m) (product total, tide included) - reported only",
+  "units": "m s-1",
+  "depth_m": 15.0,
+  "harmonisation": "nrt.harmonize.to_canonical (training regrid), ascending lat, [-180,180) lon, canonical 101x241",
+  "replay_mode": "RETROSPECTIVE",
+  "preregistration": "outputs/phase8c/OPERATIONAL_CURRENT_SUBSTITUTION_PREREGISTRATION.md",
+  "preregistration_commit": "c01c170",
+  "windows": {
+    "d1": {
+      "start": "2024-07-01",
+      "end": "2024-12-15",
+      "raw_file": "data/raw/nrt/currents_candidate/currents_candidate_d1_2024-07-01_2024-12-15.nc",
+      "raw_bytes": 54035718,
+      "raw_sha256": "81a9b5749b757f73754ed42933ea59772e3d59e7f3880ebf0a48cfa823a4e53c",
+      "canonical_file": "data/processed/nrt/currents_candidate_d1_canonical.nc",
+      "n_times": 168,
+      "first": "2024-07-01",
+      "last": "2024-12-15"
+    },
+    "d2": {
+      "start": "2022-05-01",
+      "end": "2023-12-31",
+      "raw_file": "data/raw/nrt/currents_candidate/currents_candidate_d2_2022-05-01_2023-12-31.nc",
+      "raw_bytes": 196098430,
+      "raw_sha256": "551e66141297d7bd51afb01722fb80f7e68fd6ee1fe7da4003f86a74a377e2a0",
+      "canonical_file": "data/processed/nrt/currents_candidate_d2_canonical.nc",
+      "n_times": 610,
+      "first": "2022-05-01",
+      "last": "2023-12-31"
+    }
+  }
+}
