@@ -324,6 +324,55 @@ Nothing about the science changed: each date is still an independent frozen-L2
 run over its own complete seven-channel stack, D26 stays withheld, and an
 unavailable date still produces no inference.
 
+---
+
+## 9. Direct NASA-side check with the download tooling (2026-09-12, 19:50 UTC)
+
+Checked against PO.DAAC itself rather than argued from our own cache, twice:
+unauthenticated CMR, and `earthaccess` authenticated with the configured
+Earthdata login (the same path our fetcher uses).
+
+| query | result |
+|---|---|
+| `OSCAR_L4_OC_NRT_V2.0`, 2026-09-04 → 09-12 | **0 granules** (CMR hits = 0; authenticated search = 0) |
+| `ASCATC-L2-Coastal`, 2026-09-08 → 09-12 | 64 granules, newest 2026-09-12 10:06 |
+
+**The whole OSCAR family has stopped publishing**, not just one collection:
+
+| collection | newest granule | last ingested |
+|---|---|---|
+| `OSCAR_L4_OC_NRT_V2.0` | 2026-09-03 | 2026-09-05 06:12 UTC |
+| `OSCAR_L4_OC_INTERIM_V2.0` | 2026-08-31 | 2026-09-05 08:12 UTC |
+| `OSCAR_L4_OC_FINAL_V2.0` | 2026-01-16 | — |
+
+Every OSCAR ingest timestamp stops on 2026-09-05, which looks like a
+provider-side production outage rather than normal latency. **No download
+command can fetch currents for 2026-09-04 onward, because the provider has not
+produced them.**
+
+### Why ASCAT being current does not help
+
+`ASCATC-L2-Coastal` is fresh, and it is a **wind** product. Wind is not the
+limiting channel: the qualified wind channel
+(`cmems_obs-wind_glo_phy_nrt_l4_0.125deg_PT1H`) already reaches 2026-09-11, and
+the stack is held at 2026-09-03 by currents alone. Substituting ASCAT would also
+be a different kind of product — L2 swath, needing binning onto the canonical
+grid like SMAP did — and a channel swap requires its own pre-registered
+qualification. It would move nothing.
+
+### What would actually move the date
+
+Only a re-qualified currents channel, e.g. CMEMS MULTIOBS NRT total surface
+currents (`cmems_obs-mob_glo_phy-cur_nrt_0.25deg_P1D-m`, at 2026-09-10), or
+waiting for OSCAR production to resume. Both are decisions for review; neither
+is a code fix.
+
+*Tooling note: `podaac-data-subscriber` was installed ad hoc for this check
+only. It is not used by OceanEmbed and was not added to `requirements.txt`; its
+CLI could not read a credential file in the form it expects, so the equivalent
+authenticated query was run through `earthaccess`, which is what the fetcher
+uses. No credential value was read, printed or stored.*
+
 **END OF ADDENDUM.** The Phase 8B scientific result is unchanged. Swapping the
 currents product to a fresher one remains an open decision requiring its own
 pre-registered qualification.
