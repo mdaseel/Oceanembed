@@ -38,7 +38,6 @@ from ..ml.features import SURFACE
 from ..replay.contract import DEPTHS, FieldView
 from . import harmonize as H
 from . import qualification as Q
-from .discover import poll_product
 from .registry import PRODUCTS
 from .substitution import joint_mask
 
@@ -47,6 +46,8 @@ PROTOCOL_PATH = "outputs/phase8b/NRT_SUBSURFACE_QUALIFICATION_PROTOCOL.md"
 PROTOCOL_COMMIT = "5b69dda"
 SNAPSHOT_DIR = REPO_ROOT / "outputs" / "phase8b" / "latest_snapshot"
 WORK_DIR = REPO_ROOT / "outputs" / "phase8b" / "cache"
+#: Immutable per-date qualified fields (the recent-states window).
+DAILY_CACHE_DIR = REPO_ROOT / "outputs" / "phase8b" / "daily_cache"
 
 PAD = 1.0                          # identical to training and the hindcast
 BOX = dict(minimum_longitude=WEST - PAD, maximum_longitude=EAST + PAD,
@@ -76,6 +77,11 @@ LIVE_STATE = "LATEST_QUALIFIED"
 SNAPSHOT_STATE = "LAST_SUCCESSFUL_QUALIFIED_SNAPSHOT_NOT_CURRENT"
 UNAVAILABLE_STATE = "LATEST_QUALIFIED_OCEAN_STATE_CURRENTLY_UNAVAILABLE"
 NOT_QUALIFIED_STATE = "NOT_QUALIFIED"
+#: A qualified field for a date that is not the newest one.
+DATED_STATE = "QUALIFIED_STATE_FOR_DATE"
+#: A requested date the complete stack cannot supply. No inference runs.
+DATE_UNAVAILABLE_STATE = "DATE_NOT_QUALIFIED"
+DATE_UNAVAILABLE_LABEL = "NO QUALIFIED OCEAN STATE FOR THIS DATE"
 SNAPSHOT_LABEL = "LAST SUCCESSFUL QUALIFIED SNAPSHOT — NOT CURRENT"
 UNAVAILABLE_LABEL = "LATEST QUALIFIED OCEAN STATE CURRENTLY UNAVAILABLE"
 NOT_QUALIFIED_LABEL = "LATEST SUBSURFACE RECONSTRUCTION NOT QUALIFIED"
@@ -254,24 +260,196 @@ def _complete_day(key: str, newest: pd.Timestamp) -> pd.Timestamp:
     return newest.normalize()
 
 
-def resolve_common_date(poll: Callable = poll_product
-                        ) -> tuple[pd.Timestamp | None, dict[str, SourceRecord]]:
-    """COMMON_VALID_DATE: D = min over products of the newest complete day."""
-    records, days = {}, {}
+#: Discovery lifetimes. A qualified field for a past date is immutable, but
+#: whether a NEWER date exists must be refreshable - so catalogue/time-axis
+#: discovery is cached separately and briefly, and never pins the newest date.
+DISCOVERY_TTL_SECONDS = 900
+#: How far back usable dates are enumerated. It must comfortably cover the
+#: 7-day window even when one channel has stalled and pulled the newest common
+#: date back, otherwise days would be reported missing merely because discovery
+#: never looked at them.
+LOOKBACK_DAYS = 30
+
+_DISCOVERY: dict[str, tuple[float, object]] = {}
+
+
+def refresh_discovery() -> None:
+    """Drop cached discovery so the next resolution re-reads the providers."""
+    _DISCOVERY.clear()
+
+
+def _cached(key: str, producer: Callable, ttl: float = DISCOVERY_TTL_SECONDS):
+    hit = _DISCOVERY.get(key)
+    if hit is not None and (time.time() - hit[0]) < ttl:
+        return hit[1]
+    value = producer()
+    _DISCOVERY[key] = (time.time(), value)
+    return value
+
+
+def _cmems_dates(key: str) -> set:
+    """Usable valid dates from the SERVICE'S OWN time axis, not the catalogue.
+
+    Catalogue metadata can lag the data actually retrievable, so the
+    authoritative answer is the dataset's time coordinate. Axis order is
+    irrelevant: a set is built and the maximum taken, so a descending time
+    axis cannot make the newest date look like the oldest.
+    """
+    import copernicusmarine as cm
+    ds = cm.open_dataset(dataset_id=PRODUCTS[key]["dataset_id"])
+    try:
+        t = pd.DatetimeIndex(ds.time.values)
+    finally:
+        ds.close()
+    if key == "wind_nrt":
+        # Hourly product aggregated to a daily U/V mean: a day is usable only
+        # once its 23:00 field exists, otherwise the mean would cover part of a
+        # day and silently differ from the frozen training aggregation.
+        return {d.normalize() for d in t if d.hour == 23}
+    return {d.normalize() for d in t}
+
+
+def _oscar_dates(start, end) -> set:
+    """Usable OSCAR valid dates from the granule catalogue, over a window."""
+    import earthaccess
+    earthaccess.login(strategy="netrc")
+    grans = earthaccess.search_data(
+        short_name=PRODUCTS["currents_nrt"]["dataset_id"],
+        temporal=(str(start.date()), str(end.date())), count=2000)
+    out = set()
+    for g in grans:
+        try:
+            t = pd.Timestamp(g["umm"]["TemporalExtent"]["RangeDateTime"]
+                             ["BeginningDateTime"])
+        except Exception:  # noqa: BLE001 - a malformed granule is not a date
+            continue
+        out.add((t.tz_localize(None) if t.tzinfo else t).normalize())
+    return out
+
+
+#: Start of the last discovery pass, so a day that simply predates the window
+#: is never reported as "missing from every channel".
+_WINDOW_START: dict = {}
+
+
+def channel_dates(window_days: int = LOOKBACK_DAYS) -> tuple[dict, dict]:
+    """Per-product sets of usable valid dates, plus per-product errors."""
+    end = _now().normalize()
+    start = end - pd.Timedelta(days=window_days)
+    _WINDOW_START["start"] = start
+    sets: dict = {}
+    errors: dict = {}
+    for key in PRODUCT_CHANNELS:
+        try:
+            if key == "currents_nrt":
+                dates = _cached("dates:%s:%s" % (key, start.date()),
+                                lambda: _oscar_dates(start, end))
+            else:
+                dates = _cached("dates:%s" % key, lambda k=key: _cmems_dates(k))
+            sets[key] = {d for d in dates if start <= d <= end}
+        except Exception as exc:  # noqa: BLE001 - reported per source
+            errors[key] = "%s: %s" % (type(exc).__name__, exc)
+    return sets, errors
+
+
+def _records_from(sets: dict, errors: dict) -> dict:
+    records = {}
     for key in PRODUCT_CHANNELS:
         rec = _record(key)
-        res = poll(key)
-        newest = res.get("newest_valid_time")
-        if res.get("success") and newest is not None:
-            rec.newest_valid_time = _iso(newest)
-            days[key] = _complete_day(key, newest)
+        if key in errors:
+            rec.state, rec.error = _state_from_error(errors[key]), errors[key]
+        elif sets.get(key):
+            rec.newest_valid_time = _iso(max(sets[key]))
         else:
-            err = res.get("error") or "no newest valid time resolved"
-            rec.state, rec.error = _state_from_error(err), err
+            rec.state = "UNREACHABLE"
+            rec.error = "no usable valid dates in the discovery window"
         records[key] = rec
-    if len(days) != len(PRODUCT_CHANNELS):
-        return None, records
-    return min(days.values()), records
+    return records
+
+
+def common_dates(sets: dict) -> set:
+    """Dates on which EVERY qualified channel has a usable field.
+
+    The intersection, not ``min`` of the per-product newest dates: a product
+    missing an interior day must remove that day, and a product whose newest
+    day is old must not silently define the answer for the others.
+    """
+    if len(sets) != len(PRODUCT_CHANNELS) or not all(sets.values()):
+        return set()
+    out = None
+    for key in PRODUCT_CHANNELS:
+        out = set(sets[key]) if out is None else (out & sets[key])
+    return out or set()
+
+
+def resolve_common_date(dates: dict | None = None, errors: dict | None = None):
+    """COMMON_VALID_DATE: the NEWEST date all seven channels can supply."""
+    if dates is None:
+        dates, errors = channel_dates()
+    records = _records_from(dates, errors or {})
+    shared = common_dates(dates)
+    return (max(shared) if shared else None), records
+
+
+def missing_channels(day, sets: dict, errors: dict) -> list:
+    out = []
+    for key in PRODUCT_CHANNELS:
+        if key in errors:
+            out.append("%s (%s)" % (key, errors[key].split(":")[0]))
+        elif day not in sets.get(key, set()):
+            out.append(key)
+    return out
+
+
+def available_window(days: int = 7, dates: dict | None = None,
+                     errors: dict | None = None) -> dict:
+    """The last ``days`` calendar days ending at the newest qualified date.
+
+    Each day is decided independently from what the providers actually hold.
+    An unavailable day names the channel that is missing; it is never filled
+    from a neighbouring day and never interpolated.
+    """
+    if dates is None:
+        dates, errors = channel_dates()
+    errors = errors or {}
+    newest, records = resolve_common_date(dates, errors)
+    shared = common_dates(dates)
+    anchor = newest or _now().normalize()
+    window = [anchor - pd.Timedelta(days=k) for k in range(days)][::-1]
+    rows = []
+    for day in window:
+        if day in shared:
+            rows.append({"date": str(day.date()), "status": "AVAILABLE",
+                         "is_newest": bool(newest is not None and day == newest),
+                         "input_valid_dates": {k: str(day.date())
+                                               for k in PRODUCT_CHANNELS}})
+        else:
+            start = _WINDOW_START.get("start")
+            if start is not None and day < start:
+                # Not a provider gap: discovery never enumerated this far back.
+                rows.append({"date": str(day.date()), "status": "UNAVAILABLE",
+                             "is_newest": False, "missing_channels": [],
+                             "reason": f"outside the {LOOKBACK_DAYS}-day discovery "
+                                       f"window (before {start.date()}); availability "
+                                       f"was not determined"})
+            else:
+                miss = missing_channels(day, dates, errors)
+                rows.append({"date": str(day.date()), "status": "UNAVAILABLE",
+                             "is_newest": False,
+                             "reason": "no usable field for " + ", ".join(miss),
+                             "missing_channels": miss})
+    return {
+        "newest_qualified_date": None if newest is None else str(newest.date()),
+        "window_days": days,
+        "days": rows,
+        "per_product_newest": {k: (str(max(v).date()) if v else None)
+                               for k, v in dates.items()},
+        "discovery_errors": errors,
+        "sources": [asdict(r) for r in records.values()],
+        "note": ("Each date is qualified independently from the providers' own "
+                 "time axes. No channel is carried forward between dates and "
+                 "no field is interpolated across dates."),
+    }
 
 
 # ------------------------------------------------------------------ fetchers
@@ -475,9 +653,14 @@ class PreparedStack:
 
 
 def prepare_stack(engine, fetchers: dict[str, Callable] | None = None,
-                  poll: Callable | None = None, decision_path: Path | None = None,
-                  workdir: Path | None = None) -> PreparedStack:
-    """Resolve, retrieve and check the complete stack. Refuses, never guesses.
+                  dates: dict | None = None, decision_path: Path | None = None,
+                  workdir: Path | None = None, day=None) -> PreparedStack:
+    """Resolve, retrieve and check the complete stack for ONE date.
+
+    ``day`` selects a specific valid date; without it the newest qualified
+    common date is used. Either way the date must be one every channel can
+    actually supply - a requested date that any channel lacks is refused, never
+    filled from a neighbouring day.
 
     Network-bound and model-free, so the caller can run it without holding the
     engine lock: a slow provider must never block Historical Replay.
@@ -488,12 +671,25 @@ def prepare_stack(engine, fetchers: dict[str, Callable] | None = None,
             "operational mode is not qualified: "
             + (decision or {}).get("temperature_category", "no qualification artifact")])
     started = _now()
-    day, records = resolve_common_date(poll or poll_product)
+    errors: dict = {}
+    if dates is None:
+        dates, errors = channel_dates()
+    newest, records = resolve_common_date(dates, errors)
     if day is None:
-        raise LatestRefused(["no common valid date: "
-                             + ", ".join(f"{r.product_key} {r.state}"
-                                         for r in records.values() if r.error)],
-                            [asdict(r) for r in records.values()])
+        day = newest
+        if day is None:
+            raise LatestRefused(["no common valid date: "
+                                 + ", ".join(f"{r.product_key} {r.state}"
+                                             for r in records.values() if r.error)],
+                                [asdict(r) for r in records.values()])
+    else:
+        day = pd.Timestamp(day).normalize()
+        if day not in common_dates(dates):
+            miss = missing_channels(day, dates, errors)
+            raise LatestRefused(
+                [f"{day.date()} is not a qualified common date: no usable field "
+                 f"for {', '.join(miss)}"],
+                [asdict(r) for r in records.values()], str(day.date()))
     arrays = assemble(day, records, fetchers or default_fetchers(),
                       Path(workdir) if workdir else WORK_DIR / str(day.date()))
     reasons, coverage = check_conditions(engine, arrays, records, day, decision)
@@ -505,12 +701,12 @@ def prepare_stack(engine, fetchers: dict[str, Callable] | None = None,
 
 
 def latest_qualified_field(engine, fetchers: dict[str, Callable] | None = None,
-                           poll: Callable | None = None,
+                           dates: dict | None = None,
                            decision_path: Path | None = None,
-                           workdir: Path | None = None) -> LatestResult:
+                           workdir: Path | None = None, day=None) -> LatestResult:
     """The ONLY way a latest subsurface field is produced. Refuses, never guesses."""
-    return run_prepared(engine, prepare_stack(engine, fetchers, poll,
-                                              decision_path, workdir))
+    return run_prepared(engine, prepare_stack(engine, fetchers, dates,
+                                              decision_path, workdir, day))
 
 
 def run_prepared(engine, prepared: PreparedStack) -> LatestResult:
@@ -592,8 +788,33 @@ def save_snapshot(result: LatestResult, directory: Path | None = None) -> Path:
     return d
 
 
+def daily_cache_dir(day, root: Path | None = None) -> Path:
+    """Where the immutable qualified field for one date is stored.
+
+    Separate from the single "last successful" snapshot: a field for a past
+    date never changes, so it may be reused, while the discovery that decides
+    whether a NEWER date exists has its own short lifetime (see
+    ``DISCOVERY_TTL_SECONDS``).
+    """
+    base = Path(root) if root else DAILY_CACHE_DIR
+    return base / str(pd.Timestamp(day).date())
+
+
+def load_daily(engine, day, root: Path | None = None,
+               decision_path: Path | None = None) -> LatestResult | None:
+    """A previously produced qualified field for exactly this date, or None."""
+    day = pd.Timestamp(day).normalize()
+    result = load_snapshot(engine, daily_cache_dir(day, root), decision_path,
+                           expect_date=str(day.date()))
+    if result is None:
+        return None
+    result.view.provenance["inference_source"] = "VALIDATED_DAILY_CACHE"
+    return result
+
+
 def load_snapshot(engine, directory: Path | None = None,
-                  decision_path: Path | None = None) -> LatestResult | None:
+                  decision_path: Path | None = None,
+                  expect_date: str | None = None) -> LatestResult | None:
     """The last qualified output, or None. Invalid if the model or decision changed."""
     d = Path(directory) if directory else SNAPSHOT_DIR
     try:
@@ -606,6 +827,9 @@ def load_snapshot(engine, directory: Path | None = None,
     if (ident["l2_state_dict_sha256"] != prov_now["l2_state_dict_sha256"]
             or ident["climatology_sha256"] != prov_now["climatology_sha256"]
             or ident["decision_sha256"] != _decision_sha(decision_path)):
+        return None
+    # A cached field may only ever be served as the date it was produced for.
+    if expect_date is not None and ident["effective_date"] != expect_date:
         return None
     generated = pd.Timestamp(meta["generated_utc"])
     prov = {**meta["provenance"],

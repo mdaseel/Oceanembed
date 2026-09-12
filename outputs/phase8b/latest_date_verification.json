@@ -1,0 +1,289 @@
+{
+  "checked_at": "2026-09-12T11:30:55+00:00",
+  "phase": "8B follow-up",
+  "semantics": "newest date in the INTERSECTION of every channel's usable dates",
+  "per_channel": {
+    "sst_nrt": {
+      "channels": [
+        "sst"
+      ],
+      "dataset_id": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
+      "newest_available_date": "2026-09-11",
+      "n_dates_in_window": 30,
+      "dates_retrievable": [
+        "2026-09-04",
+        "2026-09-05",
+        "2026-09-06",
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11"
+      ],
+      "error": null
+    },
+    "sss_nrt_multiobs": {
+      "channels": [
+        "sss"
+      ],
+      "dataset_id": "cmems_obs-mob_glo_phy-sss_nrt_multi_P1D",
+      "newest_available_date": "2026-09-06",
+      "n_dates_in_window": 25,
+      "dates_retrievable": [
+        "2026-08-30",
+        "2026-08-31",
+        "2026-09-01",
+        "2026-09-02",
+        "2026-09-03",
+        "2026-09-04",
+        "2026-09-05",
+        "2026-09-06"
+      ],
+      "error": null
+    },
+    "sla_nrt": {
+      "channels": [
+        "sla"
+      ],
+      "dataset_id": "cmems_obs-sl_glo_phy-ssh_nrt_allsat-l4-duacs-0.125deg_P1D",
+      "newest_available_date": "2026-09-12",
+      "n_dates_in_window": 31,
+      "dates_retrievable": [
+        "2026-09-05",
+        "2026-09-06",
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12"
+      ],
+      "error": null
+    },
+    "currents_nrt": {
+      "channels": [
+        "current_u",
+        "current_v"
+      ],
+      "dataset_id": "OSCAR_L4_OC_NRT_V2.0",
+      "newest_available_date": "2026-09-03",
+      "n_dates_in_window": 22,
+      "dates_retrievable": [
+        "2026-08-27",
+        "2026-08-28",
+        "2026-08-29",
+        "2026-08-30",
+        "2026-08-31",
+        "2026-09-01",
+        "2026-09-02",
+        "2026-09-03"
+      ],
+      "error": null
+    },
+    "wind_nrt": {
+      "channels": [
+        "wind_u",
+        "wind_v"
+      ],
+      "dataset_id": "cmems_obs-wind_glo_phy_nrt_l4_0.125deg_PT1H",
+      "newest_available_date": "2026-09-11",
+      "n_dates_in_window": 30,
+      "dates_retrievable": [
+        "2026-09-04",
+        "2026-09-05",
+        "2026-09-06",
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11"
+      ],
+      "error": null
+    }
+  },
+  "newest_qualified_date": "2026-09-03",
+  "seven_day_window": [
+    {
+      "date": "2026-08-28",
+      "status": "AVAILABLE",
+      "is_newest": false,
+      "input_valid_dates": {
+        "sst_nrt": "2026-08-28",
+        "sss_nrt_multiobs": "2026-08-28",
+        "sla_nrt": "2026-08-28",
+        "currents_nrt": "2026-08-28",
+        "wind_nrt": "2026-08-28"
+      }
+    },
+    {
+      "date": "2026-08-29",
+      "status": "AVAILABLE",
+      "is_newest": false,
+      "input_valid_dates": {
+        "sst_nrt": "2026-08-29",
+        "sss_nrt_multiobs": "2026-08-29",
+        "sla_nrt": "2026-08-29",
+        "currents_nrt": "2026-08-29",
+        "wind_nrt": "2026-08-29"
+      }
+    },
+    {
+      "date": "2026-08-30",
+      "status": "AVAILABLE",
+      "is_newest": false,
+      "input_valid_dates": {
+        "sst_nrt": "2026-08-30",
+        "sss_nrt_multiobs": "2026-08-30",
+        "sla_nrt": "2026-08-30",
+        "currents_nrt": "2026-08-30",
+        "wind_nrt": "2026-08-30"
+      }
+    },
+    {
+      "date": "2026-08-31",
+      "status": "AVAILABLE",
+      "is_newest": false,
+      "input_valid_dates": {
+        "sst_nrt": "2026-08-31",
+        "sss_nrt_multiobs": "2026-08-31",
+        "sla_nrt": "2026-08-31",
+        "currents_nrt": "2026-08-31",
+        "wind_nrt": "2026-08-31"
+      }
+    },
+    {
+      "date": "2026-09-01",
+      "status": "AVAILABLE",
+      "is_newest": false,
+      "input_valid_dates": {
+        "sst_nrt": "2026-09-01",
+        "sss_nrt_multiobs": "2026-09-01",
+        "sla_nrt": "2026-09-01",
+        "currents_nrt": "2026-09-01",
+        "wind_nrt": "2026-09-01"
+      }
+    },
+    {
+      "date": "2026-09-02",
+      "status": "AVAILABLE",
+      "is_newest": false,
+      "input_valid_dates": {
+        "sst_nrt": "2026-09-02",
+        "sss_nrt_multiobs": "2026-09-02",
+        "sla_nrt": "2026-09-02",
+        "currents_nrt": "2026-09-02",
+        "wind_nrt": "2026-09-02"
+      }
+    },
+    {
+      "date": "2026-09-03",
+      "status": "AVAILABLE",
+      "is_newest": true,
+      "input_valid_dates": {
+        "sst_nrt": "2026-09-03",
+        "sss_nrt_multiobs": "2026-09-03",
+        "sla_nrt": "2026-09-03",
+        "currents_nrt": "2026-09-03",
+        "wind_nrt": "2026-09-03"
+      }
+    }
+  ],
+  "discovery_errors": {},
+  "produced_states": [
+    {
+      "date": "2026-09-02",
+      "state": "QUALIFIED",
+      "served_from": "immutable per-date cache",
+      "joint_mask_coverage": 0.9966276180333689,
+      "reconstruction_lag_hours": 251.46,
+      "oldest_input_age_hours": 251.46,
+      "per_source": {
+        "sst_nrt": {
+          "product_valid_time": "2026-09-02T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:26:42",
+          "age_hours": 251.44,
+          "state": "OK"
+        },
+        "sss_nrt_multiobs": {
+          "product_valid_time": "2026-09-02T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:26:51",
+          "age_hours": 251.45,
+          "state": "OK"
+        },
+        "sla_nrt": {
+          "product_valid_time": "2026-09-02T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:27:04",
+          "age_hours": 251.45,
+          "state": "OK"
+        },
+        "currents_nrt": {
+          "product_valid_time": "2026-09-02T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:27:15",
+          "age_hours": 251.45,
+          "state": "OK"
+        },
+        "wind_nrt": {
+          "product_valid_time": "2026-09-02T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:27:41",
+          "age_hours": 251.46,
+          "state": "OK"
+        }
+      },
+      "n_supported_cells": 11284
+    },
+    {
+      "date": "2026-09-03",
+      "state": "QUALIFIED",
+      "served_from": "immutable per-date cache",
+      "joint_mask_coverage": 0.9966276180333689,
+      "reconstruction_lag_hours": 227.48,
+      "oldest_input_age_hours": 227.48,
+      "per_source": {
+        "sst_nrt": {
+          "product_valid_time": "2026-09-03T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:27:53",
+          "age_hours": 227.46,
+          "state": "OK"
+        },
+        "sss_nrt_multiobs": {
+          "product_valid_time": "2026-09-03T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:28:03",
+          "age_hours": 227.47,
+          "state": "OK"
+        },
+        "sla_nrt": {
+          "product_valid_time": "2026-09-03T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:28:16",
+          "age_hours": 227.47,
+          "state": "OK"
+        },
+        "currents_nrt": {
+          "product_valid_time": "2026-09-03T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:28:25",
+          "age_hours": 227.47,
+          "state": "OK"
+        },
+        "wind_nrt": {
+          "product_valid_time": "2026-09-03T00:00:00",
+          "local_retrieval_time": "2026-09-12T11:28:51",
+          "age_hours": 227.48,
+          "state": "OK"
+        }
+      },
+      "n_supported_cells": 11284
+    }
+  ],
+  "two_dates_differ": {
+    "compared_dates": [
+      "2026-09-02",
+      "2026-09-03"
+    ],
+    "identical": false,
+    "max_abs_difference_degC": 2.0998245315059982,
+    "mean_abs_difference_degC": 0.11692338747232904
+  },
+  "l2_state_dict_sha256_before": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+  "l2_state_dict_sha256_after": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+  "frozen_l2_unchanged": true,
+  "argo_opened": false
+}

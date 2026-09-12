@@ -393,8 +393,8 @@ def _engine_lock():
 
 
 def latest_state_payload(result, state: str, summary: dict,
-                         label: str | None = None, live_attempt: dict | None = None
-                         ) -> dict:
+                         label: str | None = None, live_attempt: dict | None = None,
+                         newest_date: str | None = None) -> dict:
     """A latest field in the SAME field-view transport as Historical Replay."""
     from ..nrt import latest as LQ
     from ..nrt.registry import PRODUCTS
@@ -417,7 +417,13 @@ def latest_state_payload(result, state: str, summary: dict,
         field.pop("hazard", None)
     return {"mode": "LATEST_QUALIFIED_OCEAN_STATE", "phase": "8B", "state": state,
             "label": label, "qualification": summary,
-            "effective_date": result.view.date, "sources": result.sources,
+            "effective_date": result.view.date,
+            "selected_date": result.view.date,
+            "newest_qualified_date": newest_date,
+            "is_newest": bool(newest_date is not None
+                              and result.view.date == newest_date),
+            "served_from": result.view.provenance.get("inference_source"),
+            "sources": result.sources,
             "meta": result.meta, "live_attempt": live_attempt,
             "policy": LQ.POLICY, "field": field}
 
@@ -428,6 +434,7 @@ def _latest_fallback(engine, summary: dict, live_attempt: dict) -> dict:
     if snap is not None:
         return latest_state_payload(snap, LQ.SNAPSHOT_STATE, summary,
                                     LQ.SNAPSHOT_LABEL, live_attempt)
+
     return {"mode": "LATEST_QUALIFIED_OCEAN_STATE", "phase": "8B",
             "state": LQ.UNAVAILABLE_STATE, "label": LQ.UNAVAILABLE_LABEL,
             "qualification": summary, "live_attempt": live_attempt,
@@ -462,8 +469,31 @@ async def latest_qualified_cached():
     return JSONResponse(payload)
 
 
+@app.get("/api/latest/available-dates")
+async def latest_available_dates(days: int = 7, refresh: bool = False):
+    """Which recent dates the COMPLETE seven-channel stack can actually supply.
+
+    Read from the providers' own time axes and granule catalogue, so an
+    unavailable day names the channel that is missing rather than being
+    silently skipped. Nothing is inferred here.
+    """
+    from ..nrt import latest as LQ
+    summary = LQ.qualification_summary()
+    if not summary["qualified"]:
+        return JSONResponse({**_not_qualified(summary), "days": []})
+    if refresh:
+        LQ.refresh_discovery()
+    try:
+        window = await run_in_threadpool(LQ.available_window, days)
+    except Exception as exc:  # noqa: BLE001 - discovery failure is not a crash
+        return JSONResponse({"qualification": summary, "days": [],
+                             "newest_qualified_date": None,
+                             "error": f"{type(exc).__name__}: {exc}"})
+    return JSONResponse({**window, "qualification": summary})
+
+
 @app.get("/api/latest/qualified")
-async def latest_qualified():
+async def latest_qualified(date: str | None = None, refresh: bool = False):
     """Attempt a new latest qualified reconstruction from the complete stack.
 
     Retrieval and the L1-L5 checks run WITHOUT the engine lock, so a slow or
@@ -476,10 +506,54 @@ async def latest_qualified():
     if not summary["qualified"]:
         return JSONResponse(_not_qualified(summary))
     engine = replay_api.engine()
+    if refresh:
+        LQ.refresh_discovery()
     async with _engine_lock():
         await run_in_threadpool(LQ.reference_cells, engine)
+
+    # Discovery first, so a requested date can be checked against what the
+    # providers actually hold before anything is retrieved or inferred.
     try:
-        prepared = await run_in_threadpool(LQ.prepare_stack, engine)
+        dates, errors = await run_in_threadpool(LQ.channel_dates)
+    except Exception as exc:  # noqa: BLE001
+        dates, errors = {}, {"discovery": f"{type(exc).__name__}: {exc}"}
+    newest, _ = LQ.resolve_common_date(dates, errors)
+    newest_date = None if newest is None else str(newest.date())
+    try:
+        day = pd.Timestamp(date).normalize() if date else newest
+    except (ValueError, TypeError):
+        day = None
+    if date and day is None:
+        return JSONResponse({"mode": "LATEST_QUALIFIED_OCEAN_STATE", "phase": "8B",
+                             "state": LQ.DATE_UNAVAILABLE_STATE,
+                             "label": LQ.DATE_UNAVAILABLE_LABEL,
+                             "qualification": summary, "selected_date": date,
+                             "newest_qualified_date": newest_date,
+                             "reason": "unparseable date", "field": None})
+    if day is not None and day not in LQ.common_dates(dates):
+        miss = LQ.missing_channels(day, dates, errors)
+        return JSONResponse({
+            "mode": "LATEST_QUALIFIED_OCEAN_STATE", "phase": "8B",
+            "state": LQ.DATE_UNAVAILABLE_STATE, "label": LQ.DATE_UNAVAILABLE_LABEL,
+            "qualification": summary, "selected_date": str(day.date()),
+            "newest_qualified_date": newest_date, "missing_channels": miss,
+            "reason": "no usable field for " + ", ".join(miss),
+            "note": "No inference was run for this date and no channel was "
+                    "carried forward from another day.",
+            "field": None})
+
+    # An immutable field already produced for this exact date and provenance.
+    if day is not None:
+        cached = await run_in_threadpool(LQ.load_daily, engine, day)
+        if cached is not None:
+            state = LQ.LIVE_STATE if str(day.date()) == newest_date else LQ.DATED_STATE
+            payload = await run_in_threadpool(latest_state_payload, cached, state,
+                                              summary, None, None, newest_date)
+            return JSONResponse(payload)
+
+    try:
+        prepared = await run_in_threadpool(LQ.prepare_stack, engine, None, dates,
+                                           None, None, day)
     except LatestRefused as exc:
         async with _engine_lock():
             payload = await run_in_threadpool(
@@ -496,9 +570,16 @@ async def latest_qualified():
         return JSONResponse(payload)
     async with _engine_lock():
         result = await run_in_threadpool(LQ.run_prepared, engine, prepared)
-        LQ.save_snapshot(result)
-        payload = await run_in_threadpool(latest_state_payload, result,
-                                          LQ.LIVE_STATE, summary)
+        # The per-date cache is immutable; the single "last successful" snapshot
+        # is the offline fallback and may only ever hold the newest state.
+        LQ.save_snapshot(result, LQ.daily_cache_dir(result.view.date))
+        is_newest = result.view.date == newest_date
+        if is_newest:
+            LQ.save_snapshot(result)
+        payload = await run_in_threadpool(
+            latest_state_payload, result,
+            LQ.LIVE_STATE if is_newest else LQ.DATED_STATE, summary, None, None,
+            newest_date)
     return JSONResponse(payload)
 
 

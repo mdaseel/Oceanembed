@@ -19,6 +19,14 @@ async function cachedPayload(page: Page) {
   expect(r.ok()).toBeTruthy();
   const p = await r.json();
   test.skip(!p.field, "no qualified snapshot on this machine");
+  // Default window stub so no test contacts a live provider; tests that need a
+  // specific window register their own route afterwards, which then wins.
+  await page.route("**/api/latest/available-dates**", (r2: Route) =>
+    r2.fulfill({
+      json: { newest_qualified_date: p.effective_date, window_days: 1,
+              days: [{ date: p.effective_date, status: "AVAILABLE", is_newest: true }] },
+      headers: { "content-type": "application/json" },
+    }));
   return p;
 }
 
@@ -164,4 +172,127 @@ test("historical replay keeps D26 and is untouched by the latest mode", async ({
   const layerSelect = page.getByLabel("Display layer");
   await expect(layerSelect.locator('option[value="d26"]')).toHaveCount(1);
   await expect(page.locator(".mode-badge")).toHaveText("HISTORICAL REPLAY");
+});
+
+/**
+ * Phase 8B follow-up (2026-09-12): the recent qualified states selector.
+ *
+ * The window is served from a fixture so the test is offline and deterministic;
+ * the field itself is still the backend's own last qualified snapshot.
+ */
+function windowFixture(newest: string, dates: string[]) {
+  return {
+    newest_qualified_date: newest,
+    window_days: dates.length,
+    days: dates.map((d) => ({
+      date: d,
+      status: d === "2026-09-02" ? "UNAVAILABLE" : "AVAILABLE",
+      is_newest: d === newest,
+      ...(d === "2026-09-02"
+        ? { reason: "no usable field for currents_nrt", missing_channels: ["currents_nrt"] }
+        : {}),
+    })),
+  };
+}
+
+test("the recent-states selector lists a 7-day window and marks the newest", async ({
+  page,
+}) => {
+  const q = await (await page.request.get("/api/latest/qualification")).json();
+  const cached = await cachedPayload(page);
+  const dates = ["2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03",
+                 "2026-09-04", "2026-09-05", "2026-09-06"];
+  await page.route("**/api/latest/available-dates**", (r) =>
+    r.fulfill({ json: windowFixture("2026-09-06", dates),
+                headers: { "content-type": "application/json" } }));
+  await page.route("**/api/latest/qualified?*", async (route) => {
+    const date = new URL(route.request().url()).searchParams.get("date")!;
+    await route.fulfill({
+      json: { ...cached, state: "QUALIFIED_STATE_FOR_DATE", label: null,
+              selected_date: date, effective_date: date, is_newest: date === "2026-09-06",
+              newest_qualified_date: "2026-09-06", live_attempt: null,
+              field: { ...cached.field, date } },
+      headers: { "content-type": "application/json" },
+    });
+  });
+  await serveLive(page, { ...cached, state: "LATEST_QUALIFIED", label: null,
+                          selected_date: "2026-09-06", effective_date: "2026-09-06",
+                          is_newest: true, newest_qualified_date: "2026-09-06",
+                          live_attempt: null,
+                          field: { ...cached.field, date: "2026-09-06" } });
+  await page.goto("/");
+  await page.getByRole("link", { name: q.tab_name }).click();
+
+  await expect(page.getByTestId("recent-states")).toBeVisible();
+  for (const d of dates) await expect(page.getByTestId(`day-${d}`)).toBeVisible();
+  await expect(page.getByTestId("newest-date")).toHaveText("2026-09-06");
+  await expect(page.getByTestId("day-2026-09-06")).toHaveAttribute("data-status", "AVAILABLE");
+  // an unavailable day stays visible, is disabled, and says what is missing
+  const gap = page.getByTestId("day-2026-09-02");
+  await expect(gap).toHaveAttribute("data-status", "UNAVAILABLE");
+  await expect(gap).toBeDisabled();
+  await expect(page.getByTestId("why-2026-09-02")).toContainText("currents_nrt");
+});
+
+test("choosing another day re-renders that day's field, and cannot be faked for an unavailable day", async ({
+  page,
+}) => {
+  const q = await (await page.request.get("/api/latest/qualification")).json();
+  const cached = await cachedPayload(page);
+  const dates = ["2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03",
+                 "2026-09-04", "2026-09-05", "2026-09-06"];
+  const asked: string[] = [];
+  await page.route("**/api/latest/available-dates**", (r) =>
+    r.fulfill({ json: windowFixture("2026-09-06", dates),
+                headers: { "content-type": "application/json" } }));
+  await page.route("**/api/latest/qualified?*", async (route) => {
+    const date = new URL(route.request().url()).searchParams.get("date")!;
+    asked.push(date);
+    await route.fulfill({
+      json: { ...cached, state: "QUALIFIED_STATE_FOR_DATE", label: null,
+              selected_date: date, effective_date: date, is_newest: false,
+              newest_qualified_date: "2026-09-06", live_attempt: null,
+              field: { ...cached.field, date } },
+      headers: { "content-type": "application/json" },
+    });
+  });
+  await serveLive(page, { ...cached, state: "LATEST_QUALIFIED", label: null,
+                          selected_date: "2026-09-06", effective_date: "2026-09-06",
+                          is_newest: true, newest_qualified_date: "2026-09-06",
+                          live_attempt: null,
+                          field: { ...cached.field, date: "2026-09-06" } });
+  await page.goto("/");
+  await page.getByRole("link", { name: q.tab_name }).click();
+  await expect(page.getByTestId("effective-date")).toContainText("2026-09-06");
+
+  await page.getByTestId("day-2026-09-04").click();
+  await expect(page.getByTestId("effective-date")).toContainText("2026-09-04");
+  // A qualified older state must never read as "Unavailable" (live UI defect,
+  // found 2026-09-12): the state tile has a label for every served state.
+  await expect(page.getByTestId("latest-state")).toContainText(
+    "Qualified state for this date",
+  );
+  await expect(page.getByTestId("latest-state")).not.toContainText("Unavailable");
+  await expect(page.getByTestId("effective-date")).toContainText("not the newest state");
+  await expect(page.getByTestId("newest-qualified-state")).toContainText("2026-09-06");
+  await expect(page.getByTestId("day-2026-09-04")).toHaveAttribute("data-selected", "true");
+  // the shared renderer and profile still draw the selected day
+  await expect(page.getByTestId("field-map")).toBeVisible();
+  // the profile lives in the same collapsible panel as in Historical Replay
+  await expect(page.getByTestId("profile-table")).toHaveCount(1);
+  await page.getByRole("button", { name: "3D depth" }).click();
+  await expect(page.getByTestId("depth-renderer")).toBeVisible();
+
+  // an unavailable day never triggers a request, so no inference can happen
+  await page.getByTestId("day-2026-09-02").click({ force: true }).catch(() => {});
+  expect(asked).not.toContain("2026-09-02");
+  // lag and the non-"now" wording remain for the selected day
+  await expect(page.getByTestId("timeliness-note")).toContainText("reconstruction lag");
+  // "not the ocean now" is the required disclaimer; what must never appear is
+  // the affirmative claim. Every occurrence has to be negated.
+  const body = await page.locator("body").innerText();
+  expect(body).not.toContain("Live Ocean Right Now");
+  const claims = [...body.matchAll(/.{0,16}ocean\s+now/gi)].map((m) => m[0]);
+  for (const c of claims) expect(c).toMatch(/\b(not|never)\b/i);
+  await page.locator("main").screenshot({ path: "../outputs/phase8b/recent-states.png" });
 });

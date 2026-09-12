@@ -56,10 +56,29 @@ interface Source {
   age_hours: number | null;
   error: string | null;
 }
+interface WindowDay {
+  date: string;
+  status: "AVAILABLE" | "UNAVAILABLE";
+  is_newest: boolean;
+  reason?: string;
+  missing_channels?: string[];
+}
+interface AvailableDates {
+  newest_qualified_date: string | null;
+  days: WindowDay[];
+  per_product_newest?: Record<string, string | null>;
+  error?: string;
+}
 interface LatestPayload {
   state: string;
   label: string | null;
   effective_date?: string;
+  selected_date?: string;
+  newest_qualified_date?: string | null;
+  is_newest?: boolean;
+  served_from?: string;
+  reason?: string;
+  missing_channels?: string[];
   sources?: Source[];
   meta?: {
     retrieval_time_utc?: string;
@@ -86,6 +105,7 @@ export default function LatestQualified({
   onData: (d: ReplayData | null) => void;
 }) {
   const [payload, setPayload] = useState<LatestPayload | null>(null);
+  const [window7, setWindow7] = useState<AvailableDates | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const live = useRef(true);
@@ -103,31 +123,48 @@ export default function LatestQualified({
     [onData],
   );
 
+  /** One date, always through the same qualification + inference path. */
+  const load = useCallback(
+    (date?: string) => {
+      setBusy(true);
+      setError("");
+      // A failure never blanks the tab: the previous state stays on screen.
+      getJson<LatestPayload>(
+        date ? `/api/latest/qualified?date=${encodeURIComponent(date)}` : "/api/latest/qualified",
+      )
+        .then(accept)
+        .catch((e) => live.current && setError(String(e)))
+        .finally(() => live.current && setBusy(false));
+    },
+    [accept],
+  );
+
   const refresh = useCallback(() => {
-    setBusy(true);
-    setError("");
-    // A failure never blanks the tab: the previous state stays on screen.
-    getJson<LatestPayload>("/api/latest/qualified")
-      .then(accept)
-      .catch((e) => live.current && setError(String(e)))
-      .finally(() => live.current && setBusy(false));
-  }, [accept]);
+    getJson<AvailableDates>("/api/latest/available-dates?refresh=true")
+      .then((w) => live.current && setWindow7(w))
+      .catch(() => {});
+    load();
+  }, [load]);
 
   useEffect(() => {
     live.current = true;
+    getJson<AvailableDates>("/api/latest/available-dates")
+      .then((w) => live.current && setWindow7(w))
+      .catch(() => {});
     getJson<LatestPayload>("/api/latest/qualified/cached")
       .then((p) => {
         if (p.field) accept(p);
         else if (live.current) setPayload((cur) => cur ?? p);
       })
       .catch(() => {})
-      .finally(() => live.current && refresh());
+      .finally(() => live.current && load());
     return () => {
       live.current = false;
     };
-  }, [accept, refresh]);
+  }, [accept, load]);
 
   const state = payload?.state;
+  const selectedDate = payload?.selected_date ?? payload?.effective_date;
   const sources = payload?.sources ?? [];
   const attempt = payload?.live_attempt;
   const m = payload?.meta ?? {};
@@ -154,6 +191,62 @@ export default function LatestQualified({
           “QUALIFIED” is not reachable in this phase:{" "}
           {qualification.qualified_unreachable_reason}
         </p>
+
+        {window7 && window7.days.length > 0 && (
+          <div className="date-strip" data-testid="recent-states">
+            <span className="eyebrow">RECENT QUALIFIED STATES</span>
+            <div className="date-strip-row">
+              {window7.days.map((d) => {
+                const selected = d.date === selectedDate;
+                return (
+                  <button
+                    key={d.date}
+                    type="button"
+                    className={`date-chip${selected ? " selected" : ""}${
+                      d.status === "AVAILABLE" ? "" : " unavailable"
+                    }`}
+                    data-testid={`day-${d.date}`}
+                    data-status={d.status}
+                    data-selected={selected ? "true" : "false"}
+                    disabled={d.status !== "AVAILABLE" || busy}
+                    title={
+                      d.status === "AVAILABLE"
+                        ? `Qualified state for ${d.date}`
+                        : d.reason
+                    }
+                    onClick={() => d.status === "AVAILABLE" && load(d.date)}
+                  >
+                    {d.date.slice(5)}
+                    {d.is_newest && <span className="newest-dot" aria-hidden />}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="small muted">
+              Newest complete seven-channel state:{" "}
+              <strong data-testid="newest-date">
+                {window7.newest_qualified_date ?? "none"}
+              </strong>
+              . Unavailable days are shown, not hidden: each is missing at least
+              one mandatory channel, and no day is filled from another.
+            </p>
+            {window7.days
+              .filter((d) => d.status === "UNAVAILABLE")
+              .slice(0, 3)
+              .map((d) => (
+                <p className="small muted" key={d.date} data-testid={`why-${d.date}`}>
+                  {d.date} — {d.reason}
+                </p>
+              ))}
+          </div>
+        )}
+
+        {payload?.state === "DATE_NOT_QUALIFIED" && (
+          <p className="notice" data-testid="date-unavailable">
+            <strong>{payload.label}</strong> — {payload.reason}. No inference was
+            run for this date.
+          </p>
+        )}
 
         {payload?.effective_date && (
           <p className="notice" data-testid="timeliness-note">
@@ -214,20 +307,36 @@ export default function LatestQualified({
             <span>STATE</span>
             <strong>
               {state === "LATEST_QUALIFIED"
-                ? "New qualified run"
-                : state === "LAST_SUCCESSFUL_QUALIFIED_SNAPSHOT_NOT_CURRENT"
-                  ? "Snapshot — not current"
-                  : state
-                    ? "Unavailable"
-                    : "Checking…"}
+                ? "Newest qualified state"
+                : state === "QUALIFIED_STATE_FOR_DATE"
+                  ? "Qualified state for this date"
+                  : state === "LAST_SUCCESSFUL_QUALIFIED_SNAPSHOT_NOT_CURRENT"
+                    ? "Snapshot — not current"
+                    : state === "DATE_NOT_QUALIFIED"
+                      ? "No qualified state for this date"
+                      : state
+                        ? "Unavailable"
+                        : "Checking…"}
             </strong>
             <span className="small muted">{state ?? ""}</span>
           </div>
           <div className="stat" data-testid="effective-date">
-            <span>VALID FOR (EFFECTIVE DATE)</span>
+            <span>SELECTED OCEAN STATE · VALID</span>
             <strong>{payload?.effective_date ?? "—"}</strong>
             <span className="small muted">
               common valid date of all seven inputs
+              {payload?.is_newest === false ? " · not the newest state" : ""}
+            </span>
+          </div>
+          <div className="stat" data-testid="newest-qualified-state">
+            <span>NEWEST QUALIFIED STATE</span>
+            <strong>
+              {payload?.newest_qualified_date ??
+                window7?.newest_qualified_date ??
+                "—"}
+            </strong>
+            <span className="small muted">
+              newest date all seven channels can supply
             </span>
           </div>
           <div className="stat">
