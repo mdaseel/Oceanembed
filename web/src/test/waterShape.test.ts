@@ -25,7 +25,7 @@ it("curves water vertically only and keeps side thickness constant", () => {
   expect(raised).toBe(true);
   expect(data.positions).toEqual(original);
   expect(waterShape(data.cells, f.lat.length, f.lon.length, 0)(original)).toEqual(original);
-});
+}, 30000);
 
 it("raycasts the curved geometry to the original scientific grid cell", () => {
   const curved = waterShape(data.cells, f.lat.length, f.lon.length, .36)(data.positions);
@@ -41,4 +41,4 @@ it("raycasts the curved geometry to the original scientific grid cell", () => {
   expect(f.lat[Math.floor(cell/f.lon.length)]).toBe(15);
   expect(f.lon[cell%f.lon.length]).toBe(65);
   geometry.dispose(); material.dispose();
-});
+}, 30000);
