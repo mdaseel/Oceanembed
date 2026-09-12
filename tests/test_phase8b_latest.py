@@ -178,6 +178,51 @@ class TestDateResolution:
                               lambda: LQ._cmems_dates("sst_nrt"))) == \
             pd.Timestamp("2026-09-12")
 
+    def test_persisted_discovery_is_served_when_memory_is_cold(self, monkeypatch,
+                                                               tmp_path):
+        """A restart must not make the first caller wait for every provider."""
+        f = tmp_path / "discovery.json"
+        f.write_text(json.dumps({
+            "generated_utc": str(pd.Timestamp.utcnow().tz_localize(None)),
+            "dates": {k: ["2026-09-02", "2026-09-03"] for k in LQ.PRODUCT_CHANNELS},
+            "errors": {}}), encoding="utf-8")
+        monkeypatch.setattr(LQ, "DISCOVERY_FILE", f)
+        monkeypatch.setattr(LQ, "_cmems_dates",
+                            lambda k: pytest.fail("provider read on the fast path"))
+        LQ.refresh_discovery()
+        sets, errors = LQ.channel_dates()
+        assert max(sets["sst_nrt"]) == pd.Timestamp("2026-09-03")
+        assert LQ.DISCOVERY_AGE["from_disk"] is True
+
+    def test_a_stale_persisted_discovery_is_not_served(self, monkeypatch, tmp_path):
+        """It decides which date to ask for, so it may never be old."""
+        f = tmp_path / "discovery.json"
+        old = pd.Timestamp.utcnow().tz_localize(None) - pd.Timedelta(days=2)
+        f.write_text(json.dumps({
+            "generated_utc": str(old),
+            "dates": {k: ["2026-01-01"] for k in LQ.PRODUCT_CHANNELS},
+            "errors": {}}), encoding="utf-8")
+        monkeypatch.setattr(LQ, "DISCOVERY_FILE", f)
+        monkeypatch.setattr(LQ, "_cmems_dates", lambda k: {pd.Timestamp("2026-09-10")})
+        monkeypatch.setattr(LQ, "_oscar_dates",
+                            lambda a, b: {pd.Timestamp("2026-09-10")})
+        LQ.refresh_discovery()
+        sets, _ = LQ.channel_dates()
+        assert max(sets["sst_nrt"]) == pd.Timestamp("2026-09-10")   # real read
+        assert LQ.DISCOVERY_AGE["from_disk"] is False
+
+    def test_warm_up_forces_a_real_discovery_read(self, engine, monkeypatch):
+        """The warm-up is what refreshes a cold server, so it must not be
+        served the persisted fast path."""
+        seen = {}
+
+        def fake(window_days=LQ.LOOKBACK_DAYS, allow_persisted=True):
+            seen["allow_persisted"] = allow_persisted
+            return {}, {"currents_nrt": "stopped here"}
+        monkeypatch.setattr(LQ, "channel_dates", fake)
+        LQ.warm_recent_states(engine, 7)
+        assert seen["allow_persisted"] is False
+
     def test_discovery_ttl_is_bounded(self):
         assert 0 < LQ.DISCOVERY_TTL_SECONDS <= 3600
 
@@ -473,6 +518,73 @@ class TestSnapshot:
         assert LQ.load_snapshot(engine, tmp_path / "snap", decision_path=other) is None
 
 
+# ------------------------------------------------------------- warm-up
+class TestWarmUp:
+    def test_warm_produces_every_available_date_and_skips_cached(
+            self, engine, canonical, monkeypatch, tmp_path):
+        monkeypatch.setattr(LQ, "DAILY_CACHE_DIR", tmp_path / "daily")
+        monkeypatch.setattr(LQ, "SNAPSHOT_DIR", tmp_path / "snap")
+        monkeypatch.setattr(LQ, "WORK_DIR", tmp_path / "work")
+        calls = Calls()
+        monkeypatch.setattr(LQ, "default_fetchers",
+                            lambda: make_fetchers(canonical, calls))
+        LQ.WARM_STATUS.clear()
+        sets = dates_for(DAY, DAY2)
+        LQ.warm_recent_states(engine, 7, sets, {})
+        assert LQ.is_cached(DAY) and LQ.is_cached(DAY2)
+        assert LQ.WARM_STATUS[str(DAY.date())] == "ready"
+        assert LQ.WARM_STATUS[str(DAY2.date())] == "ready"
+        first = calls.n
+        assert first > 0
+        # a second pass must reuse the immutable cache, not refetch
+        LQ.warm_recent_states(engine, 7, sets, {})
+        assert calls.n == first
+
+    def test_warm_never_produces_an_unavailable_date(self, engine, canonical,
+                                                     monkeypatch, tmp_path, no_infer):
+        monkeypatch.setattr(LQ, "DAILY_CACHE_DIR", tmp_path / "daily")
+        monkeypatch.setattr(LQ, "SNAPSHOT_DIR", tmp_path / "snap")
+        monkeypatch.setattr(LQ, "WORK_DIR", tmp_path / "work")
+        monkeypatch.setattr(LQ, "default_fetchers", lambda: make_fetchers(canonical))
+        LQ.WARM_STATUS.clear()
+        sets = dates_for(DAY)
+        sets["currents_nrt"] = set()          # nothing is a common date
+        LQ.warm_recent_states(engine, 7, sets, {})
+        assert not LQ.is_cached(DAY)          # no_infer would have fired otherwise
+
+    def test_warm_records_a_refusal_instead_of_crashing(self, engine, canonical,
+                                                        monkeypatch, tmp_path):
+        monkeypatch.setattr(LQ, "DAILY_CACHE_DIR", tmp_path / "daily")
+        monkeypatch.setattr(LQ, "SNAPSHOT_DIR", tmp_path / "snap")
+        monkeypatch.setattr(LQ, "WORK_DIR", tmp_path / "work")
+
+        def dead(_):
+            raise OSError("provider down")
+        monkeypatch.setattr(LQ, "default_fetchers",
+                            lambda: make_fetchers(canonical,
+                                                  override={"sla_nrt": dead}))
+        LQ.WARM_STATUS.clear()
+        LQ.warm_recent_states(engine, 7, dates_for(DAY), {})
+        assert LQ.WARM_STATUS[str(DAY.date())].startswith("refused")
+        assert not LQ.is_cached(DAY)
+
+    def test_window_reports_readiness_per_date(self, engine, canonical, monkeypatch,
+                                               tmp_path):
+        monkeypatch.setattr(LQ, "DAILY_CACHE_DIR", tmp_path / "daily")
+        monkeypatch.setattr(LQ, "SNAPSHOT_DIR", tmp_path / "snap")
+        monkeypatch.setattr(LQ, "WORK_DIR", tmp_path / "work")
+        monkeypatch.setattr(LQ, "default_fetchers", lambda: make_fetchers(canonical))
+        LQ.WARM_STATUS.clear()
+        sets = dates_for(DAY, DAY2)
+        before = {d["date"]: d for d in LQ.available_window(7, sets, {})["days"]}
+        assert before[str(DAY.date())]["cached"] is False
+        assert before[str(DAY.date())]["warm"] == "pending"
+        LQ.warm_recent_states(engine, 7, sets, {})
+        after = {d["date"]: d for d in LQ.available_window(7, sets, {})["days"]}
+        assert after[str(DAY.date())]["cached"] is True
+        assert after[str(DAY.date())]["warm"] == "ready"
+
+
 # ------------------------------------------------------------- API
 @pytest.fixture()
 def client(engine, canonical, monkeypatch, tmp_path):
@@ -524,6 +636,16 @@ class TestApi:
         # a day no channel holds is listed as unavailable, with a reason
         gap = rows["2024-12-12"]
         assert gap["status"] == "UNAVAILABLE" and gap["reason"]
+
+    def test_prewarm_returns_immediately_and_reports_status(self, client):
+        r = client.get("/api/latest/prewarm").json()
+        assert "running" in r or r.get("started") is not None
+
+    def test_available_dates_carries_readiness(self, client):
+        w = client.get("/api/latest/available-dates").json()
+        rows = {d["date"]: d for d in w["days"] if d["status"] == "AVAILABLE"}
+        assert all("cached" in d and "warm" in d for d in rows.values())
+        assert "warm_status" in w
 
     def test_live_payload_uses_the_historical_transport(self, client):
         p = client.get("/api/latest/qualified").json()

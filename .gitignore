@@ -54,3 +54,4 @@ outputs/phase8a/last_successful_telemetry.json
 outputs/phase8b/cache/
 outputs/phase8b/latest_snapshot/
 outputs/phase8b/daily_cache/
+outputs/phase8b/discovery_cache.json

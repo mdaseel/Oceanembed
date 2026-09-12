@@ -60,6 +60,10 @@ interface WindowDay {
   date: string;
   status: "AVAILABLE" | "UNAVAILABLE";
   is_newest: boolean;
+  /** An immutable field for this date is already on disk: opening it is instant. */
+  cached?: boolean;
+  /** "ready" | "pending" | "fetching" | "refused: …" | "error: …" */
+  warm?: string;
   reason?: string;
   missing_channels?: string[];
 }
@@ -148,6 +152,10 @@ export default function LatestQualified({
 
   useEffect(() => {
     live.current = true;
+    // Ask the server to pre-produce every recent state, so switching dates is
+    // instant. It returns at once; the work happens in the background and never
+    // blocks this page or Historical Replay.
+    getJson("/api/latest/prewarm").catch(() => {});
     getJson<AvailableDates>("/api/latest/available-dates")
       .then((w) => live.current && setWindow7(w))
       .catch(() => {});
@@ -162,6 +170,21 @@ export default function LatestQualified({
       live.current = false;
     };
   }, [accept, load]);
+
+  // While the server is still preparing states, refresh the strip so each day
+  // flips to "ready" as it lands.
+  const preparing = (window7?.days ?? []).filter(
+    (d) => d.status === "AVAILABLE" && d.warm !== "ready",
+  ).length;
+  useEffect(() => {
+    if (!preparing) return;
+    const timer = setTimeout(() => {
+      getJson<AvailableDates>("/api/latest/available-dates")
+        .then((w) => live.current && setWindow7(w))
+        .catch(() => {});
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, [preparing, window7]);
 
   const state = payload?.state;
   const selectedDate = payload?.selected_date ?? payload?.effective_date;
@@ -204,15 +227,22 @@ export default function LatestQualified({
                     type="button"
                     className={`date-chip${selected ? " selected" : ""}${
                       d.status === "AVAILABLE" ? "" : " unavailable"
+                    }${
+                      d.status === "AVAILABLE" && d.warm !== "ready"
+                        ? " preparing"
+                        : ""
                     }`}
                     data-testid={`day-${d.date}`}
                     data-status={d.status}
+                    data-warm={d.warm ?? "unknown"}
                     data-selected={selected ? "true" : "false"}
                     disabled={d.status !== "AVAILABLE" || busy}
                     title={
-                      d.status === "AVAILABLE"
-                        ? `Qualified state for ${d.date}`
-                        : d.reason
+                      d.status !== "AVAILABLE"
+                        ? d.reason
+                        : d.warm === "ready"
+                          ? `Qualified state for ${d.date} — ready`
+                          : `Qualified state for ${d.date} — preparing (${d.warm})`
                     }
                     onClick={() => d.status === "AVAILABLE" && load(d.date)}
                   >
@@ -222,6 +252,14 @@ export default function LatestQualified({
                 );
               })}
             </div>
+            {preparing > 0 && (
+              <p className="small muted" data-testid="warm-progress">
+                Preparing {preparing} of{" "}
+                {(window7.days ?? []).filter((d) => d.status === "AVAILABLE").length}{" "}
+                recent states in the background — each is a full seven-channel
+                qualification and frozen-L2 run, so they open instantly once ready.
+              </p>
+            )}
             <p className="small muted">
               Newest complete seven-channel state:{" "}
               <strong data-testid="newest-date">

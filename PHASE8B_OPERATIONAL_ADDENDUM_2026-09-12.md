@@ -245,9 +245,84 @@ the valid-date label and the shared map/3D/profile, an unavailable day never
 issuing a request (so no inference can run), the lag staying visible, the state
 tile label, and the absence of any "ocean now" claim.
 
-**Totals: 860 passing (720 pytest · 105 Vitest · 35 Playwright), no failures.**
+**Totals: 869 passing (729 pytest · 105 Vitest · 35 Playwright), no failures.**
 
 ---
+
+---
+
+## 7. Second check, after a report that newer data was available (2026-09-12, 13:32 UTC)
+
+Re-verified against the providers, with discovery forced to re-read:
+
+| channel | newest available |
+|---|---|
+| SLA | 2026-09-12 |
+| SST | 2026-09-11 |
+| wind | 2026-09-11 (23:00) |
+| SSS (MULTIOBS L4 NRT) | 2026-09-06 |
+| **currents (OSCAR NRT)** | **2026-09-03** |
+
+CMR, sorted newest-first over all 2,071 granules, still returns
+`oscar_currents_nrt_20260903` (ingested 2026-09-05) as the newest. **The newest
+common date is still 2026-09-03**, and it is not an OceanEmbed defect.
+
+The two portals in the report were checked and are **not** the binding channel:
+
+- **Argo GDAC** (`data-argo.ifremer.fr/geo/indian_ocean/2026/09/`, daily files to
+  20260912) is *in-situ validation* data. It is not one of the seven satellite
+  inputs the frozen L2 consumes, so its recency cannot move the reconstruction
+  date. The 2024 holdout also remains protected.
+- The salinity page showing `Sea_Surface_Salinity_Rain_Corrected` and dates to
+  2026-09-10 is the **SMOS L3** product `MULTIOBS_GLO_PHY_SSS_L3_MYNRT_015_014`
+  — the candidate Phase 6C-D **rejected** (2.4 % mean daily coverage; zero
+  usable days in the Bay of Bengal). The qualified salinity channel is the
+  MULTIOBS **L4** NRT product, which is at 2026-09-06 and is not the limiting
+  channel either.
+
+The only way to a fresher latest state is a **new qualification of a different
+currents product** (§1), not a change to this code.
+
+---
+
+## 8. Recent states are pre-produced, so the tab opens instantly
+
+Previously a date was fetched only when clicked, which meant a full
+five-product download and a frozen-L2 run while the user waited.
+
+**Now:**
+
+- **The server warms the window at startup.** `warm_recent_states()` walks the
+  7-day window newest-first, skips dates already cached, and produces the rest
+  into the immutable per-date cache. It is a normal, fully qualified run per
+  date — the warm-up relaxes no check and refuses exactly as an interactive
+  request would; refusals are recorded per date and never crash the loop.
+- **The page asks for it too.** The tab calls `/api/latest/prewarm` on mount,
+  which returns immediately, and each day-chip shows whether it is `ready` or
+  still being prepared, refreshing until all are ready.
+- **Discovery is single-flighted.** A page load and the warm-up at startup used
+  to miss the cache simultaneously and each pay a full provider round-trip; a
+  per-key lock now means one read serves both.
+- **Discovery is persisted** (`outputs/phase8b/discovery_cache.json`) and served
+  stale-while-revalidate for up to 6 hours, with a refresh started behind it.
+  It only decides *which* date to ask for; the retrieval still verifies that
+  every channel really carries that date before any inference runs, so a stale
+  hint cannot produce a wrong field.
+- **Historical Replay is never blocked**: downloads happen off the event loop and
+  outside the engine lock, and only the inference itself briefly takes it.
+
+Measured on this machine:
+
+| action | before | after |
+|---|---|---|
+| open the tab (cold server, window listing) | 54.5 s | **0.16–0.32 s** |
+| select an already-produced date | 41 s (paid discovery first) | **~0.8–3.5 s** (transfer of the field itself) |
+| Historical Replay while the warm-up runs | — | 1.9 s, unaffected |
+| dates ready after startup | 0 of 7 | **7 of 7** |
+
+Nothing about the science changed: each date is still an independent frozen-L2
+run over its own complete seven-channel stack, D26 stays withheld, and an
+unavailable date still produces no inference.
 
 **END OF ADDENDUM.** The Phase 8B scientific result is unchanged. Swapping the
 currents product to a fresher one remains an open decision requiring its own

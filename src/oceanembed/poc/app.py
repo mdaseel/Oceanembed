@@ -51,10 +51,34 @@ CREDITS = (
 )
 
 
+async def _warm_latest_states() -> None:
+    """Pre-produce the recent qualified states so the tab opens instantly.
+
+    Runs in the background at startup: the provider downloads happen off the
+    event loop and outside the engine lock, so Historical Replay is never made
+    to wait for them. Each date is still fully qualified; this only fills the
+    immutable per-date cache ahead of the user.
+    """
+    from ..nrt import latest as LQ
+    try:
+        summary = await run_in_threadpool(LQ.qualification_summary)
+        if not summary.get("qualified"):
+            return
+        engine = await run_in_threadpool(replay_api.engine)
+        await run_in_threadpool(LQ.reference_cells, engine)
+        await run_in_threadpool(LQ.warm_recent_states, engine, 7)
+    except Exception:  # noqa: BLE001 - warm-up must never break startup
+        pass
+
+
 @asynccontextmanager
 async def lifespan(application):
     application.state.engine_lock = asyncio.Lock()
+    application.state.warm_task = asyncio.create_task(_warm_latest_states())
     yield
+    task = getattr(application.state, "warm_task", None)
+    if task is not None and not task.done():
+        task.cancel()
 
 
 app = FastAPI(title="OceanEmbed Historical PoC", version="7B", lifespan=lifespan)
@@ -469,6 +493,26 @@ async def latest_qualified_cached():
     return JSONResponse(payload)
 
 
+@app.get("/api/latest/prewarm")
+async def latest_prewarm(days: int = 7):
+    """Start (or report) the background warm-up of the recent qualified states.
+
+    Returns immediately; it never blocks the page that asked for it.
+    """
+    from ..nrt import latest as LQ
+    summary = LQ.qualification_summary()
+    if not summary["qualified"]:
+        return JSONResponse({"started": False, "reason": "not qualified"})
+    task = getattr(app.state, "warm_task", None)
+    if task is None or task.done():
+        app.state.warm_task = asyncio.create_task(_warm_latest_states())
+        started = True
+    else:
+        started = False
+    return JSONResponse({"started": started, "running": True,
+                         "status": dict(LQ.WARM_STATUS)})
+
+
 @app.get("/api/latest/available-dates")
 async def latest_available_dates(days: int = 7, refresh: bool = False):
     """Which recent dates the COMPLETE seven-channel stack can actually supply.
@@ -489,7 +533,17 @@ async def latest_available_dates(days: int = 7, refresh: bool = False):
         return JSONResponse({"qualification": summary, "days": [],
                              "newest_qualified_date": None,
                              "error": f"{type(exc).__name__}: {exc}"})
-    return JSONResponse({**window, "qualification": summary})
+    # A window served from the persisted fast path says so, and a refresh is
+    # started behind it so the newest date cannot stay stale.
+    age = dict(LQ.DISCOVERY_AGE)
+    if age.get("from_disk"):
+        task = getattr(app.state, "warm_task", None)
+        if task is None or task.done():
+            app.state.warm_task = asyncio.create_task(_warm_latest_states())
+    return JSONResponse({**window, "qualification": summary,
+                         "warm_status": dict(LQ.WARM_STATUS),
+                         "discovery_age_seconds": round(age.get("seconds", 0.0)),
+                         "discovery_refreshing": bool(age.get("from_disk"))})
 
 
 @app.get("/api/latest/qualified")
@@ -512,7 +566,11 @@ async def latest_qualified(date: str | None = None, refresh: bool = False):
         await run_in_threadpool(LQ.reference_cells, engine)
 
     # Discovery first, so a requested date can be checked against what the
-    # providers actually hold before anything is retrieved or inferred.
+    # providers actually hold before anything is retrieved or inferred. When the
+    # in-memory answer is cold, the last persisted one is used rather than making
+    # the page wait for every provider: it only decides WHICH date to ask for,
+    # and the retrieval itself still verifies that each channel really carries
+    # that date (assemble -> NOT_ON_COMMON_DATE) before any inference runs.
     try:
         dates, errors = await run_in_threadpool(LQ.channel_dates)
     except Exception as exc:  # noqa: BLE001

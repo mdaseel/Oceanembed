@@ -24,6 +24,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import threading
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -271,6 +272,12 @@ DISCOVERY_TTL_SECONDS = 900
 LOOKBACK_DAYS = 30
 
 _DISCOVERY: dict[str, tuple[float, object]] = {}
+_DISCOVERY_LOCKS: dict[str, threading.Lock] = {}
+_DISCOVERY_GUARD = threading.Lock()
+#: Last successful discovery, so a restart does not make the first caller wait
+#: for every provider again. Served stale-while-revalidate; never used to decide
+#: that a field exists - only to decide what to ask for.
+DISCOVERY_FILE = REPO_ROOT / "outputs" / "phase8b" / "discovery_cache.json"
 
 
 def refresh_discovery() -> None:
@@ -279,12 +286,46 @@ def refresh_discovery() -> None:
 
 
 def _cached(key: str, producer: Callable, ttl: float = DISCOVERY_TTL_SECONDS):
+    """Value for ``key``, computing it at most once even under concurrency.
+
+    Without the per-key lock, a page load and the background warm-up both miss
+    the cache at startup and each pay the full provider round-trip.
+    """
     hit = _DISCOVERY.get(key)
     if hit is not None and (time.time() - hit[0]) < ttl:
         return hit[1]
-    value = producer()
-    _DISCOVERY[key] = (time.time(), value)
-    return value
+    with _DISCOVERY_GUARD:
+        lock = _DISCOVERY_LOCKS.setdefault(key, threading.Lock())
+    with lock:
+        hit = _DISCOVERY.get(key)          # another caller may have filled it
+        if hit is not None and (time.time() - hit[0]) < ttl:
+            return hit[1]
+        value = producer()
+        _DISCOVERY[key] = (time.time(), value)
+        return value
+
+
+def _save_discovery(sets: dict, errors: dict) -> None:
+    try:
+        DISCOVERY_FILE.parent.mkdir(parents=True, exist_ok=True)
+        DISCOVERY_FILE.write_text(json.dumps({
+            "generated_utc": _iso(_now()),
+            "dates": {k: sorted(str(d.date()) for d in v) for k, v in sets.items()},
+            "errors": errors}, indent=2), encoding="utf-8")
+    except OSError:
+        pass
+
+
+def load_persisted_dates() -> tuple[dict, dict, float | None]:
+    """The last discovery from disk: (sets, errors, age in seconds) or ({}, {}, None)."""
+    try:
+        doc = json.loads(DISCOVERY_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}, {}, None
+    sets = {k: {pd.Timestamp(d) for d in v} for k, v in doc.get("dates", {}).items()}
+    age = (_now() - pd.Timestamp(doc["generated_utc"])).total_seconds() \
+        if doc.get("generated_utc") else None
+    return sets, doc.get("errors", {}), age
 
 
 def _cmems_dates(key: str) -> set:
@@ -332,8 +373,30 @@ def _oscar_dates(start, end) -> set:
 _WINDOW_START: dict = {}
 
 
-def channel_dates(window_days: int = LOOKBACK_DAYS) -> tuple[dict, dict]:
-    """Per-product sets of usable valid dates, plus per-product errors."""
+#: A persisted discovery older than this is not served, even as a fast path.
+PERSISTED_MAX_AGE_SECONDS = 6 * 3600
+#: Age of the discovery last returned, in seconds; 0 when freshly read.
+DISCOVERY_AGE: dict = {"seconds": 0.0, "from_disk": False}
+
+
+def channel_dates(window_days: int = LOOKBACK_DAYS,
+                  allow_persisted: bool = True) -> tuple[dict, dict]:
+    """Per-product sets of usable valid dates, plus per-product errors.
+
+    With a cold in-memory cache this returns the last persisted discovery when
+    one is recent enough, so a page never waits for every provider, and the
+    caller refreshes behind it. It only decides WHICH date to ask for: the
+    retrieval still verifies that each channel really carries that date before
+    any inference runs. ``allow_persisted=False`` forces a real read.
+    """
+    if allow_persisted and not _DISCOVERY:
+        sets, errors, age = load_persisted_dates()
+        if sets and age is not None and age < PERSISTED_MAX_AGE_SECONDS:
+            DISCOVERY_AGE.update(seconds=age, from_disk=True)
+            end = _now().normalize()
+            _WINDOW_START["start"] = end - pd.Timedelta(days=window_days)
+            return sets, errors
+    DISCOVERY_AGE.update(seconds=0.0, from_disk=False)
     end = _now().normalize()
     start = end - pd.Timedelta(days=window_days)
     _WINDOW_START["start"] = start
@@ -349,6 +412,8 @@ def channel_dates(window_days: int = LOOKBACK_DAYS) -> tuple[dict, dict]:
             sets[key] = {d for d in dates if start <= d <= end}
         except Exception as exc:  # noqa: BLE001 - reported per source
             errors[key] = "%s: %s" % (type(exc).__name__, exc)
+    if len(sets) == len(PRODUCT_CHANNELS):
+        _save_discovery(sets, errors)
     return sets, errors
 
 
@@ -391,6 +456,64 @@ def resolve_common_date(dates: dict | None = None, errors: dict | None = None):
     return (max(shared) if shared else None), records
 
 
+#: Per-date warm-up status, for the UI. Values: "ready", "fetching",
+#: "refused: <reason>", "error: <reason>".
+WARM_STATUS: dict = {}
+_WARM_LOCK = threading.Lock()
+_WARM_RUNNING = {"on": False}
+
+
+def is_cached(day, root: Path | None = None) -> bool:
+    """Whether an immutable field for this date is already on disk.
+
+    A cheap existence check for the UI; ``load_daily`` still validates the full
+    identity (model, scalers, decision, date) before anything is served.
+    """
+    return (daily_cache_dir(day, root) / "meta.json").is_file()
+
+
+def warm_recent_states(engine, days: int = 7, dates: dict | None = None,
+                       errors: dict | None = None) -> dict:
+    """Produce and cache the qualified field for every available recent date.
+
+    Runs newest-first so the date the tab opens on is ready first. Dates already
+    cached are skipped. Each date is an independent, fully qualified run: this
+    only pre-populates the immutable per-date cache, it never relaxes a check.
+    Safe to call repeatedly - only one warm-up runs at a time.
+    """
+    if _WARM_RUNNING["on"]:
+        return {"already_running": True, "status": dict(WARM_STATUS)}
+    with _WARM_LOCK:
+        _WARM_RUNNING["on"] = True
+        try:
+            if dates is None:
+                # Forced: the warm-up is what refreshes a cold server, so it
+                # must never be served the persisted fast path.
+                dates, errors = channel_dates(allow_persisted=False)
+            window = available_window(days, dates, errors)
+            for row in reversed(window["days"]):        # newest first
+                day = pd.Timestamp(row["date"])
+                if row["status"] != "AVAILABLE" or is_cached(day):
+                    if row["status"] == "AVAILABLE":
+                        WARM_STATUS[row["date"]] = "ready"
+                    continue
+                WARM_STATUS[row["date"]] = "fetching"
+                try:
+                    prepared = prepare_stack(engine, dates=dates, day=day)
+                    result = run_prepared(engine, prepared)
+                    save_snapshot(result, daily_cache_dir(day))
+                    if row["date"] == window["newest_qualified_date"]:
+                        save_snapshot(result)
+                    WARM_STATUS[row["date"]] = "ready"
+                except LatestRefused as exc:
+                    WARM_STATUS[row["date"]] = "refused: " + "; ".join(exc.reasons)
+                except Exception as exc:  # noqa: BLE001 - warm-up never crashes
+                    WARM_STATUS[row["date"]] = f"error: {type(exc).__name__}: {exc}"
+            return {"already_running": False, "status": dict(WARM_STATUS)}
+        finally:
+            _WARM_RUNNING["on"] = False
+
+
 def missing_channels(day, sets: dict, errors: dict) -> list:
     out = []
     for key in PRODUCT_CHANNELS:
@@ -419,8 +542,12 @@ def available_window(days: int = 7, dates: dict | None = None,
     rows = []
     for day in window:
         if day in shared:
+            cached = is_cached(day)
             rows.append({"date": str(day.date()), "status": "AVAILABLE",
                          "is_newest": bool(newest is not None and day == newest),
+                         "cached": cached,
+                         "warm": WARM_STATUS.get(str(day.date()),
+                                                 "ready" if cached else "pending"),
                          "input_valid_dates": {k: str(day.date())
                                                for k in PRODUCT_CHANNELS}})
         else:
