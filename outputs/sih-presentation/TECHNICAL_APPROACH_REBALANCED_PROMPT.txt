@@ -1,0 +1,28 @@
+Built-in image generation: conservative reference edit.
+
+Refine the ATTACHED slide, keeping its existing visual identity and relative layout MOSTLY UNCHANGED. User explicitly rejected a numbered four-stage redesign. DO NOT introduce numbered stages, new branding, new layout style, huge new banners or invented charts. This is a conservative rebalancing of the same illustrated SIH architecture poster. Keep white background, OceanEmbed wave logo, giant black TECHNICAL APPROACH heading, SIH 2026 | SIH26066, narrow navy module titles, thin black rounded cards and dashed grouping borders, navy wave footer. Keep the relative locations: inputs left, harmonisation upper-left, backend+researcher upper-center, illustrated spatial engine center, outputs right, training+validation lower-left, disaster analysis lower-right, TECH STACK bottom with colored logos.
+
+Resize priorities:
+- Compact LEFT 7 SURFACE CHANNELS column to roughly HALF original width by removing all four repeated satellite/map photographs. Four small TEXT cards preserve SST / OSTIA, SSS + SLA / MULTIOBS + DUACS, Currents U/V / OSCAR Final v2, Winds U/V / CCMP v3.1. Same vertical order and same collective input flow.
+- DATA HARMONISATION 2x2 cards become smaller text panels with at most tiny icons: QC + validity mask, Daily alignment, 0.25° grid • 101×241, Train-only scaling. NRT strip is plain text 'QUALIFIED NRT ADAPTERS • Same 7-channel contract', remove satellite illustrations.
+- Backend remains upper-center but 20% less tall. Keep one small server icon, FastAPI/frozenL2/cache text, researcher and monitor with short bidirectional Request/results connection. Planned storage target can use 2 tiny icons, no large server art.
+- Use liberated width/height to make CENTRAL SPATIAL EMBEDDING ENGINE illustrations and labels around 25–35% bigger: 33×33 spatial patch → Dilated CNN plates → prominent 32-D latent embedding vector → MLP neuron network → 15-depth thermal ocean stack. Retain globe/calendar Location+season into decoder. The main engine should be the clearest central element. Text 'ONE SHARED 3D TEMPERATURE FIELD'. '15 DEPTHS • 0–1000 m' is sufficient; remove tiny individual depth ticks and exact-depth list to free room.
+- Keep right output cards at right: 2D+3D map/stack, vertical profile, TCHP+D26 diagnostics, latest-qualified state with 'Valid date + source lag'. Retain their images, no fabricated date.
+- GLORYS target and supervised training can be smaller TEXT cards at bottom-left with one tiny checkpoint icon: 'GLORYS12V1 temperature' → 'Supervised training' → 'Frozen checkpoint'. No duplicated large globe/ocean/server images.
+- Observational validation stays near lower middle-left, keep Argo float and profile/comparison imagery but make '5,176 profiles • 92 floats' prominent. Keep GLORYS TEST / L0 L1 L2, RMSE/MAE/BIAS, anomaly correlation, float-cluster bootstrap, 2024 Argo protected holdout. Do not invent new numerical charts.
+- Disaster-management group stays lower-right, but enlarge its cyclone/thermal overlay map and report so evaluator can see them. Thermal monitoring areas and external GDACS track feed TRACK × THERMAL ANALYSIS → analyst brief. Keep short metrics Peak TCHP, 100 m anomaly, strongest segment, intersection distance. Historical mini-map sequence Pre-event→passage→cold wake→recovery stays small. Add compact 'Scenario: user-drawn path • not a forecast' only if room without shrinking main map. Permanent 'Thermal support ≠ cyclone forecast'.
+- TECH STACK must RETAIN COLORFUL IMAGES/LOGOS and be HIGHLIGHTED. Keep bottom-left location but make it about 20% taller with pale-blue background, slightly thicker blue outline and clearly readable TECH STACK heading. Python, PyTorch; NumPy, pandas, xarray, NetCDF,Zarr; FastAPI; React,TypeScript,Three.js,Plotly; pytest,Vitest,Playwright. Small separate cloud/container label 'DEPLOYMENT TARGET' explicitly planned. Do not replace with plain text strip. No logos dominate main model.
+
+CONNECTIONS: Rebuild a few wrong reference arrows carefully. Each arrow in a white gutter, origin and destination clear:
+Historical input cards → one collection bus → harmonisation only. NRT adapters → harmonisation only (no historical→NRT and no NRT bypass directly into engine).
+Harmonisation → spatial patch/encoder input via ONE arrow '7 channels + validity mask'.
+Backend ↔ engine via ONE dashed short service connector 'Run / return field'.
+GLORYS → training → checkpoint → engine only. Never GLORYS→harmonisation.
+Encoder → embedding → decoder → field. Location+season→decoder.
+Field → right-side output distribution bus AND field→observational validation (Compare predictions).
+ETOPO 2022 is supporting data: its arrow points FROM seafloor-support card INTO display/diagnostics path. Never engine→ETOPO or ETOPO→encoder. Small label Masks below local seafloor; Raw predictions preserved.
+Thermal diagnostics → thermal monitoring/track analysis in disaster group. Separate External track • GDACS → same downstream analysis. No cyclone input to neural network.
+Researcher↔local API/dashboard only. No large perimeter loops.
+Keep simple scientific arrows blue/navy matching original; no crossing text, no disconnected floating arrows at titles, no duplicated routes.
+D26 note 'Historical D26; standalone latest D26 withheld'. Latest qualified ocean is dated, not real-time assertion.
+Return complete 16:9 high-quality image. Important: viewer must immediately recognize it as an improved version of SAME source slide, not a newly designed poster.

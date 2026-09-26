@@ -1,0 +1,15 @@
+﻿[SST_ONLY_s20260905] keep only SST  TRAIN 2192 d  VALIDATION 365 d
+  epoch  1 train 0.26904 val 0.28553   562s  <- best
+  epoch  2 train 0.18985 val 0.25263   607s  <- best
+  epoch  3 train 0.17340 val 0.25934   459s
+  epoch  4 train 0.16232 val 0.28332   478s
+  epoch  5 train 0.15387 val 0.26116   484s
+  epoch  6 train 0.14033 val 0.24648   485s  <- best
+  epoch  7 train 0.13690 val 0.23419   465s  <- best
+  epoch  8 train 0.13389 val 0.23326   564s  <- best
+  epoch  9 train 0.13139 val 0.25868   576s
+  epoch 10 train 0.12941 val 0.24611   484s
+  epoch 11 train 0.12787 val 0.24424   487s
+  epoch 12 train 0.12205 val 0.24768   481s
+  early stopping
+[SST_ONLY_s20260905] best epoch 8 val 0.23326

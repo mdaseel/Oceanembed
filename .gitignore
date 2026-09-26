@@ -55,3 +55,6 @@ outputs/phase8b/cache/
 outputs/phase8b/latest_snapshot/
 outputs/phase8b/daily_cache/
 outputs/phase8b/discovery_cache.json
+# Science expansion: regenerable experiment caches (attribution, occlusion,
+# thermal-extreme baseline reconstructions).
+outputs/science/cache/

@@ -1,0 +1,96 @@
+﻿reconstructed + read 106 dates (64s)
+{
+ "nio": {
+  "0-50 m": {
+   "pairs": 5731261,
+   "inversion_frequency": 0.06395,
+   "strong_inversion_frequency": 0.003925
+  },
+  "50-150 m": {
+   "pairs": 4097748,
+   "inversion_frequency": 0.00725,
+   "strong_inversion_frequency": 0.000571
+  },
+  "150-300 m": {
+   "pairs": 2005997,
+   "inversion_frequency": 4e-05,
+   "strong_inversion_frequency": 0.0
+  },
+  "300-1000 m": {
+   "pairs": 2902545,
+   "inversion_frequency": 1e-05,
+   "strong_inversion_frequency": 0.0
+  }
+ },
+ "arabian_sea": {
+  "0-50 m": {
+   "pairs": 2643375,
+   "inversion_frequency": 0.02779,
+   "strong_inversion_frequency": 8e-06
+  },
+  "50-150 m": {
+   "pairs": 1977165,
+   "inversion_frequency": 0.00692,
+   "strong_inversion_frequency": 0.000346
+  },
+  "150-300 m": {
+   "pairs": 971914,
+   "inversion_frequency": 1e-05,
+   "strong_inversion_frequency": 0.0
+  },
+  "300-1000 m": {
+   "pairs": 1423898,
+   "inversion_frequency": 0.0,
+   "strong_inversion_frequency": 0.0
+  }
+ },
+ "bay_of_bengal": {
+  "0-50 m": {
+   "pairs": 1962484,
+   "inversion_frequency": 0.12917,
+   "strong_inversion_frequency": 0.011333
+  },
+  "50-150 m": {
+   "pairs": 1424004,
+   "inversion_frequency": 0.00471,
+   "strong_inversion_frequency": 0.000898
+  },
+  "150-300 m": {
+   "pairs": 690643,
+   "inversion_frequency": 0.0,
+   "strong_inversion_frequency": 0.0
+  },
+  "300-1000 m": {
+   "pairs": 975836,
+   "inversion_frequency": 0.0,
+   "strong_inversion_frequency": 0.0
+  }
+ }
+}
+{
+ "nio": {
+  "reference_p1": -0.288262,
+  "reference_p99": 3.6e-05,
+  "fraction_within_reference_envelope": 0.97988,
+  "fraction_steeper_than_reference_p1": 0.0058,
+  "reference_fraction_steeper_than_p1": 0.01,
+  "profiles": 1185504
+ },
+ "arabian_sea": {
+  "reference_p1": -0.273785,
+  "reference_p99": -0.001253,
+  "fraction_within_reference_envelope": 0.99045,
+  "fraction_steeper_than_reference_p1": 0.00359,
+  "reference_fraction_steeper_than_p1": 0.01,
+  "profiles": 537632
+ },
+ "bay_of_bengal": {
+  "reference_p1": -0.259983,
+  "reference_p99": 0.017662,
+  "fraction_within_reference_envelope": 0.98952,
+  "fraction_steeper_than_reference_p1": 0.00024,
+  "reference_fraction_steeper_than_p1": 0.01,
+  "profiles": 404655
+ }
+}
+done (70s)

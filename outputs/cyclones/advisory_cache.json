@@ -1,0 +1,18 @@
+{
+  "state": "NO_ACTIVE_NORTH_INDIAN_CYCLONE",
+  "provider": "GDACS (Global Disaster Alert and Coordination System, EC JRC / UN OCHA)",
+  "retrieved_at": "2026-09-15T09:11:11+00:00",
+  "checked_at": "2026-09-15T09:11:11+00:00",
+  "cached": false,
+  "tc_events_checked": 2,
+  "current_tc_events": 2,
+  "current_outside_north_indian": [
+    "NORBERT-26",
+    "FIFTEEN-E-26"
+  ],
+  "advisories": [],
+  "message": "No active North Indian Ocean cyclone reported by connected source (GDACS).",
+  "imd_status": "IMD / RSMC New Delhi official track: not connected in this build. Official advisories are published as PDF bulletins, which are not a reliable machine-readable track source.",
+  "attribution": "Track geometry: GDACS, EC Joint Research Centre / UN OCHA. gdacs.org",
+  "decision": "outputs/cyclones/LIVE_SOURCE_DECISION.md"
+}

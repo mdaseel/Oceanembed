@@ -11,7 +11,7 @@ test("hazard tab shows a category, its reasoning, and refuses to predict", async
 }) => {
   await page.goto("/");
   await page.getByLabel("HISTORICAL DATE", { exact: true }).fill("2023-05-13");
-  await page.getByRole("link", { name: "Ocean Hazard Indicators" }).click();
+  await page.getByRole("link", { name: "Events & Disasters" }).click();
 
   await expect(page.getByTestId("hazard-non-prediction")).toContainText(
     "does not predict cyclone genesis, track, landfall, category",
@@ -79,7 +79,7 @@ test("categories agree with the backend and never appear unsupported", async ({
   await page.getByLabel("Latitude", { exact: true }).fill(String(truth.high!.lat));
   await page.getByLabel("Longitude", { exact: true }).fill(String(truth.high!.lon));
   await page.getByRole("button", { name: "Inspect column" }).click();
-  await page.getByRole("link", { name: "Ocean Hazard Indicators" }).click();
+  await page.getByRole("link", { name: "Events & Disasters" }).click();
   await expect(page.getByTestId("hazard-level")).toContainText("HIGH");
 });
 
@@ -89,7 +89,7 @@ test("the observed track is never drawn over an ocean state it did not cross", a
   await page.goto("/");
   // The default date is years before the event.
   await page.getByLabel("HISTORICAL DATE", { exact: true }).fill("2021-06-15");
-  await page.getByRole("link", { name: "Ocean Hazard Indicators" }).click();
+  await page.getByRole("link", { name: "Events & Disasters" }).click();
   const outside = page.getByTestId("outside-event-window");
   await expect(outside).toContainText("outside the");
   await expect(page.getByTestId("track-attribution")).toContainText(
@@ -112,7 +112,9 @@ test("event window replays as independent days, not a forecast", async ({
 }) => {
   test.setTimeout(120000);
   await page.goto("/");
-  await page.getByRole("link", { name: "Ocean Hazard Indicators" }).click();
+  await page.getByRole("link", { name: "Events & Disasters" }).click();
+  // The corridor series lives under Event Evolution.
+  await page.getByTestId("tab-evolution").click();
   const wake = page.getByTestId("cold-wake");
   await expect(wake).toContainText("independent replay_field");
   await expect(wake).toContainText("never a forecast");

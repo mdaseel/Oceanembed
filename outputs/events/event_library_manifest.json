@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "generated_utc": "2026-09-13T19:20:33+00:00",
+  "rule": "outputs/events/EVENT_LIBRARY_RULE.md",
+  "source": {
+    "dataset": "IBTrACS v04r01, North Indian basin",
+    "url": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.NI.list.v04r01.csv",
+    "sha256": "1e892624f97f5481cddf6b8e9e65be2925fa0a3336f399f5b9fd87fbb463fb78"
+  },
+  "candidates": [
+    {
+      "event_id": "mocha-2023",
+      "name": "Mocha",
+      "season": 2023,
+      "enabled": true,
+      "exclusion_reasons": [],
+      "split": "test",
+      "basin": "Bay of Bengal",
+      "replay_start": "2023-05-05",
+      "replay_end": "2023-05-22"
+    },
+    {
+      "event_id": "biparjoy-2023",
+      "name": "Biparjoy",
+      "season": 2023,
+      "enabled": true,
+      "exclusion_reasons": [],
+      "split": "test",
+      "basin": "Arabian Sea",
+      "replay_start": "2023-06-02",
+      "replay_end": "2023-06-23"
+    },
+    {
+      "event_id": "tauktae-2021",
+      "name": "Tauktae",
+      "season": 2021,
+      "enabled": true,
+      "exclusion_reasons": [],
+      "split": "validation",
+      "basin": "Arabian Sea",
+      "replay_start": "2021-05-10",
+      "replay_end": "2021-05-25"
+    },
+    {
+      "event_id": "yaas-2021",
+      "name": "Yaas",
+      "season": 2021,
+      "enabled": true,
+      "exclusion_reasons": [],
+      "split": "validation",
+      "basin": "Bay of Bengal",
+      "replay_start": "2021-05-19",
+      "replay_end": "2021-06-03"
+    },
+    {
+      "event_id": "amphan-2020",
+      "name": "Amphan",
+      "season": 2020,
+      "enabled": true,
+      "exclusion_reasons": [],
+      "split": "train",
+      "basin": "Bay of Bengal",
+      "replay_start": "2020-05-12",
+      "replay_end": "2020-05-28"
+    },
+    {
+      "event_id": "fani-2019",
+      "name": "Fani",
+      "season": 2019,
+      "enabled": true,
+      "exclusion_reasons": [],
+      "split": "train",
+      "basin": "Bay of Bengal",
+      "replay_start": "2019-04-22",
+      "replay_end": "2019-05-11"
+    }
+  ],
+  "events": [
+    "mocha-2023",
+    "biparjoy-2023",
+    "tauktae-2021",
+    "yaas-2021",
+    "amphan-2020",
+    "fani-2019"
+  ],
+  "assets": {
+    "amphan-2020.json": "2ff874ab24c2507c8a17d58f65bcf95d46b54025c2d0618e0d65da1928b2d5ca",
+    "biparjoy-2023.json": "382991cb75f27b3caf2c7082b74c546ab20660945ba092ba55ca87a6761f485c",
+    "fani-2019.json": "4bc15af981bc4abf42bffcbc296dc844f398492efa35010ac1fd0e1bff17384f",
+    "index.json": "9e0b55ba7e8c4f76ab20c4f81bb09f299acaeb9cab4c9b906aaa3eb67d76d3f4",
+    "mocha-2023.json": "45964912c34d0e04b131b0d8541ce23fd24c8fb514126bf8a1bba427d45728c0",
+    "tauktae-2021.json": "da871e1ce57ec86dcb1fb229ee7aaf14fe93adcade706ad799514a189a279f59",
+    "yaas-2021.json": "db2f572326b3c88f8fe2a5a782473a46d5c793fb29a1dd242c7735a11a60466a"
+  },
+  "frozen_mocha_track_sha256": "c45a0d14d58dda2011271cce5b6d84c31debcfd748bd8a2020675c3facb868b0"
+}

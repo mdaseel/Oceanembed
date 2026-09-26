@@ -1,0 +1,423 @@
+/* Disaster-management expansion: event library, analysis tabs, track x thermal,
+ * sections, change maps, cyclone watch, scenarios and printable briefs. */
+
+.mode-badge.badge-scenario {
+  color: #f3d49a;
+  border-color: #5c4a2a;
+  background: #251d10;
+}
+.intel[data-mode="scenario"] .mode-switch button.active {
+  background: #251d10;
+  color: #f3d49a;
+  box-shadow: inset 0 0 0 1px #5c4a2a;
+}
+
+/* ---------------------------------------------------------------- event library */
+.event-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+.event-cards li {
+  display: grid;
+  gap: 4px;
+}
+.event-card {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #1f2b39;
+  background: #0b1219;
+  color: inherit;
+  min-height: 118px;
+}
+.event-card:hover {
+  border-color: #3a5569;
+}
+.event-card.active {
+  border-color: #67e8f9;
+  background: #0f1f27;
+  box-shadow: 0 0 0 1px #67e8f9 inset;
+}
+.event-card-name {
+  font-size: 16px;
+  font-weight: 650;
+  color: #eef6ff;
+  overflow-wrap: anywhere;
+}
+.event-card-name small {
+  font-size: 12px;
+  color: #8ea5bf;
+  font-weight: 400;
+}
+.event-card-basin {
+  font-size: 11px;
+  color: #9fc5cc;
+  letter-spacing: 0.5px;
+}
+.split-pill {
+  justify-self: start;
+  font-size: 9px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: #16222d;
+  color: #a9c3d6;
+}
+.split-pill.split-train {
+  background: #2e2412;
+  color: #f0cf8e;
+}
+.split-pill.split-test {
+  background: #10282c;
+  color: #8fe7ef;
+}
+.compare-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #9fb3c8;
+  padding-left: 4px;
+}
+
+/* ---------------------------------------------------------------- analysis tabs */
+.analysis-tabs .tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid #1f2a38;
+  margin-bottom: 14px;
+}
+.analysis-tabs .tab-bar button {
+  border: 0;
+  background: transparent;
+  color: #8ea5bf;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 10px 12px;
+  border-bottom: 2px solid transparent;
+}
+.analysis-tabs .tab-bar button.active {
+  color: #e6f7ff;
+  border-bottom-color: #67e8f9;
+}
+.panel-heading.compact {
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.section-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------------------------------------------------------------- track x thermal */
+.track-thermal,
+.along-section,
+.ocean-change,
+.compare,
+.cyclone-analysis {
+  display: grid;
+  gap: 12px;
+}
+.provenance-pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 11px;
+  color: #b9c9d9;
+}
+.provenance-pair span {
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid #253342;
+  background: #0c141d;
+}
+.provenance-pair span:first-child {
+  border-color: #4d4122;
+  background: #1a160c;
+  color: #e7cf9d;
+}
+.thermal-alert {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #243244;
+  border-left: 4px solid #4a5566;
+  background: #0b121b;
+  display: grid;
+  gap: 6px;
+}
+.thermal-alert strong {
+  color: #eef6ff;
+  font-size: 14px;
+}
+.thermal-alert.alert-high {
+  border-left-color: rgb(193 61 44);
+}
+.thermal-alert.alert-elevated {
+  border-left-color: rgb(222 158 54);
+}
+.thermal-alert .metric-list {
+  margin: 4px 0;
+}
+.track-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.strongest-segment {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #1f3a45;
+  background: #0c1820;
+}
+.strongest-segment p {
+  margin: 4px 0;
+}
+.rules summary {
+  font-size: 11px;
+  color: #9fd8e0;
+}
+
+.section-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  cursor: crosshair;
+}
+.section-readout {
+  min-height: 1.4em;
+  color: #cfdbe8;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- change maps */
+.footprint {
+  display: grid;
+  gap: 8px;
+}
+
+/* ---------------------------------------------------------------- compare */
+.compare-table.external td {
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------- cyclone watch */
+.cyclone-watch .test-banner {
+  border-color: #5c4a2a;
+  background: #221a0d;
+  color: #f0d8a6;
+  font-size: 12px;
+}
+.map-test-banner {
+  margin: 0;
+  border-color: #5c4a2a;
+  background: #221a0d;
+  color: #f0d8a6;
+}
+.relation-pill {
+  justify-self: start;
+  margin-top: 3px;
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #16222d;
+  color: #a9c3d6;
+}
+.relation-pill.intersect {
+  background: #3a1f15;
+  color: #ffd1bd;
+}
+
+/* external track and scenario overlays */
+.ext-observed-line {
+  fill: none;
+  stroke: #e9f6ff;
+  stroke-width: 2.6;
+}
+.ext-forecast-line {
+  fill: none;
+  stroke: #f3c77a;
+  stroke-width: 2.4;
+  stroke-dasharray: 9 7;
+}
+.ext-observed {
+  fill: #e9f6ff;
+  stroke: #0b1119;
+  stroke-width: 2;
+}
+.ext-forecast {
+  fill: #0b1119;
+  stroke: #f3c77a;
+  stroke-width: 2.4;
+}
+.overlay-legend rect:first-child {
+  fill: #07101ae6;
+  stroke: #2c4254;
+}
+.overlay-legend text {
+  fill: #dbe7f2;
+  font: 500 13px system-ui;
+}
+.overlay-legend .legend-provenance {
+  fill: #e7cf9d;
+  font: 500 11px system-ui;
+}
+.overlay-legend .legend-area {
+  fill: none;
+  stroke: #f3d9a6;
+  stroke-width: 1.6;
+}
+.scenario-path polyline {
+  fill: none;
+  stroke: #f3c77a;
+  stroke-width: 3;
+}
+.scenario-path circle {
+  fill: #2b200d;
+  stroke: #f3c77a;
+  stroke-width: 2;
+}
+.scenario-path text {
+  fill: #fff3d6;
+  font: 700 11px system-ui;
+}
+.draw-capture {
+  fill: transparent;
+  pointer-events: all;
+  cursor: crosshair;
+}
+
+/* ---------------------------------------------------------------- scenario */
+.scenario-badge {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid #5c4a2a;
+  background: #251d10;
+  color: #f3d49a;
+  white-space: nowrap;
+}
+.scenario-tools,
+.scenario-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.scenario-add label {
+  display: grid;
+  gap: 3px;
+  font-size: 10px;
+  color: #87a4bf;
+}
+.scenario-add input,
+.scenario-date input {
+  background: #0b1119;
+  color: #dbe6f2;
+  border: 1px solid #273444;
+  border-radius: 6px;
+  padding: 6px 8px;
+  max-width: 120px;
+}
+.intel .btn.active {
+  border-color: #f3c77a;
+  color: #f3d49a;
+}
+
+/* ---------------------------------------------------------------- briefs */
+.brief {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #22303e;
+  background: #0a1017;
+}
+.brief-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  margin: 0;
+}
+.brief-grid dt {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #86a3bd;
+  text-transform: uppercase;
+}
+.brief-grid dd {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #e3eef8;
+}
+.brief h3 {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  color: #86a3bd;
+  margin: 10px 0 2px;
+}
+.brief ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: #cfdbe8;
+}
+.brief-map img {
+  width: 100%;
+  border-radius: 6px;
+}
+.external-hazards summary {
+  cursor: pointer;
+}
+
+@media print {
+  body.printing-brief * {
+    visibility: hidden;
+  }
+  body.printing-brief .print-target,
+  body.printing-brief .print-target * {
+    visibility: visible;
+  }
+  body.printing-brief .print-target {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #ffffff;
+    color: #000000;
+    border: 0;
+  }
+  body.printing-brief .print-target dd,
+  body.printing-brief .print-target li,
+  body.printing-brief .print-target p,
+  body.printing-brief .print-target h2 {
+    color: #000000;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .track-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .brief-grid {
+    grid-template-columns: 1fr;
+  }
+}

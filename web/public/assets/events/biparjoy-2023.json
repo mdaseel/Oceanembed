@@ -1,0 +1,1224 @@
+{
+  "schema": 1,
+  "event_id": "biparjoy-2023",
+  "display_name": "Cyclone Biparjoy (2023)",
+  "name": "Biparjoy",
+  "season": 2023,
+  "sid": [
+    "2023156N10067"
+  ],
+  "basin": "Arabian Sea",
+  "subbasin_codes": [
+    "AS"
+  ],
+  "replay_start": "2023-06-02",
+  "replay_end": "2023-06-23",
+  "formation": "2023-06-06",
+  "peak": "2023-06-11",
+  "landfall": "2023-06-15",
+  "peak_time": "2023-06-11 03:00:00",
+  "landfall_time": "2023-06-15 21:00:00",
+  "segments": [
+    {
+      "label": "Pre-event",
+      "start": "2023-06-02",
+      "end": "2023-06-05"
+    },
+    {
+      "label": "Approach / intensification",
+      "start": "2023-06-06",
+      "end": "2023-06-10"
+    },
+    {
+      "label": "Event",
+      "start": "2023-06-11",
+      "end": "2023-06-15"
+    },
+    {
+      "label": "Wake",
+      "start": "2023-06-16",
+      "end": "2023-06-19"
+    },
+    {
+      "label": "Recovery",
+      "start": "2023-06-20",
+      "end": "2023-06-23"
+    }
+  ],
+  "phase_rule": "outputs/events/EVENT_LIBRARY_RULE.md",
+  "frozen": false,
+  "split": "test",
+  "in_sample": false,
+  "split_note": "Locked test-split dates: out-of-sample for the frozen L2.",
+  "external_metadata": {
+    "intensity_source": "IMD / RSMC New Delhi agency columns via IBTrACS (3-minute sustained wind)",
+    "peak_imd_wind_kt": 90.0,
+    "peak_imd_wind_time": "2023-06-11 03:00:00",
+    "min_imd_pressure_hpa": 958.0,
+    "jtwc_peak_wind_kt_1min": 110.0,
+    "first_landfall_fix_time": "2023-06-15 21:00:00"
+  },
+  "track_fixes_inside_domain": 113,
+  "track_fixes_total": 113,
+  "availability": {
+    "days": 22,
+    "missing_dates": [],
+    "zero_input_dates": [],
+    "valid_cells_min": 11268,
+    "valid_cells_median": 11268,
+    "valid_cells_max": 11268,
+    "checked": "surface_input_valid counts in the frozen model-ready store; no inference"
+  },
+  "enabled": true,
+  "exclusion_reasons": [],
+  "track": {
+    "schema": 1,
+    "event": "Cyclone Biparjoy (2023)",
+    "basin": "North Indian (Arabian Sea)",
+    "dataset": "IBTrACS v04r01, North Indian basin",
+    "agency": "IMD / RSMC New Delhi, via IBTrACS",
+    "provider": "NOAA National Centers for Environmental Information",
+    "source_url": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.NI.list.v04r01.csv",
+    "source_sha256": "1e892624f97f5481cddf6b8e9e65be2925fa0a3336f399f5b9fd87fbb463fb78",
+    "citation": "Knapp, K. R., M. C. Kruk, D. H. Levinson, H. J. Diamond and C. J. Neumann (2010), The International Best Track Archive for Climate Stewardship (IBTrACS): Unifying tropical cyclone best track data, Bull. Amer. Meteor. Soc., 91, 363-376. Data: IBTrACS Project v04r01, NOAA NCEI, doi:10.25921/82ty-9e16.",
+    "licence": "US Government work, public domain; NOAA/NCEI attribution retained",
+    "role": "static geographic context; not a model input, not an OceanEmbed output, and never used in inference, diagnostics or masks",
+    "n_points": 113,
+    "first_time": "2023-06-05 00:00:00",
+    "last_time": "2023-06-19 00:00:00",
+    "peak_imd_wind_kt": 90.0,
+    "min_imd_pressure_hpa": 958.0,
+    "points": [
+      {
+        "time": "2023-06-05 00:00:00",
+        "lat": 10.3,
+        "lon": 66.7,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 926.0
+      },
+      {
+        "time": "2023-06-05 03:00:00",
+        "lat": 10.5,
+        "lon": 66.6,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 929.0
+      },
+      {
+        "time": "2023-06-05 06:00:00",
+        "lat": 10.7,
+        "lon": 66.5,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 934.0
+      },
+      {
+        "time": "2023-06-05 09:00:00",
+        "lat": 10.8,
+        "lon": 66.4,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 939.0
+      },
+      {
+        "time": "2023-06-05 12:00:00",
+        "lat": 11.0,
+        "lon": 66.3,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 942.0
+      },
+      {
+        "time": "2023-06-05 15:00:00",
+        "lat": 11.2,
+        "lon": 66.2,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 28.0,
+        "nature": "TS",
+        "dist2land_km": 941.0
+      },
+      {
+        "time": "2023-06-05 18:00:00",
+        "lat": 11.4,
+        "lon": 66.1,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 30.0,
+        "nature": "TS",
+        "dist2land_km": 940.0
+      },
+      {
+        "time": "2023-06-05 21:00:00",
+        "lat": 11.5,
+        "lon": 66.0,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 35.0,
+        "nature": "TS",
+        "dist2land_km": 945.0
+      },
+      {
+        "time": "2023-06-06 00:00:00",
+        "lat": 11.5,
+        "lon": 66.0,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 1000.0,
+        "usa_wind_kt": 40.0,
+        "nature": "TS",
+        "dist2land_km": 945.0
+      },
+      {
+        "time": "2023-06-06 03:00:00",
+        "lat": 11.7,
+        "lon": 66.0,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 1000.0,
+        "usa_wind_kt": 48.0,
+        "nature": "TS",
+        "dist2land_km": 935.0
+      },
+      {
+        "time": "2023-06-06 06:00:00",
+        "lat": 11.9,
+        "lon": 65.9,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 999.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 936.0
+      },
+      {
+        "time": "2023-06-06 09:00:00",
+        "lat": 12.0,
+        "lon": 66.0,
+        "imd_wind_kt": 33.0,
+        "imd_pressure_hpa": 999.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 922.0
+      },
+      {
+        "time": "2023-06-06 12:00:00",
+        "lat": 12.2,
+        "lon": 66.0,
+        "imd_wind_kt": 35.0,
+        "imd_pressure_hpa": 998.0,
+        "usa_wind_kt": 75.0,
+        "nature": "TS",
+        "dist2land_km": 913.0
+      },
+      {
+        "time": "2023-06-06 15:00:00",
+        "lat": 12.3,
+        "lon": 66.0,
+        "imd_wind_kt": 35.0,
+        "imd_pressure_hpa": 998.0,
+        "usa_wind_kt": 78.0,
+        "nature": "TS",
+        "dist2land_km": 909.0
+      },
+      {
+        "time": "2023-06-06 18:00:00",
+        "lat": 12.5,
+        "lon": 66.1,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 996.0,
+        "usa_wind_kt": 80.0,
+        "nature": "TS",
+        "dist2land_km": 890.0
+      },
+      {
+        "time": "2023-06-06 21:00:00",
+        "lat": 12.5,
+        "lon": 66.2,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 996.0,
+        "usa_wind_kt": 83.0,
+        "nature": "TS",
+        "dist2land_km": 880.0
+      },
+      {
+        "time": "2023-06-07 00:00:00",
+        "lat": 12.6,
+        "lon": 66.3,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 990.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 866.0
+      },
+      {
+        "time": "2023-06-07 03:00:00",
+        "lat": 12.8,
+        "lon": 66.3,
+        "imd_wind_kt": 60.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 83.0,
+        "nature": "TS",
+        "dist2land_km": 857.0
+      },
+      {
+        "time": "2023-06-07 06:00:00",
+        "lat": 13.0,
+        "lon": 66.4,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 983.0,
+        "usa_wind_kt": 80.0,
+        "nature": "TS",
+        "dist2land_km": 838.0
+      },
+      {
+        "time": "2023-06-07 09:00:00",
+        "lat": 13.2,
+        "lon": 66.3,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 983.0,
+        "usa_wind_kt": 83.0,
+        "nature": "TS",
+        "dist2land_km": 838.0
+      },
+      {
+        "time": "2023-06-07 12:00:00",
+        "lat": 13.3,
+        "lon": 66.2,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 983.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 843.0
+      },
+      {
+        "time": "2023-06-07 15:00:00",
+        "lat": 13.4,
+        "lon": 66.2,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 983.0,
+        "usa_wind_kt": 83.0,
+        "nature": "TS",
+        "dist2land_km": 838.0
+      },
+      {
+        "time": "2023-06-07 18:00:00",
+        "lat": 13.6,
+        "lon": 66.1,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 80.0,
+        "nature": "TS",
+        "dist2land_km": 838.0
+      },
+      {
+        "time": "2023-06-07 21:00:00",
+        "lat": 13.6,
+        "lon": 66.0,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 78.0,
+        "nature": "TS",
+        "dist2land_km": 834.0
+      },
+      {
+        "time": "2023-06-08 00:00:00",
+        "lat": 13.8,
+        "lon": 66.1,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 75.0,
+        "nature": "TS",
+        "dist2land_km": 829.0
+      },
+      {
+        "time": "2023-06-08 03:00:00",
+        "lat": 13.9,
+        "lon": 66.0,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 75.0,
+        "nature": "TS",
+        "dist2land_km": 835.0
+      },
+      {
+        "time": "2023-06-08 06:00:00",
+        "lat": 14.0,
+        "lon": 66.0,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 75.0,
+        "nature": "TS",
+        "dist2land_km": 831.0
+      },
+      {
+        "time": "2023-06-08 09:00:00",
+        "lat": 14.2,
+        "lon": 66.0,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 75.0,
+        "nature": "TS",
+        "dist2land_km": 824.0
+      },
+      {
+        "time": "2023-06-08 12:00:00",
+        "lat": 14.3,
+        "lon": 66.0,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 75.0,
+        "nature": "TS",
+        "dist2land_km": 820.0
+      },
+      {
+        "time": "2023-06-08 15:00:00",
+        "lat": 14.4,
+        "lon": 66.0,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 73.0,
+        "nature": "TS",
+        "dist2land_km": 817.0
+      },
+      {
+        "time": "2023-06-08 18:00:00",
+        "lat": 14.6,
+        "lon": 66.1,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 70.0,
+        "nature": "TS",
+        "dist2land_km": 800.0
+      },
+      {
+        "time": "2023-06-08 21:00:00",
+        "lat": 14.6,
+        "lon": 66.1,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 68.0,
+        "nature": "TS",
+        "dist2land_km": 800.0
+      },
+      {
+        "time": "2023-06-09 00:00:00",
+        "lat": 14.8,
+        "lon": 66.3,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 773.0
+      },
+      {
+        "time": "2023-06-09 03:00:00",
+        "lat": 14.8,
+        "lon": 66.5,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 63.0,
+        "nature": "TS",
+        "dist2land_km": 752.0
+      },
+      {
+        "time": "2023-06-09 06:00:00",
+        "lat": 15.0,
+        "lon": 66.8,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 60.0,
+        "nature": "TS",
+        "dist2land_km": 715.0
+      },
+      {
+        "time": "2023-06-09 09:00:00",
+        "lat": 15.3,
+        "lon": 67.0,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 63.0,
+        "nature": "TS",
+        "dist2land_km": 687.0
+      },
+      {
+        "time": "2023-06-09 12:00:00",
+        "lat": 15.6,
+        "lon": 67.2,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 982.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 659.0
+      },
+      {
+        "time": "2023-06-09 15:00:00",
+        "lat": 15.9,
+        "lon": 67.3,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 982.0,
+        "usa_wind_kt": 68.0,
+        "nature": "TS",
+        "dist2land_km": 644.0
+      },
+      {
+        "time": "2023-06-09 18:00:00",
+        "lat": 16.2,
+        "lon": 67.4,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 70.0,
+        "nature": "TS",
+        "dist2land_km": 618.0
+      },
+      {
+        "time": "2023-06-09 21:00:00",
+        "lat": 16.3,
+        "lon": 67.4,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 976.0,
+        "usa_wind_kt": 83.0,
+        "nature": "TS",
+        "dist2land_km": 608.0
+      },
+      {
+        "time": "2023-06-10 00:00:00",
+        "lat": 16.5,
+        "lon": 67.4,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 974.0,
+        "usa_wind_kt": 95.0,
+        "nature": "TS",
+        "dist2land_km": 590.0
+      },
+      {
+        "time": "2023-06-10 03:00:00",
+        "lat": 16.6,
+        "lon": 67.3,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 972.0,
+        "usa_wind_kt": 98.0,
+        "nature": "TS",
+        "dist2land_km": 587.0
+      },
+      {
+        "time": "2023-06-10 06:00:00",
+        "lat": 16.7,
+        "lon": 67.3,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 970.0,
+        "usa_wind_kt": 100.0,
+        "nature": "TS",
+        "dist2land_km": 578.0
+      },
+      {
+        "time": "2023-06-10 09:00:00",
+        "lat": 16.9,
+        "lon": 67.4,
+        "imd_wind_kt": 80.0,
+        "imd_pressure_hpa": 966.0,
+        "usa_wind_kt": 110.0,
+        "nature": "TS",
+        "dist2land_km": 553.0
+      },
+      {
+        "time": "2023-06-10 12:00:00",
+        "lat": 17.2,
+        "lon": 67.3,
+        "imd_wind_kt": 80.0,
+        "imd_pressure_hpa": 964.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 532.0
+      },
+      {
+        "time": "2023-06-10 15:00:00",
+        "lat": 17.4,
+        "lon": 67.3,
+        "imd_wind_kt": 80.0,
+        "imd_pressure_hpa": 964.0,
+        "usa_wind_kt": 103.0,
+        "nature": "TS",
+        "dist2land_km": 513.0
+      },
+      {
+        "time": "2023-06-10 18:00:00",
+        "lat": 17.5,
+        "lon": 67.4,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 100.0,
+        "nature": "TS",
+        "dist2land_km": 498.0
+      },
+      {
+        "time": "2023-06-10 21:00:00",
+        "lat": 17.6,
+        "lon": 67.4,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 98.0,
+        "nature": "TS",
+        "dist2land_km": 489.0
+      },
+      {
+        "time": "2023-06-11 00:00:00",
+        "lat": 17.8,
+        "lon": 67.6,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 960.0,
+        "usa_wind_kt": 95.0,
+        "nature": "TS",
+        "dist2land_km": 449.0
+      },
+      {
+        "time": "2023-06-11 03:00:00",
+        "lat": 18.0,
+        "lon": 67.7,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 93.0,
+        "nature": "TS",
+        "dist2land_km": 434.0
+      },
+      {
+        "time": "2023-06-11 06:00:00",
+        "lat": 18.3,
+        "lon": 67.8,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 401.0
+      },
+      {
+        "time": "2023-06-11 09:00:00",
+        "lat": 18.5,
+        "lon": 67.8,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 384.0
+      },
+      {
+        "time": "2023-06-11 12:00:00",
+        "lat": 18.7,
+        "lon": 67.8,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 367.0
+      },
+      {
+        "time": "2023-06-11 15:00:00",
+        "lat": 18.8,
+        "lon": 67.8,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 88.0,
+        "nature": "TS",
+        "dist2land_km": 359.0
+      },
+      {
+        "time": "2023-06-11 18:00:00",
+        "lat": 18.9,
+        "lon": 67.8,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 343.0
+      },
+      {
+        "time": "2023-06-11 21:00:00",
+        "lat": 19.0,
+        "lon": 67.7,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 83.0,
+        "nature": "TS",
+        "dist2land_km": 351.0
+      },
+      {
+        "time": "2023-06-12 00:00:00",
+        "lat": 19.2,
+        "lon": 67.7,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 80.0,
+        "nature": "TS",
+        "dist2land_km": 335.0
+      },
+      {
+        "time": "2023-06-12 03:00:00",
+        "lat": 19.4,
+        "lon": 67.6,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 327.0
+      },
+      {
+        "time": "2023-06-12 06:00:00",
+        "lat": 19.7,
+        "lon": 67.5,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 312.0
+      },
+      {
+        "time": "2023-06-12 09:00:00",
+        "lat": 19.8,
+        "lon": 67.4,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 958.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 312.0
+      },
+      {
+        "time": "2023-06-12 12:00:00",
+        "lat": 19.9,
+        "lon": 67.3,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 960.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 312.0
+      },
+      {
+        "time": "2023-06-12 15:00:00",
+        "lat": 20.0,
+        "lon": 67.2,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 960.0,
+        "usa_wind_kt": 88.0,
+        "nature": "TS",
+        "dist2land_km": 311.0
+      },
+      {
+        "time": "2023-06-12 18:00:00",
+        "lat": 20.2,
+        "lon": 67.2,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 293.0
+      },
+      {
+        "time": "2023-06-12 21:00:00",
+        "lat": 20.4,
+        "lon": 67.2,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 275.0
+      },
+      {
+        "time": "2023-06-13 00:00:00",
+        "lat": 20.7,
+        "lon": 67.0,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 265.0
+      },
+      {
+        "time": "2023-06-13 03:00:00",
+        "lat": 20.9,
+        "lon": 66.9,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 88.0,
+        "nature": "TS",
+        "dist2land_km": 259.0
+      },
+      {
+        "time": "2023-06-13 06:00:00",
+        "lat": 21.0,
+        "lon": 66.8,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 261.0
+      },
+      {
+        "time": "2023-06-13 09:00:00",
+        "lat": 21.1,
+        "lon": 66.5,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 93.0,
+        "nature": "TS",
+        "dist2land_km": 281.0
+      },
+      {
+        "time": "2023-06-13 12:00:00",
+        "lat": 21.2,
+        "lon": 66.5,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 95.0,
+        "nature": "TS",
+        "dist2land_km": 276.0
+      },
+      {
+        "time": "2023-06-13 15:00:00",
+        "lat": 21.3,
+        "lon": 66.4,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 281.0
+      },
+      {
+        "time": "2023-06-13 18:00:00",
+        "lat": 21.5,
+        "lon": 66.4,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 272.0
+      },
+      {
+        "time": "2023-06-13 21:00:00",
+        "lat": 21.5,
+        "lon": 66.3,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 964.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 282.0
+      },
+      {
+        "time": "2023-06-14 00:00:00",
+        "lat": 21.6,
+        "lon": 66.3,
+        "imd_wind_kt": 80.0,
+        "imd_pressure_hpa": 966.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 279.0
+      },
+      {
+        "time": "2023-06-14 03:00:00",
+        "lat": 21.6,
+        "lon": 66.3,
+        "imd_wind_kt": 80.0,
+        "imd_pressure_hpa": 966.0,
+        "usa_wind_kt": 83.0,
+        "nature": "TS",
+        "dist2land_km": 279.0
+      },
+      {
+        "time": "2023-06-14 06:00:00",
+        "lat": 21.6,
+        "lon": 66.4,
+        "imd_wind_kt": 80.0,
+        "imd_pressure_hpa": 966.0,
+        "usa_wind_kt": 80.0,
+        "nature": "TS",
+        "dist2land_km": 269.0
+      },
+      {
+        "time": "2023-06-14 09:00:00",
+        "lat": 21.7,
+        "lon": 66.6,
+        "imd_wind_kt": 80.0,
+        "imd_pressure_hpa": 966.0,
+        "usa_wind_kt": 75.0,
+        "nature": "TS",
+        "dist2land_km": 246.0
+      },
+      {
+        "time": "2023-06-14 12:00:00",
+        "lat": 21.9,
+        "lon": 66.7,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 970.0,
+        "usa_wind_kt": 70.0,
+        "nature": "TS",
+        "dist2land_km": 230.0
+      },
+      {
+        "time": "2023-06-14 15:00:00",
+        "lat": 22.1,
+        "lon": 66.8,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 974.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 206.0
+      },
+      {
+        "time": "2023-06-14 18:00:00",
+        "lat": 22.2,
+        "lon": 66.8,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 974.0,
+        "usa_wind_kt": 60.0,
+        "nature": "TS",
+        "dist2land_km": 196.0
+      },
+      {
+        "time": "2023-06-14 21:00:00",
+        "lat": 22.3,
+        "lon": 66.8,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 974.0,
+        "usa_wind_kt": 58.0,
+        "nature": "TS",
+        "dist2land_km": 186.0
+      },
+      {
+        "time": "2023-06-15 00:00:00",
+        "lat": 22.3,
+        "lon": 67.0,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 974.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 168.0
+      },
+      {
+        "time": "2023-06-15 03:00:00",
+        "lat": 22.5,
+        "lon": 67.1,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 974.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 154.0
+      },
+      {
+        "time": "2023-06-15 06:00:00",
+        "lat": 22.6,
+        "lon": 67.3,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 976.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 137.0
+      },
+      {
+        "time": "2023-06-15 09:00:00",
+        "lat": 22.7,
+        "lon": 67.7,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 976.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 107.0
+      },
+      {
+        "time": "2023-06-15 12:00:00",
+        "lat": 22.8,
+        "lon": 68.1,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 976.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 61.0
+      },
+      {
+        "time": "2023-06-15 15:00:00",
+        "lat": 23.1,
+        "lon": 68.4,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 976.0,
+        "usa_wind_kt": 53.0,
+        "nature": "TS",
+        "dist2land_km": 23.0
+      },
+      {
+        "time": "2023-06-15 18:00:00",
+        "lat": 23.3,
+        "lon": 68.6,
+        "imd_wind_kt": 60.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 50.0,
+        "nature": "TS",
+        "dist2land_km": 10.0
+      },
+      {
+        "time": "2023-06-15 21:00:00",
+        "lat": 23.4,
+        "lon": 68.8,
+        "imd_wind_kt": 50.0,
+        "imd_pressure_hpa": 982.0,
+        "usa_wind_kt": 48.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-16 00:00:00",
+        "lat": 23.5,
+        "lon": 69.1,
+        "imd_wind_kt": 50.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-16 03:00:00",
+        "lat": 23.5,
+        "lon": 69.4,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-16 06:00:00",
+        "lat": 23.7,
+        "lon": 69.7,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-16 09:00:00",
+        "lat": 23.9,
+        "lon": 70.0,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 984.0,
+        "usa_wind_kt": 43.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-16 12:00:00",
+        "lat": 24.2,
+        "lon": 70.4,
+        "imd_wind_kt": 35.0,
+        "imd_pressure_hpa": 986.0,
+        "usa_wind_kt": 40.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-16 15:00:00",
+        "lat": 24.5,
+        "lon": 70.7,
+        "imd_wind_kt": 35.0,
+        "imd_pressure_hpa": 987.0,
+        "usa_wind_kt": 38.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-16 18:00:00",
+        "lat": 24.6,
+        "lon": 70.9,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 35.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-16 21:00:00",
+        "lat": 24.7,
+        "lon": 71.0,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 33.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-17 00:00:00",
+        "lat": 24.8,
+        "lon": 71.2,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 30.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-17 03:00:00",
+        "lat": 25.0,
+        "lon": 71.5,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-17 06:00:00",
+        "lat": 25.3,
+        "lon": 71.9,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 989.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-17 09:00:00",
+        "lat": 25.5,
+        "lon": 72.2,
+        "imd_wind_kt": 28.0,
+        "imd_pressure_hpa": 990.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-17 12:00:00",
+        "lat": 25.6,
+        "lon": 72.5,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 990.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-17 15:00:00",
+        "lat": 25.7,
+        "lon": 72.7,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 991.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-17 18:00:00",
+        "lat": 25.8,
+        "lon": 72.8,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 991.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-17 21:00:00",
+        "lat": 25.9,
+        "lon": 73.0,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 991.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-18 00:00:00",
+        "lat": 26.0,
+        "lon": 73.3,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 991.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-18 03:00:00",
+        "lat": 26.2,
+        "lon": 73.8,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-18 06:00:00",
+        "lat": 26.3,
+        "lon": 74.0,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 994.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-18 09:00:00",
+        "lat": 26.3,
+        "lon": 74.3,
+        "imd_wind_kt": 23.0,
+        "imd_pressure_hpa": 995.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-18 12:00:00",
+        "lat": 26.3,
+        "lon": 74.7,
+        "imd_wind_kt": 20.0,
+        "imd_pressure_hpa": 995.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-18 15:00:00",
+        "lat": 26.3,
+        "lon": 74.9,
+        "imd_wind_kt": 20.0,
+        "imd_pressure_hpa": 995.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-18 18:00:00",
+        "lat": 26.3,
+        "lon": 75.2,
+        "imd_wind_kt": 20.0,
+        "imd_pressure_hpa": 995.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-18 21:00:00",
+        "lat": 26.3,
+        "lon": 75.6,
+        "imd_wind_kt": 20.0,
+        "imd_pressure_hpa": 995.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2023-06-19 00:00:00",
+        "lat": 26.3,
+        "lon": 76.0,
+        "imd_wind_kt": 20.0,
+        "imd_pressure_hpa": 995.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+Mode: built-in image generation, reference editing.
+
+Edit the latest attached OceanEmbed TECHNICAL APPROACH infographic according to the user's red markup. The thick hand-drawn red lines are annotations only: REMOVE ALL HAND-DRAWN RED MARKUP in final. Preserve existing branding, white background, giant black title, illustrated style, navy headings, thin borders, model illustrations, output column, and highlighted TECH STACK logos. This is layout rebalancing, NOT a new visual design.
+
+USER PRIORITY: the marked left input/preprocessing/training areas and validation area still consume too much space. Make them significantly more COMPACT and use freed space to make DISASTER-MANAGEMENT INTELLIGENCE far BIGGER, visibly highlighted, easy to read.
+
+Concrete geometry strategy:
+- Left INPUTS + DATA HARMONISATION become a single narrow support column occupying roughly LEFT 22% of canvas instead of 34%. Inputs are FOUR compact text rows SST • OSTIA; SSS + SLA • MULTIOBS / DUACS; Currents U/V • OSCAR Final v2; Winds U/V • CCMP v3.1. Remove long explanatory sentences and all imagery here.
+- Directly below input rows within SAME narrow column: compact harmonisation text, no images: QC + validity mask / Daily alignment / 0.25° • 101×241 / Train-only scaling. Small separate NRT line enters same processing: 'Qualified NRT adapters • same 7-channel contract'. No historical→NRT arrow.
+- Below that narrow column small TEXT ONLY training line: 'GLORYS12V1 targets → Supervised training → Frozen checkpoint'. Label Training only. No large grid/map/server illustrations.
+- Compact OBSERVATIONAL VALIDATION below training as a clean evidence card in this narrow column. At most ONE small Argo float icon. Preserve large readable '5,176 profiles • 92 floats', 'GLORYS test • L0/L1/L2', 'RMSE / MAE / BIAS', 'Float-cluster bootstrap', '2024 Argo protected holdout'. Remove tiny illustrative graphs.
+- The center engine starts farther LEFT in newly freed width: keep 33×33 patch→dilated CNN plates→32-D embedding→MLP→15-depth ocean stack all brightly illustrated and large. Keep backend+researcher above engine, and outputs at far right. Backend can reduce height slightly. Main positions still recognizable as original.
+- DISASTER-MANAGEMENT INTELLIGENCE is now a LARGE LANDSCAPE PANEL beneath central engine and output column, spanning ~75% of slide width (from x=24% to97%), rather than original narrow lower-right block. Give ~28–30% of full canvas height to this group by moving engine up modestly. This must become one of the TWO main visual attractions, alongside engine.
+- Highlight disaster panel with refined pale-coral background, thicker clean red/coral outline, bold deep red heading clearly bigger than minor headings. NOT hand drawn. Stronger internal maps and labels, more whitespace.
+- Disaster contents larger: OceanEmbed thermal hotspot map (HIGH/ELEVATED) + EXTERNAL TRACK • GDACS line input → LARGE central map 'TRACK × THERMAL ANALYSIS' → large report icon 'ANALYST BRIEF'. Metrics readable 'Peak TCHP • 100 m anomaly • strongest segment • intersection distance'. These quantify thermal reservoir, not energy transferred to cyclone.
+- Small secondary row INSIDE expanded disaster panel: CURRENT CYCLONE WATCH (GDACS source+qualified dated field), HISTORICAL REPLAY (pre-event→passage→cold wake→recovery mini maps), SCENARIO MODE (drawn path map, 'What-if path • not a forecast'). Include exports CSV/NetCDF/PNG small. Permanent note 'THERMAL SUPPORT ≠ CYCLONE FORECAST'.
+- Preserve the TECH STACK as a FULL-WIDTH blue highlighted band immediately above wave footer: colorful logos for Python/PyTorch; NumPy/pandas/xarray/NetCDF/Zarr; FastAPI; React/TypeScript/Three.js/Plotly; pytest/Vitest/Playwright; cloud/container marked DEPLOYMENT TARGET (planned). This is important to user: do NOT delete imagery or turn it into plain text.
+- Keep existing wave footer.
+
+Correct connections are mandatory:
+Historical and NRT are alternatives → harmonisation → engine patch via one labeled '7 channels + validity mask' arrow. Training checkpoint→engine only. Backend↔engine ONE short 'Run/return field' link; researcher↔FastAPI short Request/results.
+Engine reconstruction→right output bus and→observational validation (comparison only).
+ETOPO support arrow enters output/diagnostic support from ETOPO, never as predicted output.
+Thermal diagnostics→large disaster panel's OceanEmbed thermal map. Separate GDACS track→track×thermal analysis, never engine.
+Every arrow touches intended node, no floaters at headings, no loops crossing text.
+Keep concise note 'Historical D26; standalone latest D26 withheld' and latest field label 'Valid date + source lag'.
+Do not add new statistics or claims. Keep all major product/architecture content, reduce only supporting decoration and repetition. No numbered stages, no completely new poster style. Final polished 16:9 slide, no red pen markup, clean legible labels.
+
+Preserve this entire slide's layout, large disaster panel, highlighted tech logos and illustrations. Make only targeted technical corrections:
+1. CURRENT CYCLONE WATCH caption replace invented 'Latest qualified track and intensity (date)' with 'External GDACS track + dated OceanEmbed field'. No intensity claim or extra weather-service icon; retain cyclone image.
+2. Restore missing small context input to MLP: above MLP decoder inside engine, add a compact globe/calendar icon and label 'Location + season', short arrow DOWN into MLP. Fit in available white space above neuron nodes, do not move panels.
+3. Scientific input connector wrongly comes down from backend with '7 channels + validity mask'. REMOVE that one arrow and label from under server. Keep existing backend↔engine Run/return field.
+Instead draw one SHORT RIGHT arrow from left-column DATA HARMONISATION right border to engine's spatial map left edge at same height near y410, label '7 channels + mask' small at arrow if space. It represents processing→model.
+4. Add small DOWN arrow connecting left-column SURFACE INPUTS bottom to DATA HARMONISATION top, in the divider. NRT line belongs to preprocessing.
+5. Add short RIGHT arrow from TRAINING card's right edge near y585 then route UP the white gutter into engine lower-left border, arrowhead at engine. Label 'Frozen model' tiny. Never attach training to disaster panel.
+6. Add LEFT-pointing arrow from engine lower-left border, down through narrow white gutter, into OBSERVATIONAL VALIDATION right edge near y700. Label 'Compare' small. Raw predictions go to validation, Argo never to model.
+7. Add short downward arrow from shared output/diagnostics bus into disaster-panel upper-right boundary, label 'Thermal diagnostics' in whitespace. Keep ETOPO left-pointing support arrow.
+Avoid crossing headings or text. All connectors restrained thin blue, only these additions. No new panels or content changes. Full 16:9 complete image.

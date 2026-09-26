@@ -1,0 +1,484 @@
+{
+  "schema": 1,
+  "event_id": "yaas-2021",
+  "display_name": "Cyclone Yaas (2021)",
+  "name": "Yaas",
+  "season": 2021,
+  "sid": [
+    "2021143N15090"
+  ],
+  "basin": "Bay of Bengal",
+  "subbasin_codes": [
+    "BB"
+  ],
+  "replay_start": "2021-05-19",
+  "replay_end": "2021-06-03",
+  "formation": "2021-05-23",
+  "peak": "2021-05-25",
+  "landfall": "2021-05-26",
+  "peak_time": "2021-05-25 21:00:00",
+  "landfall_time": "2021-05-26 06:00:00",
+  "segments": [
+    {
+      "label": "Pre-event",
+      "start": "2021-05-19",
+      "end": "2021-05-22"
+    },
+    {
+      "label": "Approach / intensification",
+      "start": "2021-05-23",
+      "end": "2021-05-24"
+    },
+    {
+      "label": "Event",
+      "start": "2021-05-25",
+      "end": "2021-05-26"
+    },
+    {
+      "label": "Wake",
+      "start": "2021-05-27",
+      "end": "2021-05-30"
+    },
+    {
+      "label": "Recovery",
+      "start": "2021-05-31",
+      "end": "2021-06-03"
+    }
+  ],
+  "phase_rule": "outputs/events/EVENT_LIBRARY_RULE.md",
+  "frozen": false,
+  "split": "validation",
+  "in_sample": false,
+  "split_note": "Validation-period dates: used for model selection, not for fitting weights. Not a locked out-of-sample test.",
+  "external_metadata": {
+    "intensity_source": "IMD / RSMC New Delhi agency columns via IBTrACS (3-minute sustained wind)",
+    "peak_imd_wind_kt": 75.0,
+    "peak_imd_wind_time": "2021-05-25 21:00:00",
+    "min_imd_pressure_hpa": 970.0,
+    "jtwc_peak_wind_kt_1min": 65.0,
+    "first_landfall_fix_time": "2021-05-26 06:00:00"
+  },
+  "track_fixes_inside_domain": 39,
+  "track_fixes_total": 39,
+  "availability": {
+    "days": 16,
+    "missing_dates": [],
+    "zero_input_dates": [],
+    "valid_cells_min": 11136,
+    "valid_cells_median": 11136,
+    "valid_cells_max": 11136,
+    "checked": "surface_input_valid counts in the frozen model-ready store; no inference"
+  },
+  "enabled": true,
+  "exclusion_reasons": [],
+  "track": {
+    "schema": 1,
+    "event": "Cyclone Yaas (2021)",
+    "basin": "North Indian (Bay of Bengal)",
+    "dataset": "IBTrACS v04r01, North Indian basin",
+    "agency": "IMD / RSMC New Delhi, via IBTrACS",
+    "provider": "NOAA National Centers for Environmental Information",
+    "source_url": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.NI.list.v04r01.csv",
+    "source_sha256": "1e892624f97f5481cddf6b8e9e65be2925fa0a3336f399f5b9fd87fbb463fb78",
+    "citation": "Knapp, K. R., M. C. Kruk, D. H. Levinson, H. J. Diamond and C. J. Neumann (2010), The International Best Track Archive for Climate Stewardship (IBTrACS): Unifying tropical cyclone best track data, Bull. Amer. Meteor. Soc., 91, 363-376. Data: IBTrACS Project v04r01, NOAA NCEI, doi:10.25921/82ty-9e16.",
+    "licence": "US Government work, public domain; NOAA/NCEI attribution retained",
+    "role": "static geographic context; not a model input, not an OceanEmbed output, and never used in inference, diagnostics or masks",
+    "n_points": 39,
+    "first_time": "2021-05-23 00:00:00",
+    "last_time": "2021-05-27 18:00:00",
+    "peak_imd_wind_kt": 75.0,
+    "min_imd_pressure_hpa": 970.0,
+    "points": [
+      {
+        "time": "2021-05-23 00:00:00",
+        "lat": 15.5,
+        "lon": 90.0,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 20.0,
+        "nature": "DS",
+        "dist2land_km": 453.0
+      },
+      {
+        "time": "2021-05-23 03:00:00",
+        "lat": 15.4,
+        "lon": 89.9,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 23.0,
+        "nature": "DS",
+        "dist2land_km": 465.0
+      },
+      {
+        "time": "2021-05-23 06:00:00",
+        "lat": 15.6,
+        "lon": 89.8,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 996.0,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 473.0
+      },
+      {
+        "time": "2021-05-23 09:00:00",
+        "lat": 15.6,
+        "lon": 89.7,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 995.0,
+        "usa_wind_kt": 28.0,
+        "nature": "TS",
+        "dist2land_km": 483.0
+      },
+      {
+        "time": "2021-05-23 12:00:00",
+        "lat": 15.7,
+        "lon": 89.6,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 994.0,
+        "usa_wind_kt": 30.0,
+        "nature": "TS",
+        "dist2land_km": 493.0
+      },
+      {
+        "time": "2021-05-23 15:00:00",
+        "lat": 15.8,
+        "lon": 89.5,
+        "imd_wind_kt": 28.0,
+        "imd_pressure_hpa": 993.0,
+        "usa_wind_kt": 33.0,
+        "nature": "TS",
+        "dist2land_km": 503.0
+      },
+      {
+        "time": "2021-05-23 18:00:00",
+        "lat": 15.8,
+        "lon": 89.5,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 35.0,
+        "nature": "MX",
+        "dist2land_km": 502.0
+      },
+      {
+        "time": "2021-05-23 21:00:00",
+        "lat": 16.0,
+        "lon": 89.6,
+        "imd_wind_kt": 33.0,
+        "imd_pressure_hpa": 991.0,
+        "usa_wind_kt": 35.0,
+        "nature": "MX",
+        "dist2land_km": 491.0
+      },
+      {
+        "time": "2021-05-24 00:00:00",
+        "lat": 16.1,
+        "lon": 89.8,
+        "imd_wind_kt": 35.0,
+        "imd_pressure_hpa": 990.0,
+        "usa_wind_kt": 35.0,
+        "nature": "TS",
+        "dist2land_km": 470.0
+      },
+      {
+        "time": "2021-05-24 03:00:00",
+        "lat": 16.5,
+        "lon": 89.7,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 35.0,
+        "nature": "TS",
+        "dist2land_km": 483.0
+      },
+      {
+        "time": "2021-05-24 06:00:00",
+        "lat": 16.6,
+        "lon": 89.6,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 35.0,
+        "nature": "TS",
+        "dist2land_km": 485.0
+      },
+      {
+        "time": "2021-05-24 09:00:00",
+        "lat": 16.9,
+        "lon": 89.6,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 38.0,
+        "nature": "TS",
+        "dist2land_km": 483.0
+      },
+      {
+        "time": "2021-05-24 12:00:00",
+        "lat": 17.2,
+        "lon": 89.4,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 986.0,
+        "usa_wind_kt": 40.0,
+        "nature": "TS",
+        "dist2land_km": 445.0
+      },
+      {
+        "time": "2021-05-24 15:00:00",
+        "lat": 17.4,
+        "lon": 89.2,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 986.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 414.0
+      },
+      {
+        "time": "2021-05-24 18:00:00",
+        "lat": 17.6,
+        "lon": 89.0,
+        "imd_wind_kt": 50.0,
+        "imd_pressure_hpa": 984.0,
+        "usa_wind_kt": 50.0,
+        "nature": "TS",
+        "dist2land_km": 383.0
+      },
+      {
+        "time": "2021-05-24 21:00:00",
+        "lat": 17.8,
+        "lon": 88.9,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 982.0,
+        "usa_wind_kt": 53.0,
+        "nature": "TS",
+        "dist2land_km": 360.0
+      },
+      {
+        "time": "2021-05-25 00:00:00",
+        "lat": 18.1,
+        "lon": 88.6,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 321.0
+      },
+      {
+        "time": "2021-05-25 03:00:00",
+        "lat": 18.4,
+        "lon": 88.4,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 275.0
+      },
+      {
+        "time": "2021-05-25 06:00:00",
+        "lat": 18.8,
+        "lon": 88.2,
+        "imd_wind_kt": 60.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 229.0
+      },
+      {
+        "time": "2021-05-25 09:00:00",
+        "lat": 19.1,
+        "lon": 88.2,
+        "imd_wind_kt": 60.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 60.0,
+        "nature": "TS",
+        "dist2land_km": 206.0
+      },
+      {
+        "time": "2021-05-25 12:00:00",
+        "lat": 19.5,
+        "lon": 88.2,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 976.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 180.0
+      },
+      {
+        "time": "2021-05-25 15:00:00",
+        "lat": 19.9,
+        "lon": 88.0,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 976.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 137.0
+      },
+      {
+        "time": "2021-05-25 18:00:00",
+        "lat": 20.3,
+        "lon": 87.8,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 974.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 94.0
+      },
+      {
+        "time": "2021-05-25 21:00:00",
+        "lat": 20.4,
+        "lon": 87.7,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 970.0,
+        "usa_wind_kt": 63.0,
+        "nature": "TS",
+        "dist2land_km": 80.0
+      },
+      {
+        "time": "2021-05-26 00:00:00",
+        "lat": 20.6,
+        "lon": 87.6,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 970.0,
+        "usa_wind_kt": 60.0,
+        "nature": "TS",
+        "dist2land_km": 63.0
+      },
+      {
+        "time": "2021-05-26 03:00:00",
+        "lat": 21.1,
+        "lon": 87.2,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 970.0,
+        "usa_wind_kt": 58.0,
+        "nature": "TS",
+        "dist2land_km": 38.0
+      },
+      {
+        "time": "2021-05-26 06:00:00",
+        "lat": 21.5,
+        "lon": 86.9,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 970.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-26 09:00:00",
+        "lat": 21.7,
+        "lon": 86.6,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 978.0,
+        "usa_wind_kt": 50.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-26 12:00:00",
+        "lat": 21.9,
+        "lon": 86.5,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 984.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-26 15:00:00",
+        "lat": 22.2,
+        "lon": 86.1,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 986.0,
+        "usa_wind_kt": 40.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-26 18:00:00",
+        "lat": 22.5,
+        "lon": 85.8,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 35.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-26 21:00:00",
+        "lat": 22.8,
+        "lon": 85.7,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 30.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-27 00:00:00",
+        "lat": 23.1,
+        "lon": 85.7,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 988.0,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-27 03:00:00",
+        "lat": 23.3,
+        "lon": 85.7,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 990.0,
+        "usa_wind_kt": 23.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-27 06:00:00",
+        "lat": 23.6,
+        "lon": 85.6,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 991.0,
+        "usa_wind_kt": 20.0,
+        "nature": "MX",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-27 09:00:00",
+        "lat": 23.9,
+        "lon": 85.5,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-27 12:00:00",
+        "lat": 24.3,
+        "lon": 85.3,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-27 15:00:00",
+        "lat": 24.5,
+        "lon": 85.1,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2021-05-27 18:00:00",
+        "lat": 24.7,
+        "lon": 84.8,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 1920 1080"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#167d9a"/></marker></defs><rect width="1920" height="1080" fill="#f5f8fb"/><style>text{font-family:Segoe UI,Arial,sans-serif;fill:#142c42}.small{font-size:18px}.body{font-size:21px}.title{font-size:24px;font-weight:700}.tag{font-size:16px;font-weight:700;letter-spacing:1.5px}</style>
+<path d="M40 42 Q55 28 70 42 T100 42" fill="none" stroke="#167d9a" stroke-width="4"/>
+<path d="M40 52 Q55 38 70 52 T100 52" fill="none" stroke="#167d9a" stroke-width="4"/>
+<path d="M40 62 Q55 48 70 62 T100 62" fill="none" stroke="#167d9a" stroke-width="4"/>
+<text x="115" y="53" style="font-size:27px;fill:#142c42;font-weight:750">OCEANEMBED</text>
+<text text-anchor="end" x="1880" y="43" style="font-size:18px;fill:#167d9a;font-weight:650">SIH 2026  •  SIH26066</text>
+<text x="40" y="115" style="font-size:48px;fill:#142c42;font-weight:800">TECHNICAL APPROACH</text>
+<text x="40" y="148" style="font-size:24px;fill:#587185;font-weight:400">Surface observations → spatial embeddings → subsurface ocean intelligence</text>
+<text text-anchor="end" x="1880" y="110" style="font-size:18px;fill:#167d9a;font-weight:700">NORTH INDIAN OCEAN</text>
+<text text-anchor="end" x="1880" y="139" style="font-size:18px;fill:#587185;font-weight:400">5–30°N  |  45–105°E  |  0.25° grid</text>
+<rect x="40" y="180" width="270" height="390" rx="14" fill="#fff" stroke="#c6d6e2" stroke-width="1.5"/>
+<rect x="40" y="180" width="270" height="66" rx="14" fill="#e8f2f8" stroke="#c6d6e2" stroke-width="1.5"/>
+<text x="57" y="209" style="font-size:16px;fill:#167d9a;font-weight:700">01 / OBSERVE</text>
+<text x="57" y="236" style="font-size:20px;fill:#142c42;font-weight:700">SURFACE INPUTS</text>
+<text x="57" y="269" style="font-size:17px;fill:#587185;font-weight:400">Historical inputs • 7 channels</text>
+<rect x="58" y="285" width="234" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="71" y="308" style="font-size:17px;fill:#142c42;font-weight:650">SST</text>
+<text x="71" y="330" style="font-size:16px;fill:#587185;font-weight:400">OSTIA</text>
+<rect x="58" y="348" width="234" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="71" y="371" style="font-size:17px;fill:#142c42;font-weight:650">SSS + SLA</text>
+<text x="71" y="393" style="font-size:16px;fill:#587185;font-weight:400">CMEMS MULTIOBS + DUACS</text>
+<rect x="58" y="411" width="234" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="71" y="434" style="font-size:17px;fill:#142c42;font-weight:650">Currents u / v</text>
+<text x="71" y="456" style="font-size:16px;fill:#587185;font-weight:400">OSCAR Final v2.0</text>
+<rect x="58" y="474" width="234" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="71" y="497" style="font-size:17px;fill:#142c42;font-weight:650">Winds u / v</text>
+<text x="71" y="519" style="font-size:16px;fill:#587185;font-weight:400">CCMP v3.1</text>
+<rect x="335" y="180" width="270" height="390" rx="14" fill="#fff" stroke="#c6d6e2" stroke-width="1.5"/>
+<rect x="335" y="180" width="270" height="66" rx="14" fill="#e8f2f8" stroke="#c6d6e2" stroke-width="1.5"/>
+<text x="352" y="209" style="font-size:16px;fill:#167d9a;font-weight:700">02 / HARMONISE</text>
+<text x="352" y="236" style="font-size:20px;fill:#142c42;font-weight:700">SCIENTIFIC PROCESSING</text>
+<text x="352" y="269" style="font-size:17px;fill:#587185;font-weight:400">Daily, aligned, model-ready</text>
+<rect x="353" y="285" width="234" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="366" y="308" style="font-size:17px;fill:#142c42;font-weight:650">QC + valid-ocean mask</text>
+<text x="366" y="330" style="font-size:16px;fill:#587185;font-weight:400">Missing data stays explicit</text>
+<rect x="353" y="348" width="234" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="366" y="371" style="font-size:17px;fill:#142c42;font-weight:650">Spatial / temporal alignment</text>
+<text x="366" y="393" style="font-size:16px;fill:#587185;font-weight:400">xarray → 101 × 241 grid</text>
+<rect x="353" y="411" width="234" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="366" y="434" style="font-size:17px;fill:#142c42;font-weight:650">Train-only standardisation</text>
+<text x="366" y="456" style="font-size:16px;fill:#587185;font-weight:400">Frozen feature + target scalers</text>
+<rect x="353" y="474" width="234" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="366" y="497" style="font-size:17px;fill:#142c42;font-weight:650">7 inputs + validity channel</text>
+<text x="366" y="519" style="font-size:16px;fill:#587185;font-weight:400">Zarr model-ready stores</text>
+<rect x="630" y="180" width="480" height="450" rx="14" fill="#102e45" stroke="#167d9a" stroke-width="1.5"/>
+<text x="653" y="211" style="font-size:17px;fill:#5bd1df;font-weight:700">03 / CORE INNOVATION</text>
+<text x="653" y="248" style="font-size:30px;fill:#fff;font-weight:750">SPATIAL SATELLITE</text>
+<text x="653" y="283" style="font-size:30px;fill:#fff;font-weight:750">EMBEDDING ENGINE</text>
+<rect x="653" y="305" width="434" height="67" rx="9" fill="#1b4059" stroke="#416278" stroke-width="1.5"/>
+<text x="673" y="333" style="font-size:25px;fill:#fff;font-weight:650">33 × 33 context • dilated CNN</text>
+<text x="673" y="357" style="font-size:18px;fill:#b8d6e5;font-weight:400">Dilations 1 / 2 / 4 / 8 / 1</text>
+<path d="M870 375 V393" fill="none" stroke="#167d9a" stroke-width="2.6" marker-end="url(#arrow)" />
+<rect x="715" y="398" width="310" height="47" rx="9" fill="#167d9a" stroke="#48bfd1" stroke-width="1.5"/>
+<text x="736" y="429" style="font-size:20px;fill:#fff;font-weight:750">32-D SATELLITE EMBEDDING</text>
+<path d="M870 449 V466" fill="none" stroke="#167d9a" stroke-width="2.6" marker-end="url(#arrow)" />
+<text x="653" y="493" style="font-size:19px;fill:#b8d6e5;font-weight:400">+ latitude / longitude / seasonal context</text>
+<rect x="653" y="507" width="434" height="56" rx="9" fill="#1b4059" stroke="#416278" stroke-width="1.5"/>
+<text x="673" y="542" style="font-size:24px;fill:#fff;font-weight:650">MLP decoder → 15 temperatures</text>
+<text x="653" y="593" style="font-size:22px;fill:#5bd1df;font-weight:650">0–1000 m   •   136,335 parameters</text>
+<text x="653" y="617" style="font-size:17px;fill:#d4e6ee;font-weight:400">One shared field pass; no per-click model run</text>
+<rect x="1135" y="180" width="285" height="450" rx="14" fill="#fff" stroke="#c6d6e2" stroke-width="1.5"/>
+<rect x="1135" y="180" width="285" height="66" rx="14" fill="#e8f2f8" stroke="#c6d6e2" stroke-width="1.5"/>
+<text x="1152" y="209" style="font-size:16px;fill:#167d9a;font-weight:700">04 / QUALIFY</text>
+<text x="1152" y="236" style="font-size:20px;fill:#142c42;font-weight:700">PHYSICAL DIAGNOSTICS</text>
+<text x="1152" y="269" style="font-size:17px;fill:#587185;font-weight:400">Derived from the same field</text>
+<rect x="1153" y="285" width="249" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="1166" y="308" style="font-size:17px;fill:#142c42;font-weight:650">ETOPO depth support</text>
+<text x="1166" y="330" style="font-size:16px;fill:#587185;font-weight:400">Hide below-seafloor values</text>
+<rect x="1153" y="348" width="249" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="1166" y="371" style="font-size:17px;fill:#142c42;font-weight:650">Temperature anomaly</text>
+<text x="1166" y="393" style="font-size:16px;fill:#587185;font-weight:400">Reconstruction − frozen L0</text>
+<rect x="1153" y="411" width="249" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="1166" y="434" style="font-size:17px;fill:#142c42;font-weight:650">D26 + TCHP</text>
+<text x="1166" y="456" style="font-size:16px;fill:#587185;font-weight:400">26°C depth + ocean heat</text>
+<rect x="1153" y="474" width="249" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="1166" y="497" style="font-size:17px;fill:#142c42;font-weight:650">Thermal-support indicators</text>
+<text x="1166" y="519" style="font-size:16px;fill:#587185;font-weight:400">Explainable historical categories</text>
+<text x="1153" y="584" style="font-size:21px;fill:#167d9a;font-weight:650">Validity + provenance</text>
+<text x="1153" y="609" style="font-size:18px;fill:#587185;font-weight:400">Not a cyclone forecast</text>
+<rect x="1445" y="180" width="435" height="450" rx="14" fill="#fff" stroke="#c6d6e2" stroke-width="1.5"/>
+<rect x="1445" y="180" width="435" height="66" rx="14" fill="#e8f2f8" stroke="#c6d6e2" stroke-width="1.5"/>
+<text x="1462" y="209" style="font-size:16px;fill:#167d9a;font-weight:700">05 / DELIVER</text>
+<text x="1462" y="236" style="font-size:20px;fill:#142c42;font-weight:700">INTERACTIVE OCEAN INTELLIGENCE</text>
+<text x="1462" y="269" style="font-size:17px;fill:#587185;font-weight:400">FastAPI serves one authoritative field</text>
+<rect x="1463" y="285" width="399" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="1476" y="308" style="font-size:17px;fill:#142c42;font-weight:650">2D map + bathymetry-aware 3D</text>
+<text x="1476" y="330" style="font-size:16px;fill:#587185;font-weight:400">Linked location, depth and 15-level profile</text>
+<rect x="1463" y="348" width="399" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="1476" y="371" style="font-size:17px;fill:#142c42;font-weight:650">Historical event replay</text>
+<text x="1476" y="393" style="font-size:16px;fill:#587185;font-weight:400">IBTrACS tracks + along-track analysis</text>
+<rect x="1463" y="411" width="399" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="1476" y="434" style="font-size:17px;fill:#142c42;font-weight:650">Model-science workspace</text>
+<text x="1476" y="456" style="font-size:16px;fill:#587185;font-weight:400">Attribution • occlusion • physical QA</text>
+<rect x="1463" y="474" width="399" height="57" rx="8" fill="#f7fafc" stroke="#dde6ed" stroke-width="1.5"/>
+<text x="1476" y="497" style="font-size:17px;fill:#142c42;font-weight:650">Evidence + scientific exports</text>
+<text x="1476" y="519" style="font-size:16px;fill:#587185;font-weight:400">CSV / NetCDF / PNG + provenance</text>
+<text x="1463" y="584" style="font-size:21px;fill:#167d9a;font-weight:650">React dashboard • local runtime</text>
+<text x="1463" y="609" style="font-size:18px;fill:#587185;font-weight:400">Provenance-keyed field cache</text>
+<path d="M310 389 H332" fill="none" stroke="#167d9a" stroke-width="2.6" marker-end="url(#arrow)" />
+<path d="M605 389 H627" fill="none" stroke="#167d9a" stroke-width="2.6" marker-end="url(#arrow)" />
+<path d="M1110 389 H1132" fill="none" stroke="#167d9a" stroke-width="2.6" marker-end="url(#arrow)" />
+<path d="M1420 389 H1442" fill="none" stroke="#167d9a" stroke-width="2.6" marker-end="url(#arrow)" />
+<rect x="40" y="590" width="565" height="67" rx="10" fill="#edf6f6" stroke="#b1d8d9" stroke-width="1.5"/>
+<text x="57" y="616" style="font-size:18px;fill:#167d9a;font-weight:700">TRAINING BRANCH  •  GLORYS12V1 TARGETS</text>
+<text x="57" y="643" style="font-size:19px;fill:#142c42;font-weight:400">Supervised training → validation selection → frozen L2</text>
+<path d="M605 624 H617 V549 H647" fill="none" stroke="#167d9a" stroke-width="2.6" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="630" y="666" style="font-size:18px;fill:#587185;font-weight:400">Frozen checkpoint + hash-verified scalers</text>
+<rect x="40" y="705" width="1380" height="151" rx="14" fill="#fff" stroke="#9fc4d4" stroke-width="1.5"/>
+<text x="59" y="735" style="font-size:22px;fill:#167d9a;font-weight:750">06 / VERIFY  —  TWO COMPLEMENTARY EVIDENCE TRACKS</text>
+<text x="59" y="774" style="font-size:20px;fill:#142c42;font-weight:750">HELD-OUT REANALYSIS</text>
+<text x="59" y="803" style="font-size:20px;fill:#142c42;font-weight:400">GLORYS • L0 / L1 baselines</text>
+<text x="59" y="832" style="font-size:19px;fill:#587185;font-weight:400">Depth-wise RMSE / MAE / bias</text>
+<text x="444" y="774" style="font-size:20px;fill:#142c42;font-weight:750">INDEPENDENT ARGO AUDIT</text>
+<text x="444" y="803" style="font-size:22px;fill:#167d9a;font-weight:700">5,176 profiles • 92 floats</text>
+<text x="444" y="832" style="font-size:19px;fill:#587185;font-weight:400">Profile QC + float-clustered bootstrap</text>
+<text x="908" y="774" style="font-size:20px;fill:#142c42;font-weight:750">SCIENTIFIC DISCIPLINE</text>
+<text x="908" y="803" style="font-size:19px;fill:#142c42;font-weight:400">Train 2015–20 • validation 2021</text>
+<text x="908" y="832" style="font-size:19px;fill:#587185;font-weight:400">Test 2022–24 • 2024 Argo held out</text>
+<path d="M1010 632 V695" fill="none" stroke="#167d9a" stroke-width="2.6" marker-end="url(#arrow)" />
+<text x="1030" y="686" style="font-size:16px;fill:#167d9a;font-weight:400">prediction audit</text>
+<rect x="1445" y="658" width="435" height="198" rx="14" fill="#edf6f6" stroke="#b1d8d9" stroke-width="1.5"/>
+<text x="1463" y="690" style="font-size:22px;fill:#167d9a;font-weight:750">QUALIFIED RECENT STATES</text>
+<text x="1463" y="723" style="font-size:19px;fill:#142c42;font-weight:400">Availability → source checks → same L2</text>
+<text x="1463" y="751" style="font-size:18px;fill:#142c42;font-weight:400">Actual valid date + operating-mode flags</text>
+<text x="1463" y="783" style="font-size:18px;fill:#142c42;font-weight:400">Temperature: qualified with limitations</text>
+<text x="1463" y="811" style="font-size:19px;fill:#142c42;font-weight:650">TCHP qualified • D26 withheld</text>
+<text x="1463" y="839" style="font-size:17px;fill:#587185;font-weight:400">Provider latency is disclosed</text>
+<rect x="40" y="882" width="1840" height="143" rx="14" fill="#e8f0f6" stroke="#bdcedb" stroke-width="1.5"/>
+<text x="60" y="913" style="font-size:23px;fill:#142c42;font-weight:750">IMPLEMENTED TECH STACK</text>
+<text x="60" y="944" style="font-size:16px;fill:#167d9a;font-weight:750">AI / SCIENCE</text>
+<text x="60" y="976" style="font-size:21px;fill:#142c42;font-weight:600">Python • PyTorch</text>
+<text x="60" y="1006" style="font-size:18px;fill:#587185;font-weight:400">NumPy • SciPy • gsw</text>
+<text x="425" y="944" style="font-size:16px;fill:#167d9a;font-weight:750">DATA ENGINEERING</text>
+<text x="425" y="976" style="font-size:21px;fill:#142c42;font-weight:600">xarray • pandas • Dask</text>
+<text x="425" y="1006" style="font-size:18px;fill:#587185;font-weight:400">NetCDF • Zarr</text>
+<text x="790" y="944" style="font-size:16px;fill:#167d9a;font-weight:750">SERVING / STORAGE</text>
+<text x="790" y="976" style="font-size:21px;fill:#142c42;font-weight:600">FastAPI • Uvicorn</text>
+<text x="790" y="1006" style="font-size:18px;fill:#587185;font-weight:400">Local files + field cache</text>
+<text x="1155" y="944" style="font-size:16px;fill:#167d9a;font-weight:750">FRONTEND</text>
+<text x="1155" y="976" style="font-size:21px;fill:#142c42;font-weight:600">React • TypeScript • Vite</text>
+<text x="1155" y="1006" style="font-size:18px;fill:#587185;font-weight:400">Tailwind CSS</text>
+<text x="1520" y="944" style="font-size:16px;fill:#167d9a;font-weight:750">VISUALS / TESTS</text>
+<text x="1520" y="976" style="font-size:21px;fill:#142c42;font-weight:600">Three.js • Plotly</text>
+<text x="1520" y="1006" style="font-size:18px;fill:#587185;font-weight:400">pytest • Vitest • Playwright</text>
+<text x="40" y="1055" style="font-size:19px;fill:#167d9a;font-weight:700">SPATIAL CONTEXT  +  INDEPENDENT EVIDENCE  +  PHYSICAL SUPPORT  +  TRACEABLE REPLAY</text>
+<text text-anchor="end" x="1880" y="1055" style="font-size:16px;fill:#587185;font-weight:400">Implemented system • repository-verified</text>
+<g transform="translate(274,194)" fill="none" stroke="#168aa6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<rect x="7" y="6" width="10" height="12" rx="2"/><path d="M1 4H6V18H1ZM18 4H23V18H18ZM12 1V5M12 19V23"/>
+</g>
+<g transform="translate(569,194)" fill="none" stroke="#168aa6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M2 5H22M2 12H22M2 19H22"/><circle cx="7" cy="5" r="3" fill="#e8f2f8"/><circle cx="17" cy="12" r="3" fill="#e8f2f8"/><circle cx="9" cy="19" r="3" fill="#e8f2f8"/>
+</g>
+<g transform="translate(1384,194)" fill="none" stroke="#168aa6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 1L22 5V13Q21 20 12 24Q3 20 2 13V5ZM6 12L10 16L18 8"/>
+</g>
+<g transform="translate(1844,194)" fill="none" stroke="#168aa6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<rect x="1" y="2" width="22" height="16" rx="2"/><path d="M12 18V23M6 23H18M5 13L10 8L14 11L19 5"/>
+</g>
+<g transform="translate(1074,194)" fill="none" stroke="#168aa6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 5L12 12L21 5M3 20L12 12L21 20"/><circle cx="3" cy="5" r="3"/><circle cx="3" cy="20" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="21" cy="5" r="3"/><circle cx="21" cy="20" r="3"/>
+</g>
+</svg>

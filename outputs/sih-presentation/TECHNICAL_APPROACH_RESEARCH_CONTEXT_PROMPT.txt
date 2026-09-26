@@ -1,0 +1,36 @@
+Edit the attached OceanEmbed technical approach image. User loves it: preserve its white/navy technical poster aesthetic, logo/header, illustrated spatial CNN engine, large red disaster-management panel, right output cards, blue logo-rich tech stack, map pictures, typography hierarchy and 16:9 format. Main requested change: add concise visually engaging research context explaining L0, L1, L2 and the rejected L3, without making the slide crowded. Generate high resolution with sharp legible text.
+
+Use the existing very wide APPLICATION / INFERENCE SERVICE band across the upper middle more efficiently: split this band into two adjacent panels. Left 45% remains compact application service with server/FastAPI, model-cache icon and smaller ocean researcher, connected by request/results arrow. Right 55% becomes a clean pale-blue outlined "RESEARCH → MODEL SELECTION" panel. Keep the engine and disaster-management panels large, at essentially original positions; do not shrink them. The new research panel can extend a little into the gap above the engine if necessary, but never overlap it.
+
+New research panel: four compact illustrated cards side by side. This is an OFFLINE COMPARISON, not sequential runtime stages. Do NOT connect L0→L1→L2→L3 as inference. Each card uses a tiny useful icon and only the following text:
+"L0 • CLIMATOLOGY"
+"Location + season"
+(calendar/globe icon, neutral baseline badge)
+
+"L1 • POINTWISE MLP"
+"Local surface state"
+(single grid cell/neural nodes icon, neutral baseline badge)
+
+"L2 • SPATIAL CNN"
+"Surrounding ocean context"
+(spatial grid icon, green check badge "RETAINED")
+
+"L3 • TEMPORAL GRU"
+"1 / 3 / 7-day history"
+(sequence/calendar icon, red cross badge "REJECTED")
+
+Beneath those cards, two short readable lines:
+"L3: validation gain did not survive the frozen benchmark."
+"Final core: frozen L2 — selected by controlled comparison."
+Show a thin dashed arrow only FROM retained L2 card down to the existing spatial engine, labeled "Selected model". Clearly separates research alternatives from production architecture. Green emphasis L2, muted red L3; no unsupported numeric results. Don't label L3 worse universally, only this tested temporal extension.
+Backend retains bidirectional "Run / return field" arrow to existing engine. Research panel must not disconnect backend from model or imply researcher feeds training.
+
+Scientific label cleanups while preserving all other design:
+- Bottom "Observational validation (independent)" becomes simply "Observational validation".
+- Reverse arrow between Qualified NRT adapters and harmonisation so adapters feeds UP into preprocessing.
+- Remove erroneous long arrow from bottom offline training into NRT adapters.
+- Remove erroneous checkpoint arrow to disaster-management panel; instead connect frozen checkpoint via narrow left gutter dashed route to backend model cache, labeled "Frozen model". No runtime arrow from Argo into model.
+- Small ETOPO card: heading "DEPTH SUPPORT"; underlying text "ETOPO 2022 bathymetry" / "Mask below seafloor" / "Raw field preserved". This is display support, not a neural prediction.
+- All other content preserved. Do not add other research experiments, accuracy metrics, or unrelated systems.
+
+Aim for the SAME attractive poster with one compact but clear research-selection panel. Icons and graphics, minimal text, no paragraphs. Keep disaster-management intelligence as the strongest application highlight and preserve every tech-stack logo. Accurate black/blue connectors, no lines crossing text, no arbitrary new arrows.

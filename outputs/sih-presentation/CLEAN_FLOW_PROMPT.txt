@@ -1,0 +1,37 @@
+Built-in image generation reference edit.
+
+Recreate/refine this OceanEmbed illustrated technical architecture slide with a modest layout cleanup to FIX CONFUSING FLOW. Preserve its recognizable design: white background, OceanEmbed wave logo, enormous black TECHNICAL APPROACH title, SIH 2026 | SIH26066, colorful satellite/map illustrations, CNN plates, colored latent vector, neuron diagram, exploded ocean layers, float illustration, rounded black modules, dashed groups, blue wave footer. It MUST remain a richly illustrated SIH architecture image, not text boxes. You MAY reposition modules slightly to make arrows simple and unambiguous. Do NOT trace the erroneous arrows in the source. Rebuild connectors logically from scratch. All connectors thin navy with one arrowhead at destination. Blue dashed double-headed lines only for request/response. No giant perimeter lines, no overlapping labels, no duplicate connectors, no floating arrowheads or connections into titles. Reserve whitespace corridors for all lines.
+
+CRITICAL LAYOUT CHANGE: Move the OCEAN RESEARCHER illustration from bottom-left into the upper-right BACKEND / API area, directly alongside its server illustration. Draw a short double-headed dashed link researcher ↔ FastAPI labelled 'Request / results'. This eliminates the long blue line around the page. Researcher never connects to training inputs.
+
+Preserve main layout structure:
+LEFT: four richly illustrated cards under '7 SURFACE CHANNELS' / 'Historical input family': SST • OSTIA; SSS + SLA • MULTIOBS / DUACS; CURRENTS U/V • OSCAR Final v2; WINDS U/V • CCMP v3.1. Each card connects to a common collection bus, that bus ends in DATA HARMONISATION. Do not omit any input card connection.
+UPPER LEFT-CENTER: DATA HARMONISATION with four icon panels QC + VALIDITY MASK; DAILY ALIGNMENT; 0.25° GRID • 101×241; TRAIN-ONLY SCALING. Compact QUALIFIED NRT ADAPTERS strip below/alongside connects independently into harmonisation, labeled 'Same 7-channel contract'; icon captions SST / SSS+SLA / Current U/V / Wind U/V (not invented providers).
+MAIN CENTER: a large dashed group 'OCEANEMBED • SPATIAL SATELLITE EMBEDDING ENGINE'. One clear arrow from harmonisation to first spatial map inside group, label '7 channels + validity mask'. Reroute with whitespace and adjust modules if necessary so no crossing title.
+Internal illustrated chain is EXACTLY:
+33×33 SPATIAL CONTEXT map → DILATED CNN ENCODER plates → 32-D LATENT EMBEDDING colored vector → MLP DECODER nodes → 15 DEPTHS • 0–1000 m exploded temperature stack.
+Separate small globe/calendar 'Geospatial + seasonal context' arrow into decoder.
+Tiny 136,335 parameters and 'ONE SHARED 3D TEMPERATURE FIELD'.
+Do not let arrows terminate at the group title. Every arrow meets an actual module/illustration edge.
+Backend sits directly above engine, a SINGLE short dashed bidirectional connector between group borders labeled 'Run / return field'. Avoid heading by reserving a blank gap on right. Backend contains server, FastAPI, frozen L2 replay + qualified NRT, hash-verified field cache. Ocean researcher is alongside backend connected locally as above.
+Compact DEPLOYMENT TARGET storage illustration in backend area: '70+ GB archive' → 'Object storage • chunked Zarr / NetCDF' → 'Requested dates / chunks' → API/cache. Keep planned status explicit. Do not label cloud deployed. Space may be recovered from redundant server rows.
+
+RIGHT: Output cards connected by ONE common bus whose source is visibly the temperature stack's right side, labelled 'Shared field'. Rich illustrations for '2D MAP + 3D DEPTH VIEW', '15-DEPTH PROFILE', 'THERMAL DIAGNOSTICS • TCHP + D26*', 'LATEST QUALIFIED OCEAN STATE' (clock and 'Valid timestamp', no fake date).
+Physical support: small ETOPO 2022 seabed icon just BEFORE output bus/adjacent to field with arrow INTO display/diagnostics pathway labeled 'Physical depth support'. Do not show ETOPO as generated output or as neural-network input. Small 'Masks below local seafloor'.
+Small readable '*D26 historical; withheld as standalone NRT diagnostic'.
+
+LOWER LEFT: GLORYS12V1 TEMPERATURE target illustration → SUPERVISED TRAINING → FROZEN CHECKPOINT → upward into engine. Dedicated training route, separate from historical/NRT input bus. Tiny 'Training supervision only'. This area can occupy space vacated by researcher.
+LOWER MIDDLE: OBSERVATIONAL VALIDATION with Argo float, profile graphs. ONE downward arrow from engine output group into validation labelled 'Compare predictions'. Content GLORYS TEST • L0/L1/L2; ARGO • 5,176 profiles / 92 floats; RMSE/MAE/BIAS; anomaly correlation; float-cluster bootstrap; 2024 ARGO • PROTECTED FINAL HOLDOUT. Argo never feeds inference.
+
+LOWER RIGHT: DISASTER-MANAGEMENT INTELLIGENCE group.
+A clear short arrow from THERMAL DIAGNOSTICS above enters thermal monitoring map (not from ETOPO). Arrange this directly below diagnostic output to avoid long outside routing.
+Thermal monitoring map HIGH/ELEVATED → TRACK × THERMAL ANALYSIS overlay map → ANALYST BRIEF / THERMAL SUPPORT WATCH report illustration.
+Separate EXTERNAL CYCLONE TRACK • GDACS input merges into that analysis map only.
+Small TCHP along track • 50/75/100 m anomaly • strongest thermal segment • intersection distance.
+Secondary illustrated strip MULTI-CYCLONE HISTORICAL REPLAY: PRE-EVENT → PASSAGE → COLD WAKE → RECOVERY. Tiny Mocha • Biparjoy • Tauktae • Yaas • Amphan • Fani.
+Permanent 'THERMAL SUPPORT ≠ CYCLONE FORECAST'. Small CSV/NetCDF/PNG export icons.
+
+Slim tech stack footer Python/PyTorch; NumPy/pandas/xarray/NetCDF/Zarr; FastAPI; React/TypeScript/Three.js/Plotly; pytest/Vitest/Playwright; container/cloud TARGET.
+Wave footer 'FROM SURFACE OBSERVATIONS TO SUBSURFACE OCEAN INTELLIGENCE'.
+
+Prefer a clean, slightly rebalanced version of original with SAME visual assets and richness. The main arrows tell a clear story and smaller support arrows are distinct. Use fewer routes and larger gutters; no excessive new text. 16:9 high-resolution complete slide, all margins intact.

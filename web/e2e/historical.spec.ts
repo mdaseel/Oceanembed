@@ -380,7 +380,9 @@ test("responsive mobile route navigation and science without horizontal overflow
     ),
   ).toBe(true);
   await page.getByRole("button", { name: "Toggle navigation" }).click();
-  await page.getByRole("link", { name: "3D Depth View", exact: true }).click();
+  await page.getByRole("link", { name: "Ocean State", exact: true }).click();
+  // 3D is a view of the Ocean State map, not a separate page.
+  await page.getByRole("button", { name: "3D depth", exact: true }).click();
   await expect(page.getByRole("button", { name: "Enable 3D" })).toBeVisible();
   await expect(page.getByTestId("field-map")).toBeVisible();
   await page.screenshot({ path: `${out}/mobile.png`, fullPage: true });

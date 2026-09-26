@@ -161,12 +161,12 @@ test("historical replay does not go down when the live path does", async ({ page
   );
 
   // The offline science must still be fully usable in the same session.
-  await page.getByRole("link", { name: "Historical Replay" }).click();
+  await page.getByRole("link", { name: "Ocean State" }).click();
   await expect(page.getByTestId("field-map")).toBeVisible();
   await expect(page.locator(".stat").first()).toContainText("L2 TEMPERATURE");
 
   // And the hazard tab must remain historical, with no latest variant offered.
-  await page.getByRole("link", { name: "Ocean Hazard Indicators" }).click();
+  await page.getByRole("link", { name: "Events & Disasters" }).click();
   await expect(page.getByTestId("hazard-level")).toBeVisible();
   const body = await page.locator("body").innerText();
   expect(body).not.toContain("Latest Qualified Ocean State");

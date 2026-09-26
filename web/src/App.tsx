@@ -1,31 +1,20 @@
-import {
-  lazy,
-  Suspense,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import {
   Waves,
   Map,
-  Layers3,
   ShieldCheck,
   Download,
   Settings2,
   Menu,
   Search,
-  Thermometer,
-  LineChart,
-  Sigma,
-  Grid3x3,
-  ArrowRight,
   RefreshCw,
   MapPin,
-  ChevronLeft,
   ChevronRight,
-  Info,
+  ArrowRight,
   Flame,
+  Sigma,
+  Crosshair,
+  Layers3,
 } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { MapView } from "./components/MapView";
@@ -33,40 +22,44 @@ import { DiagnosticMap } from "./components/DiagnosticMap";
 import { Profile } from "./components/Profile";
 import { getJson, loadReplay } from "./field/api";
 import {
-  DIAGNOSTIC_UNIT,
   asLayer,
-  diagnosticAt,
   format,
   isDiagnostic,
-  offset,
   resolve,
+  type DiagnosticKind,
   type MapLayer,
   type Palette,
+  type Selection,
 } from "./field/contract";
 import { type ScaleMode } from "./field/colors";
 import { type ReplayData } from "./field/replayAdapter";
 import { download, mapPng, profileCsv } from "./field/exports";
+import OceanState from "./components/workspace/OceanState";
+import { IntegrityDrawer } from "./components/workspace/IntegrityDrawer";
+import type { Qualification } from "./components/LatestQualified";
+import type { HazardLayer, MapPanelOptions } from "./components/hazard/types";
 const DepthRenderer = lazy(() => import("./components/DepthRenderer"));
 const Validation = lazy(() => import("./components/Validation"));
-const MultiDate = lazy(() => import("./components/MultiDate"));
 const HazardTab = lazy(() => import("./components/Hazard"));
+const ModelScience = lazy(() => import("./components/workspace/ModelScience"));
 const LatestInputsTab = lazy(() => import("./components/LatestInputs"));
-const LatestQualifiedTab = lazy(() => import("./components/LatestQualified"));
-const LatestHazardPanel = lazy(() =>
-  import("./components/LatestQualified").then((m) => ({
-    default: m.LatestHazardPanel,
-  })),
-);
-import type { Qualification } from "./components/LatestQualified";
-const routes = [
-  { id: "replay", name: "Historical Replay", icon: Map },
-  { id: "depth", name: "3D Depth View", icon: Layers3 },
-  { id: "hazard", name: "Ocean Hazard Indicators", icon: Flame },
-  { id: "latest", name: "Latest Inputs", icon: RefreshCw },
+
+/** Four workspaces. Everything else is a tool, one click away. */
+const workspaces = [
+  { id: "ocean", name: "Ocean State", icon: Map },
+  { id: "events", name: "Events & Disasters", icon: Flame },
+  { id: "science", name: "Model Science", icon: Sigma },
+  { id: "scenario", name: "Scenario", icon: Crosshair },
+];
+const tools = [
+  { id: "inputs", name: "Latest Inputs", icon: RefreshCw },
   { id: "validation", name: "Provenance & Validation", icon: ShieldCheck },
   { id: "exports", name: "Exports", icon: Download },
   { id: "settings", name: "Settings", icon: Settings2 },
 ];
+/** Hash routes from earlier builds keep working: they open the equivalent workspace. */
+const OCEAN_ALIASES = ["", "ocean", "replay", "depth"];
+
 function readSettings() {
   try {
     return JSON.parse(localStorage.getItem("oceanembed-settings") || "{}");
@@ -78,8 +71,10 @@ const initialSettings = readSettings();
 const defaultDate = /^\d{4}-\d{2}-\d{2}$/.test(initialSettings.date || "")
   ? initialSettings.date
   : "2021-06-15";
+
 export default function App() {
-  const [route, setRoute] = useState(location.hash.slice(1) || "replay"),
+  const initialHash = location.hash.slice(1);
+  const [route, setRoute] = useState(initialHash || "ocean"),
     [menu, setMenu] = useState(false);
   const [date, setDate] = useState(defaultDate),
     [data, setData] = useState<ReplayData | null>(null),
@@ -87,14 +82,13 @@ export default function App() {
     [error, setError] = useState("");
   const [record, setRecord] = useState<string[]>([]),
     [depth, setDepth] = useState(7),
-    // One control, four choices. The two depth-integrated diagnostics are map
-    // layers only; `asLayer` gives the depth-indexed layer the 3D view needs.
-    [display, setDisplay] = useState<MapLayer>("temperature");
-  // Phase 8B: the latest tab's name and every qualified claim come from the
-  // frozen qualification artifact on the server, never from this file.
+    [display, setDisplay] = useState<HazardLayer>("temperature");
+  // The latest workspace's name and every qualified claim come from the frozen
+  // qualification artifact on the server, never from this file.
   const [qual, setQual] = useState<Qualification | null>(null),
-    [latestData, setLatestData] = useState<ReplayData | null>(null),
-    [latest3d, setLatest3d] = useState(false);
+    [qualLoaded, setQualLoaded] = useState(false);
+  const [oceanSource, setOceanSource] = useState<"historical" | "latest">("historical");
+  const [threeD, setThreeD] = useState(initialHash === "depth");
   const [lat, setLat] = useState(String(initialSettings.lat ?? 15.25)),
     [lon, setLon] = useState(String(initialSettings.lon ?? 87.75));
   const [coords, setCoords] = useState<[number, number]>([
@@ -109,17 +103,16 @@ export default function App() {
         : "thermal",
   );
   // Default "field": one colour scale over the whole reconstruction, so depths
-  // and dates are comparable. "slice" restores the old per-depth auto-stretch.
+  // and dates are comparable. "slice" restores the per-depth auto-stretch.
   const [scaleMode, setScaleMode] = useState<ScaleMode>(
     initialSettings.scaleMode === "slice" ? "slice" : "field",
   );
   const [query, setQuery] = useState("");
   const [exaggeration, setExaggeration] = useState(700),
     [clip, setClip] = useState<[number, number]>([0, 14]);
-  // Exploded stack by default on the depth page: at true spacing eleven of the
-  // fifteen levels fall inside the top fifth of the axis and are unreadable.
-  // The renderer states in the view that the spacing is then not to scale, and
-  // 0 restores the true-depth layout.
+  // Exploded stack by default: at true spacing eleven of the fifteen levels fall
+  // inside the top fifth of the axis and are unreadable. The renderer states in
+  // the view that the spacing is then not to scale.
   const [explode, setExplode] = useState(1),
     [layerCount, setLayerCount] = useState(5);
   const [enable3d, setEnable3d] = useState(
@@ -146,39 +139,54 @@ export default function App() {
       if (!controller.signal.aborted) setLoading(false);
     }
   }, []);
+  // A real replayed day that a page already loaded (event playback) is shown
+  // directly; the page is not blanked between frames.
+  const showHistorical = useCallback((next: ReplayData) => {
+    pending.current?.abort();
+    setDate(next.field.effectiveDate);
+    setData(next);
+    setError("");
+    setLoading(false);
+  }, []);
   useEffect(() => {
     void request(defaultDate, true);
     getJson<{ date_range: string[] }>("/api/health")
-      .then((r) => setRecord(r.date_range))
+      .then((r) => setRecord(r?.date_range ?? []))
       .catch(() => {});
     getJson<Qualification>("/api/latest/qualification")
-      .then(setQual)
-      .catch(() => setQual(null));
+      .then((q) => setQual(q && typeof q === "object" && "qualified" in q ? q : null))
+      .catch(() => setQual(null))
+      .finally(() => setQualLoaded(true));
     return () => pending.current?.abort();
   }, [request]);
   useEffect(() => {
     const change = () => {
-      setRoute(location.hash.slice(1) || "replay");
+      const h = location.hash.slice(1);
+      setRoute(h || "ocean");
+      if (h === "replay" || h === "depth") setOceanSource("historical");
+      if (h === "depth") setThreeD(true);
+      if (h === "replay") setThreeD(false);
       setMenu(false);
     };
     window.addEventListener("hashchange", change);
     return () => window.removeEventListener("hashchange", change);
   }, []);
-  // One explorer, two sources. In the qualified latest mode the SAME map, 3D
-  // renderer and profile below are handed the latest field instead of the
-  // historical one; nothing about how they draw it changes.
-  const latestMode = route === "latest" && !!qual?.qualified;
-  const source = latestMode ? latestData : data;
-  const f = source?.field,
-    selection = f ? resolve(f, ...coords) : null;
-  const withheld = f?.diagnostics?.withheld ?? [];
-  const shown: MapLayer =
-    isDiagnostic(display) && withheld.includes(display) ? "temperature" : display;
-  const layer = asLayer(shown),
-    diagnosticView = isDiagnostic(shown);
-  const threeD = latestMode ? latest3d : route === "depth";
-  const setThreeD = (v: boolean) =>
-    latestMode ? setLatest3d(v) : navigate(v ? "depth" : "replay");
+  // #latest opens the latest source only where the latest state is qualified;
+  // otherwise it is the Latest Inputs tool and Ocean State stays historical.
+  useEffect(() => {
+    if (route === "latest" && qualLoaded && qual?.qualified) setOceanSource("latest");
+  }, [route, qualLoaded, qual]);
+  const view = OCEAN_ALIASES.includes(route)
+    ? "ocean"
+    : route === "latest"
+      ? !qualLoaded
+        ? "pending"
+        : qual?.qualified
+          ? "ocean"
+          : "inputs"
+      : route === "hazard"
+        ? "events"
+        : route;
   const select = (a: number, b: number) => {
     setCoords([a, b]);
     setLat(String(a));
@@ -193,17 +201,11 @@ export default function App() {
     value.setUTCDate(value.getUTCDate() + days);
     void request(value.toISOString().slice(0, 10));
   };
-  const current =
-    f && selection && selection.row >= 0
-      ? offset(f, selection.row, selection.col, depth)
-      : -1;
   const changeDepth = (k: number) => {
     setDepth(k);
     if (k < clip[0] || k > clip[1])
       setClip([Math.min(k, clip[0]), Math.max(k, clip[1])]);
   };
-  const scientificView =
-    route === "replay" || route === "depth" || (latestMode && !!latestData);
   async function exportAction(action: () => Promise<void> | void) {
     setExportError("");
     setExportBusy(true);
@@ -214,7 +216,8 @@ export default function App() {
     } finally {
       setExportBusy(false);
     }
-  }  // Quick-jump: accepts "lat, lon" inside the domain, or an ISO date. It only
+  }
+  // Quick-jump: accepts "lat, lon" inside the domain, or an ISO date. It only
   // moves the existing selection/date state - it performs no inference and has
   // no separate data path.
   const jumpTo = useCallback(
@@ -223,13 +226,11 @@ export default function App() {
       if (!text) return;
       const isoDate = text.match(/^(\d{4}-\d{2}-\d{2})$/);
       if (isoDate) {
-        setDate(isoDate[1]);
+        void request(isoDate[1]);
         setQuery("");
         return;
       }
-      const pair = text.match(
-        /^\s*(-?\d+(?:\.\d+)?)\s*[, ]\s*(-?\d+(?:\.\d+)?)\s*$/,
-      );
+      const pair = text.match(/^\s*(-?\d+(?:\.\d+)?)\s*[, ]\s*(-?\d+(?:\.\d+)?)\s*$/);
       if (!pair) return;
       const nextLat = Number(pair[1]);
       const nextLon = Number(pair[2]);
@@ -239,8 +240,235 @@ export default function App() {
       setCoords([nextLat, nextLon]);
       setQuery("");
     },
-    [setDate, setLat, setLon, setCoords],
+    [request],
   );
+
+  const renderProfile = (src: ReplayData, sel: Selection) => (
+    <Profile field={src.field} selection={sel} depth={depth} />
+  );
+  // One map, one 3D renderer and one profile serve every source and workspace.
+  // A workspace chooses the layer and may add an overlay; none draws a second map.
+  const renderMapPanel = (src: ReplayData, sel: Selection, o: MapPanelOptions) => {
+    const fv = src.field;
+    const support = o.layer === "support";
+    const diagnostic: DiagnosticKind | null =
+      !support && isDiagnostic(o.layer as MapLayer) ? (o.layer as DiagnosticKind) : null;
+    const drawLayer = support ? "temperature" : asLayer(o.layer as MapLayer);
+    return (
+      <section className="panel map-panel">
+        <div className="panel-heading">
+          <div>
+            <span className="eyebrow">
+              {o.eyebrow ?? (o.threeD ? "15-DEPTH RECONSTRUCTED THERMAL FIELD" : "SURFACE OBSERVATIONS → SUBSURFACE STRUCTURE")}
+            </span>
+            <h2>{o.title ?? (o.threeD ? "3D Depth View" : "North Indian Ocean")}</h2>
+          </div>
+          {o.headerExtra}
+          <div className="view-switch">
+            <Button size="sm" variant={!o.threeD ? "default" : "ghost"} onClick={() => o.setThreeD(false)}>
+              2D map
+            </Button>
+            <Button size="sm" variant={o.threeD ? "default" : "ghost"} onClick={() => o.setThreeD(true)}>
+              3D depth
+            </Button>
+          </div>
+        </div>
+        {o.threeD && (
+          <>
+            <div className="depth-controls">
+              <label>
+                Vertical exaggeration · {exaggeration}×
+                <input
+                  aria-label="Vertical exaggeration"
+                  type="range"
+                  min="100"
+                  max="2200"
+                  step="100"
+                  value={exaggeration}
+                  onChange={(e) => setExaggeration(+e.target.value)}
+                />
+              </label>
+              <label>
+                Clip from
+                <select
+                  aria-label="Clip from"
+                  value={clip[0]}
+                  onChange={(e) => {
+                    const k = +e.target.value;
+                    setClip([k, Math.max(k, clip[1])]);
+                    if (depth < k) setDepth(k);
+                  }}
+                >
+                  {fv.depths.map((d, k) => (
+                    <option key={d} value={k}>
+                      {d} m
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Clip to
+                <select
+                  aria-label="Clip to"
+                  value={clip[1]}
+                  onChange={(e) => {
+                    const k = +e.target.value;
+                    setClip([Math.min(k, clip[0]), k]);
+                    if (depth > k) setDepth(k);
+                  }}
+                >
+                  {fv.depths.map((d, k) => (
+                    <option key={d} value={k}>
+                      {d} m
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Layers
+                <select aria-label="Layers" value={layerCount} onChange={(e) => setLayerCount(+e.target.value)}>
+                  {[3, 4, 5, 6, 8].map((n) => (
+                    <option key={n} value={n}>
+                      {n} sheets
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Separation · {explode === 0 ? "true depth" : `${Math.round(explode * 100)}%`}
+                <input
+                  type="range"
+                  aria-label="Layer separation"
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  value={explode}
+                  onChange={(e) => setExplode(+e.target.value)}
+                />
+              </label>
+            </div>
+            {!enable3d && (
+              <div className="notice">
+                Lighter 2D view is active for this device.{" "}
+                <Button size="sm" variant="outline" onClick={() => setEnable3d(true)}>
+                  Enable 3D
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+        {o.threeD && (diagnostic || support) && (
+          <p className="notice" data-testid="diagnostic-3d-note">
+            {support
+              ? "Thermal support is read from TCHP, a depth-integrated surface, so it has no 3D depth stack."
+              : "D26 and TCHP are depth-integrated surfaces, so they have no 3D depth stack."}{" "}
+            The volume below shows reconstructed temperature; switch to the map view to see the selected{" "}
+            {support ? "category map" : "diagnostic"}.
+          </p>
+        )}
+        <div
+          className="map-stage"
+          data-testid="map-stage"
+          data-field-date={fv.effectiveDate}
+          data-view={o.threeD && enable3d ? "3d" : "2d"}
+        >
+          {o.threeD && enable3d ? (
+            <Suspense fallback={<p className="empty">Loading local 3D renderer…</p>}>
+              <DepthRenderer
+                field={fv}
+                layer={drawLayer}
+                depth={depth}
+                palette={palette}
+                selection={sel}
+                onSelect={select}
+                exaggeration={exaggeration}
+                clip={clip}
+                scaleMode={scaleMode}
+                explode={explode}
+                layerCount={layerCount}
+              />
+            </Suspense>
+          ) : support && o.supportMap ? (
+            o.supportMap
+          ) : diagnostic ? (
+            <DiagnosticMap field={fv} kind={diagnostic} selection={sel} onSelect={select} />
+          ) : (
+            <MapView
+              field={fv}
+              layer={drawLayer}
+              depth={depth}
+              palette={palette}
+              selection={sel}
+              onSelect={select}
+              scaleMode={scaleMode}
+            />
+          )}
+          {!(o.threeD && enable3d) && o.overlay}
+        </div>
+        <div className="scrubber">
+          <label htmlFor="depth-scrub">
+            DEPTH SCRUB <strong>{fv.depths[depth]} m</strong>
+          </label>
+          <input
+            id="depth-scrub"
+            aria-label="Depth scrub"
+            title="Snaps to the 15 mandated levels. No inference or continuous-depth interpolation."
+            type="range"
+            min="0"
+            max="14"
+            step="1"
+            value={depth}
+            onChange={(e) => changeDepth(+e.target.value)}
+          />
+          <div className="depth-ticks">
+            {fv.depths.map((d, k) => (
+              <button
+                key={d}
+                className={k === depth ? "selected" : ""}
+                onClick={() => changeDepth(k)}
+                aria-label={`Select ${d} metres`}
+              >
+                {d}
+              </button>
+            ))}
+          </div>
+        </div>
+        <form
+          className="coordinate-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            select(Number(lat), Number(lon));
+          }}
+        >
+          <MapPin size={17} />
+          <label>
+            Latitude °N
+            <input aria-label="Latitude" type="number" step="any" value={lat} onChange={(e) => setLat(e.target.value)} required />
+          </label>
+          <label>
+            Longitude °E
+            <input aria-label="Longitude" type="number" step="any" value={lon} onChange={(e) => setLon(e.target.value)} required />
+          </label>
+          <Button type="submit" variant="outline" size="sm">
+            Inspect column <ArrowRight size={14} />
+          </Button>
+        </form>
+      </section>
+    );
+  };
+
+  const f = data?.field;
+  const selection = f ? resolve(f, ...coords) : null;
+  const nameOf = (id: string) =>
+    (id === "inputs" && qual && !qual.qualified && qual.tab_name) ||
+    [...workspaces, ...tools].find((r) => r.id === id)?.name ||
+    "Ocean State";
+  const toolTitle: Record<string, string> = {
+    inputs: "Near-real-time input telemetry.",
+    validation: "Evidence behind the reconstruction.",
+    exports: "Take the science with you.",
+    settings: "Your local workspace.",
+  };
 
   return (
     <div className={`app ${menu ? "menu-open" : ""}`}>
@@ -256,7 +484,7 @@ export default function App() {
         Skip to content
       </a>
       <aside className="sidebar">
-        <a href="#replay" className="brand">
+        <a href="#ocean" className="brand">
           <div className="brand-mark">
             <Waves size={28} />
           </div>
@@ -265,33 +493,40 @@ export default function App() {
             <small>SATELLITE EMBEDDING ENGINE</small>
           </span>
         </a>
-        <div className="nav-section-label">WORKSPACE</div>
+        <div className="nav-section-label">WORKSPACES</div>
         <nav aria-label="Main navigation">
-          {routes.map((item) => (
+          {workspaces.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
-              className={route === item.id ? "active" : ""}
-              aria-current={route === item.id ? "page" : undefined}
+              className={view === item.id ? "active" : ""}
+              aria-current={view === item.id ? "page" : undefined}
             >
               <item.icon size={18} />
-              <span>
-                {(item.id === "latest" && qual?.tab_name) || item.name}
-              </span>
-              {route === item.id && <span className="nav-dot" />}
+              <span>{item.name}</span>
+              {view === item.id && <span className="nav-dot" />}
+            </a>
+          ))}
+        </nav>
+        <div className="nav-section-label tools">TOOLS</div>
+        <nav aria-label="Tools" className="tools">
+          {tools.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={view === item.id ? "active" : ""}
+              aria-current={view === item.id ? "page" : undefined}
+            >
+              <item.icon size={15} />
+              <span>{item.name}</span>
             </a>
           ))}
         </nav>
         <div className="sidebar-bottom">
           <div className="local-mark">
             <span className="status-dot" />
-            LOCAL HISTORICAL MODE
+            FROZEN L2 · 2024 ARGO PROTECTED
           </div>
-          <p>
-            Surface observations.
-            <br />
-            Depth-resolved understanding.
-          </p>
           <small>
             OceanEmbed · SIH26066
             <br />
@@ -313,11 +548,7 @@ export default function App() {
           </Button>
           <div className="breadcrumb">
             WORKSPACE <ChevronRight size={13} />
-            <span>
-              {(route === "latest" && qual?.tab_name) ||
-                routes.find((r) => r.id === route)?.name ||
-                "Historical Replay"}
-            </span>
+            <span>{nameOf(view)}</span>
           </div>
           <form
             className="topbar-search"
@@ -336,885 +567,231 @@ export default function App() {
               aria-label="Jump to a coordinate or a historical date"
             />
           </form>
-          <div className="local-mark">
-            <span className="status-dot" />
-            OFFLINE READY <span className="topbar-divider">/</span> FROZEN L2
-          </div>
+          <IntegrityDrawer />
         </header>
         <main id="main-content" tabIndex={-1}>
-          <div className="page-title">
-            <div>
-              <span className="eyebrow">
-                {latestMode && qual
-                  ? `NORTH INDIAN OCEAN / ${qual.tab_name.toUpperCase()}`
-                  : "NORTH INDIAN OCEAN / HISTORICAL REPLAY"}
-              </span>
-              <h1>
-                {latestMode
-                  ? "The latest available qualified reconstruction."
-                  : route === "depth"
-                  ? "Explore the ocean in depth."
-                  : route === "validation"
-                    ? "Evidence behind the reconstruction."
-                    : route === "exports"
-                      ? "Take the science with you."
-                      : route === "settings"
-                        ? "Your local workspace."
-                        : "The surface tells a deeper story."}
-              </h1>
-              <p className="muted">
-                {latestMode
-                  ? `Valid ${f?.effectiveDate ?? "—"} · the common date of all seven near-real-time inputs, not the ocean “now” · 5–30°N, 45–105°E`
-                  : route === "replay" || route === "depth"
-                    ? "Reconstructed Subsurface Temperature · 5–30°N, 45–105°E · 0.25° grid"
-                    : "One frozen scientific core. Transparent inputs, outputs and provenance."}
-              </p>
-            </div>
-            <span className="mode-badge">
-              {latestMode && qual ? qual.banner : "HISTORICAL REPLAY"}
-            </span>
-          </div>
-          {(scientificView || route === "exports" || route === "hazard") && (
-            <section className="controls panel">
-              {!latestMode && (
-              <div className="date-control">
-                <label htmlFor="historical-date">HISTORICAL DATE</label>
-                <div className="action-row">
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    aria-label="Previous day"
-                    disabled={loading || !date || date === record[0]}
-                    onClick={() => shiftDate(-1)}
-                  >
-                    <ChevronLeft size={16} />
-                  </Button>
-                  <input
-                    id="historical-date"
-                    type="date"
-                    min={record[0]}
-                    max={record[1]}
-                    value={date}
-                    onChange={(e) => {
-                      if (e.target.value) void request(e.target.value);
-                    }}
-                  />
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    aria-label="Next day"
-                    disabled={loading || !date || date === record[1]}
-                    onClick={() => shiftDate(1)}
-                  >
-                    <ChevronRight size={16} />
-                  </Button>
-                </div>
+          {toolTitle[view] && (
+            <div className="page-title">
+              <div>
+                <span className="eyebrow">NORTH INDIAN OCEAN / TOOLS</span>
+                <h1>{toolTitle[view]}</h1>
+                <p className="muted">One frozen scientific core. Transparent inputs, outputs and provenance.</p>
               </div>
-              )}
-              <label>
-                DEPTH
-                <select
-                  aria-label="Depth"
-                  value={depth}
-                  onChange={(e) => changeDepth(+e.target.value)}
-                  disabled={!f}
-                >
-                  {(f?.depths || []).map((d, k) => (
-                    <option value={k} key={d}>
-                      {d} m{d === 0 ? " · nominal" : ""}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="layer-control">
-                DISPLAY LAYER
-                <select
-                  aria-label="Display layer"
-                  value={shown}
-                  onChange={(e) => setDisplay(e.target.value as MapLayer)}
-                >
-                  <option value="temperature">Reconstructed temperature</option>
-                  <option value="anomaly">Anomaly from climatology</option>
-                  {f?.diagnostics && (
-                    <>
-                      {!withheld.includes("d26") && (
-                        <option value="d26">D26 · 26 °C isotherm depth (m)</option>
-                      )}
-                      {!withheld.includes("tchp") && (
-                        <option value="tchp">TCHP · heat potential (kJ/cm²)</option>
-                      )}
-                    </>
-                  )}
-                </select>
-              </label>
-              {!latestMode && (
-                <Button
-                  variant="outline"
-                  disabled={loading || !date}
-                  onClick={() => void request(date, true)}
-                >
-                  <RefreshCw size={15} className={loading ? "spin" : ""} />
-                  Run frozen L2
-                </Button>
-              )}
-            </section>
+            </div>
           )}
-          {route === "latest" && !latestMode ? (
-            // Deliberately outside the replay-data guard: Latest Inputs needs
-            // no replay result, and a failure on either side must never take
-            // the other down.
-            <Suspense
-              fallback={<p className="empty">Loading latest inputs…</p>}
-            >
+          {view === "pending" ? (
+            <p className="empty">Reading the latest-state qualification…</p>
+          ) : view === "ocean" ? (
+            <OceanState
+              source={oceanSource}
+              setSource={(s) => {
+                setOceanSource(s);
+                if (route !== "ocean") navigate("ocean");
+              }}
+              historical={data}
+              historicalDate={date}
+              historicalLoading={loading}
+              historicalError={error}
+              record={record}
+              request={(day, force) => void request(day, force)}
+              shiftDate={shiftDate}
+              qualification={qual}
+              coords={coords}
+              onSelect={select}
+              depth={depth}
+              onDepth={changeDepth}
+              display={display}
+              setDisplay={setDisplay}
+              threeD={threeD}
+              setThreeD={setThreeD}
+              renderMapPanel={renderMapPanel}
+              renderProfile={renderProfile}
+              onOpenEvents={() => navigate("events")}
+            />
+          ) : view === "events" || view === "scenario" ? (
+            <Suspense fallback={<p className="empty">Loading {view === "events" ? "event intelligence" : "scenario analysis"}…</p>}>
+              <HazardTab
+                workspace={view}
+                historical={data}
+                historicalDate={date}
+                historicalLoading={loading}
+                historicalError={error}
+                showHistorical={showHistorical}
+                retryHistorical={() => void request(date, true)}
+                requestHistorical={(day) => void request(day)}
+                qualification={qual}
+                coords={coords}
+                onSelect={select}
+                depth={depth}
+                onDepth={changeDepth}
+                renderMapPanel={renderMapPanel}
+                renderProfile={renderProfile}
+              />
+            </Suspense>
+          ) : view === "science" ? (
+            <Suspense fallback={<p className="empty">Loading model science…</p>}>
+              <ModelScience
+                historical={data}
+                historicalDate={date}
+                qualification={qual}
+                coords={coords}
+                onSelect={select}
+                depth={depth}
+                renderMapPanel={renderMapPanel}
+              />
+            </Suspense>
+          ) : view === "inputs" ? (
+            // Deliberately independent of the replay data: Latest Inputs needs no
+            // reconstruction, and a failure on either side never takes the other down.
+            <Suspense fallback={<p className="empty">Loading latest inputs…</p>}>
               <LatestInputsTab />
             </Suspense>
-          ) : route === "validation" ? (
-            <Suspense
-              fallback={<p className="empty">Loading validation page…</p>}
-            >
+          ) : view === "validation" ? (
+            <Suspense fallback={<p className="empty">Loading validation page…</p>}>
               <Validation />
             </Suspense>
-          ) : route === "settings" ? (
+          ) : view === "settings" ? (
             <section className="panel settings">
               <h2>Display &amp; launch preferences</h2>
-              <p className="muted">
-                Saved in this browser. Scientific units remain °C and metres.
-              </p>
+              <p className="muted">Saved in this browser. Scientific units remain °C and metres.</p>
               <label>
                 Temperature colormap
-                <select
-                  value={palette}
-                  onChange={(e) => setPalette(e.target.value as Palette)}
-                >
-                  <option value="thermal">
-                    Thermal · ocean-temperature default
-                  </option>
+                <select value={palette} onChange={(e) => setPalette(e.target.value as Palette)}>
+                  <option value="thermal">Thermal · ocean-temperature default</option>
                   <option value="viridis">Viridis</option>
-                  <option value="cividis">
-                    Cividis · color-vision accessible
-                  </option>
+                  <option value="cividis">Cividis · color-vision accessible</option>
                 </select>
               </label>
-              <p className="small muted">
-                Anomaly always uses a blue–white–red scale centered at zero.
-              </p>
+              <p className="small muted">Anomaly always uses a blue–white–red scale centered at zero.</p>
               <label>
                 Color scale range
-                <select
-                  value={scaleMode}
-                  onChange={(e) => setScaleMode(e.target.value as ScaleMode)}
-                >
-                  <option value="field">
-                    Whole reconstruction · all 15 depths (default)
-                  </option>
-                  <option value="slice">
-                    Auto-stretch to the displayed depth only
-                  </option>
+                <select value={scaleMode} onChange={(e) => setScaleMode(e.target.value as ScaleMode)}>
+                  <option value="field">Whole reconstruction · all 15 depths (default)</option>
+                  <option value="slice">Auto-stretch to the displayed depth only</option>
                 </select>
               </label>
               <p className="small muted">
-                Both ranges are computed from the values returned for the
-                requested date — neither is a hardcoded temperature range. The
-                default spans all 15 depths so a 0 m map and a 500 m map mean the
-                same colours. Auto-stretching to one depth maximises contrast
-                inside that layer but makes depths and dates{" "}
-                <strong>not comparable</strong>: at 1000 m it renders ~6 °C water
-                in the same colours as ~30 °C surface water.
+                Both ranges are computed from the values returned for the requested date — neither is a hardcoded temperature
+                range. The default spans all 15 depths so a 0 m map and a 500 m map mean the same colours. Auto-stretching to one
+                depth maximises contrast inside that layer but makes depths and dates <strong>not comparable</strong>: at 1000 m
+                it renders ~6 °C water in the same colours as ~30 °C surface water.
               </p>
               <label>
-                <input
-                  type="checkbox"
-                  checked={!enable3d}
-                  onChange={(e) => setEnable3d(!e.target.checked)}
-                />{" "}
-                Prefer the lighter 2D view
+                <input type="checkbox" checked={!enable3d} onChange={(e) => setEnable3d(!e.target.checked)} /> Prefer the
+                lighter 2D view
               </label>
               <Button
                 onClick={() => {
                   try {
                     localStorage.setItem(
                       "oceanembed-settings",
-                      JSON.stringify({
-                        palette,
-                        scaleMode,
-                        prefer2d: !enable3d,
-                        date,
-                        lat: coords[0],
-                        lon: coords[1],
-                      }),
+                      JSON.stringify({ palette, scaleMode, prefer2d: !enable3d, date, lat: coords[0], lon: coords[1] }),
                     );
                     setSaved(
                       `Saved launch date ${date} and requested location ${coords[0].toFixed(2)}°N, ${coords[1].toFixed(2)}°E.`,
                     );
                   } catch {
-                    setSaved(
-                      "Browser storage is unavailable. Settings apply to this session.",
-                    );
+                    setSaved("Browser storage is unavailable. Settings apply to this session.");
                   }
                 }}
               >
                 Save current date, location &amp; display settings
               </Button>
               <p role="status">{saved}</p>
-              <p className="muted small">
-                Local server: same origin · historical source paths and frozen
-                model configuration are managed by the repository.
-              </p>
             </section>
-          ) : (
-            <>
-              {latestMode && qual && (
-                <Suspense
-                  fallback={
-                    <p className="empty">Loading latest qualified state…</p>
-                  }
-                >
-                  <LatestQualifiedTab
-                    qualification={qual}
-                    onData={setLatestData}
-                  />
-                </Suspense>
-              )}
-              {!latestMode && loading && (
-                <div className="loading-state panel" role="status">
-                  <Waves className="spin" />
-                  <h2>Reconstructing {date}</h2>
-                  <p>
-                    Reading local surface inputs and the frozen L2 field. All 15
-                    depths arrive together.
-                  </p>
-                  <div className="loading-line" />
-                </div>
-              )}
-              {!latestMode && error && (
-                <section className="panel error-state" role="alert">
-                  <h2>Historical reconstruction unavailable</h2>
-                  <p>{error}</p>
-                  <Button onClick={() => void request(date, true)}>
-                    Retry local replay
-                  </Button>
-                </section>
-              )}
-              {(latestMode || (!loading && !error)) && f && source && selection && (
-                <>
-                  {scientificView ? (
-                    <>
-                      <div className="stats-grid">
-                        <Stat
-                          label={`L2 TEMPERATURE / ${f.depths[depth]} M`}
-                          icon={Thermometer}
-                          value={
-                            current >= 0
-                              ? format(f.temperature[current])
-                              : "Unavailable"
-                          }
-                          unit="°C"
-                        />
-                        <Stat
-                          label="L0 CLIMATOLOGY"
-                          icon={LineChart}
-                          value={
-                            current >= 0
-                              ? format(f.climatology[current])
-                              : "Unavailable"
-                          }
-                          unit="°C"
-                        />
-                        <Stat
-                          label="ANOMALY FROM CLIMATOLOGY"
-                          icon={Sigma}
-                          value={
-                            current >= 0
-                              ? format(f.anomaly[current])
-                              : "Unavailable"
-                          }
-                          unit="°C"
-                        />
-                        <Stat
-                          label="DATE-SPECIFIC INPUT SUPPORT"
-                          icon={Grid3x3}
-                          value={f.provenance.n_supported_cells.toLocaleString()}
-                          unit="cells"
-                        />
-                        {f.diagnostics &&
-                          (["d26", "tchp"] as const)
-                            .filter((k) => !withheld.includes(k))
-                            .map((kind) => {
-                            const d = diagnosticAt(f, kind, selection);
-                            return (
-                              <Stat
-                                key={kind}
-                                label={
-                                  kind === "d26"
-                                    ? "D26 · 26 °C ISOTHERM DEPTH"
-                                    : "TCHP · HEAT POTENTIAL"
-                                }
-                                icon={kind === "d26" ? Waves : Flame}
-                                value={
-                                  !d || !Number.isFinite(d.value)
-                                    ? "No 26 °C crossing"
-                                    : d.physical === "SUPPORTED"
-                                      ? format(d.value, 1)
-                                      : "Below local seafloor"
-                                }
-                                unit={
-                                  !d || !Number.isFinite(d.value)
-                                    ? d?.status === "SURFACE_BELOW_26"
-                                      ? "column below 26 °C"
-                                      : "not a value"
-                                    : d.physical === "SUPPORTED"
-                                      ? DIAGNOSTIC_UNIT[kind]
-                                      : `raw ${format(d.value, 1)} ${DIAGNOSTIC_UNIT[kind]} — no water column`
-                                }
-                              />
-                            );
-                          })}
-                      </div>
-                      <div className="explorer-grid">
-                        <div className="map-column">
-                          <section className="panel map-panel">
-                            <div className="panel-heading">
-                              <div>
-                                <span className="eyebrow">
-                                  {threeD
-                                    ? "15-DEPTH RECONSTRUCTED THERMAL FIELD"
-                                    : "SURFACE OBSERVATIONS → SUBSURFACE STRUCTURE"}
-                                </span>
-                                <h2>
-                                  {threeD
-                                    ? "3D Depth View"
-                                    : "North Indian Ocean"}
-                                </h2>
-                              </div>
-                              <div className="view-switch">
-                                <Button
-                                  size="sm"
-                                  variant={!threeD ? "default" : "ghost"}
-                                  onClick={() => setThreeD(false)}
-                                >
-                                  2D map
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant={threeD ? "default" : "ghost"}
-                                  onClick={() => setThreeD(true)}
-                                >
-                                  3D depth
-                                </Button>
-                              </div>
-                            </div>
-                            {threeD && (
-                              <>
-                                <div className="depth-controls">
-                                  <label>
-                                    Vertical exaggeration · {exaggeration}×
-                                    <input
-                                      aria-label="Vertical exaggeration"
-                                      type="range"
-                                      min="100"
-                                      max="2200"
-                                      step="100"
-                                      value={exaggeration}
-                                      onChange={(e) =>
-                                        setExaggeration(+e.target.value)
-                                      }
-                                    />
-                                  </label>
-                                  <label>
-                                    Clip from
-                                    <select
-                                      aria-label="Clip from"
-                                      value={clip[0]}
-                                      onChange={(e) => {
-                                        const k = +e.target.value;
-                                        setClip([k, Math.max(k, clip[1])]);
-                                        if (depth < k) setDepth(k);
-                                      }}
-                                    >
-                                      {f.depths.map((d, k) => (
-                                        <option key={d} value={k}>
-                                          {d} m
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </label>
-                                  <label>
-                                    Clip to
-                                    <select
-                                      aria-label="Clip to"
-                                      value={clip[1]}
-                                      onChange={(e) => {
-                                        const k = +e.target.value;
-                                        setClip([Math.min(k, clip[0]), k]);
-                                        if (depth > k) setDepth(k);
-                                      }}
-                                    >
-                                      {f.depths.map((d, k) => (
-                                        <option key={d} value={k}>
-                                          {d} m
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </label>
-                                  <label>
-                                    Layers
-                                    <select
-                                      aria-label="Layers"
-                                      value={layerCount}
-                                      onChange={(e) =>
-                                        setLayerCount(+e.target.value)
-                                      }
-                                    >
-                                      {[3, 4, 5, 6, 8].map((n) => (
-                                        <option key={n} value={n}>
-                                          {n} sheets
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </label>
-                                  <label>
-                                    Separation ·{" "}
-                                    {explode === 0
-                                      ? "true depth"
-                                      : `${Math.round(explode * 100)}%`}
-                                    <input
-                                      type="range"
-                                      aria-label="Layer separation"
-                                      min={0}
-                                      max={1}
-                                      step={0.05}
-                                      value={explode}
-                                      onChange={(e) =>
-                                        setExplode(+e.target.value)
-                                      }
-                                    />
-                                  </label>
-                                </div>
-                                {!enable3d && (
-                                  <div className="notice">
-                                    Lighter 2D view is active for this device.{" "}
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => setEnable3d(true)}
-                                    >
-                                      Enable 3D
-                                    </Button>
-                                  </div>
-                                )}
-                              </>
-                            )}
-                            {threeD && diagnosticView && (
-                              <p className="notice" data-testid="diagnostic-3d-note">
-                                D26 and TCHP are depth-integrated surfaces, so
-                                they have no 3D depth stack. The volume below
-                                shows reconstructed temperature; switch to the
-                                map view to see the selected diagnostic.
-                              </p>
-                            )}
-                            {threeD && enable3d ? (
-                              <Suspense
-                                fallback={
-                                  <p className="empty">
-                                    Loading local 3D renderer…
-                                  </p>
-                                }
-                              >
-                                <DepthRenderer
-                                  field={f}
-                                  layer={layer}
-                                  depth={depth}
-                                  palette={palette}
-                                  selection={selection}
-                                  onSelect={select}
-                                  exaggeration={exaggeration}
-                                  clip={clip}
-                                  scaleMode={scaleMode}
-                                  explode={explode}
-                                  layerCount={layerCount}
-                                />
-                              </Suspense>
-                            ) : diagnosticView && isDiagnostic(shown) ? (
-                              <DiagnosticMap
-                                field={f}
-                                kind={shown}
-                                selection={selection}
-                                onSelect={select}
-                              />
-                            ) : (
-                              <MapView
-                                field={f}
-                                layer={layer}
-                                depth={depth}
-                                palette={palette}
-                                selection={selection}
-                                onSelect={select}
-                                scaleMode={scaleMode}
-                              />
-                            )}
-                            <div className="scrubber">
-                              <label htmlFor="depth-scrub">
-                                DEPTH SCRUB <strong>{f.depths[depth]} m</strong>
-                              </label>
-                              <input
-                                id="depth-scrub"
-                                aria-label="Depth scrub"
-                                title="Snaps to the 15 mandated levels. No inference or continuous-depth interpolation."
-                                type="range"
-                                min="0"
-                                max="14"
-                                step="1"
-                                value={depth}
-                                onChange={(e) => changeDepth(+e.target.value)}
-                              />
-                              <div className="depth-ticks">
-                                {f.depths.map((d, k) => (
-                                  <button
-                                    key={d}
-                                    className={k === depth ? "selected" : ""}
-                                    onClick={() => changeDepth(k)}
-                                    aria-label={`Select ${d} metres`}
-                                  >
-                                    {d}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                            <form
-                              className="coordinate-form"
-                              onSubmit={(e) => {
-                                e.preventDefault();
-                                select(Number(lat), Number(lon));
-                              }}
-                            >
-                              <MapPin size={17} />
-                              <label>
-                                Latitude °N
-                                <input
-                                  aria-label="Latitude"
-                                  type="number"
-                                  step="any"
-                                  value={lat}
-                                  onChange={(e) => setLat(e.target.value)}
-                                  required
-                                />
-                              </label>
-                              <label>
-                                Longitude °E
-                                <input
-                                  aria-label="Longitude"
-                                  type="number"
-                                  step="any"
-                                  value={lon}
-                                  onChange={(e) => setLon(e.target.value)}
-                                  required
-                                />
-                              </label>
-                              <Button type="submit" variant="outline" size="sm">
-                                Inspect column <ArrowRight size={14} />
-                              </Button>
-                            </form>
-                          </section>
-                          <section className="panel">
-                            <div className="panel-heading">
-                              <div>
-                                <span className="eyebrow">
-                                  OBSERVED PREDICTORS / SELECTED GRID CELL
-                                </span>
-                                <h2>Seven surface inputs</h2>
-                              </div>
-                            </div>
-                            {selection.row < 0 ? (
-                              <p className="empty">
-                                No inputs outside the domain.
-                              </p>
-                            ) : (
-                              <div className="inputs-grid">
-                                {Object.entries(source.surface).map(
-                                  ([name, input]) => (
-                                    <div key={name} className="input-tile">
-                                      <span>
-                                        {name
-                                          .replaceAll("_", " ")
-                                          .toUpperCase()}
-                                      </span>
-                                      <strong data-testid={`surface-${name}`}>
-                                        {format(
-                                          input.values[
-                                            selection.row * f.lon.length +
-                                              selection.col
-                                          ],
-                                        )}{" "}
-                                        <small>{input.units}</small>
-                                      </strong>
-                                      <p>{input.product}</p>
-                                    </div>
-                                  ),
-                                )}
-                              </div>
-                            )}
-                          </section>
-                        </div>
-                        <Profile
-                          field={f}
-                          selection={selection}
-                          depth={depth}
-                        />
-                      </div>
-                      <div className="disclosures">
-                        <p className="notice" data-testid="zero-note">
-                          <Info size={17} />
-                          <span>
-                            <strong>Nominal 0 m.</strong>{" "}
-                            {f.provenance.nominal_zero_m_note}
-                          </span>
-                        </p>
-                        <p
-                          className={`notice ${f.depths[depth] >= 500 ? "deep-active" : ""}`}
-                          data-testid="deep-note"
-                        >
-                          <Info size={17} />
-                          <span>
-                            <strong>Deep-ocean skill.</strong>{" "}
-                            {f.provenance.deep_skill_note}
-                          </span>
-                        </p>
-                      </div>
-                      <section className="panel provenance">
-                        <div className="panel-heading">
-                          <div>
-                            <span className="eyebrow">TRACEABLE BY DESIGN</span>
-                            <h2>{f.provenance.model_name}</h2>
-                          </div>
-                          <span className="chip" data-testid="inference-source">
-                            {f.provenance.inference_source}
-                          </span>
-                        </div>
-                        <div className="provenance-summary">
-                          <span>
-                            Latent width{" "}
-                            <strong>{f.provenance.latent_dim}</strong>
-                          </span>
-                          <span>
-                            Receptive field{" "}
-                            <strong>
-                              {f.provenance.receptive_field} ×{" "}
-                              {f.provenance.receptive_field}
-                            </strong>
-                          </span>
-                          <span>
-                            Parameters{" "}
-                            <strong>
-                              {f.provenance.n_parameters.toLocaleString()}
-                            </strong>
-                          </span>
-                          <span>
-                            Compute{" "}
-                            <strong>
-                              {f.provenance.compute_seconds === null
-                                ? "Validated cache"
-                                : `${format(f.provenance.compute_seconds, 3)} s`}
-                            </strong>
-                          </span>
-                        </div>
-                        <details>
-                          <summary>
-                            Inspect frozen hashes &amp; support semantics
-                          </summary>
-                          <dl>
-                            <dt>L2 state dictionary SHA256</dt>
-                            <dd>{f.provenance.l2_state_dict_sha256}</dd>
-                            <dt>Encoder SHA256</dt>
-                            <dd>{f.provenance.l2_encoder_sha256}</dd>
-                          </dl>
-                          <p>{f.provenance.climatology_defined_note}</p>
-                        </details>
-                        <p className="muted small">
-                          Only surface inputs at inference. {f.credits}
-                        </p>
-                      </section>
-                      {!latestMode && (
-                        <Suspense
-                          fallback={
-                            <p className="empty">Loading date comparison…</p>
-                          }
-                        >
-                          <MultiDate date={date} coords={coords} depth={depth} />
-                        </Suspense>
-                      )}
-                      {latestMode && (
-                        <Suspense fallback={null}>
-                          <LatestHazardPanel
-                            field={f}
-                            selection={selection}
-                            note={qual?.hazard_transfer_note}
-                          />
-                        </Suspense>
-                      )}
-                    </>
-                  ) : route === "hazard" ? (
-                    <Suspense
-                      fallback={
-                        <p className="empty">Loading hazard indicators…</p>
+          ) : view === "exports" ? (
+            f && selection ? (
+              <section className="panel">
+                <span className="eyebrow">ACTUAL OUTPUTS / {f.effectiveDate}</span>
+                <h2>Export the current reconstruction</h2>
+                <p>Full precision values, explicit missing values, frozen model provenance and product-specific credits.</p>
+                <div className="export-grid">
+                  <article>
+                    <Download />
+                    <h3>Selected profile</h3>
+                    <p>All 15 L2, L0 and anomaly values for the selected grid cell.</p>
+                    <Button
+                      disabled={selection.row < 0 || exportBusy}
+                      onClick={() =>
+                        void exportAction(() =>
+                          download(
+                            new Blob([profileCsv(f, selection)], { type: "text/csv;charset=utf-8" }),
+                            `OceanEmbed-${f.effectiveDate}-profile.csv`,
+                          ),
+                        )
                       }
                     >
-                      <HazardTab
-                        field={f}
-                        selection={selection}
-                        onSelect={select}
-                        onDate={(d) => {
-                          setDate(d);
-                          void request(d);
-                        }}
-                      />
-                    </Suspense>
-                  ) : route === "exports" ? (
-                    <section className="panel">
-                      <span className="eyebrow">
-                        ACTUAL OUTPUTS / {f.effectiveDate}
-                      </span>
-                      <h2>Export the current reconstruction</h2>
-                      <p>
-                        Full precision values, explicit missing values, frozen
-                        model provenance and product-specific credits.
-                      </p>
-                      <div className="export-grid">
-                        <article>
-                          <Download />
-                          <h3>Selected profile</h3>
-                          <p>
-                            All 15 L2, L0 and anomaly values for the selected
-                            grid cell.
-                          </p>
-                          <Button
-                            disabled={selection.row < 0 || exportBusy}
-                            onClick={() =>
-                              void exportAction(() =>
-                                download(
-                                  new Blob([profileCsv(f, selection)], {
-                                    type: "text/csv;charset=utf-8",
-                                  }),
-                                  `OceanEmbed-${f.effectiveDate}-profile.csv`,
-                                ),
-                              )
-                            }
-                          >
-                            Download CSV
-                          </Button>
-                        </article>
-                        <article>
-                          <Map />
-                          <h3>Current depth map</h3>
-                          <p>
-                            {f.depths[depth]} m · {layer} · actual color scale
-                            and attribution.
-                          </p>
-                          <Button
-                            disabled={exportBusy}
-                            onClick={() =>
-                              void exportAction(() =>
-                                mapPng({
-                                  field: f,
-                                  layer,
-                                  depth,
-                                  palette,
-                                  selection,
-                                  scaleMode,
-                                }),
-                              )
-                            }
-                          >
-                            Download PNG
-                          </Button>
-                        </article>
-                        <article>
-                          <Layers3 />
-                          <h3>Complete field</h3>
-                          <p>
-                            101 × 241 × 15, all three fields, support masks and
-                            provenance.
-                          </p>
-                          <Button
-                            disabled={exportBusy}
-                            onClick={() =>
-                              void exportAction(async () => {
-                                const response = await fetch(
-                                  `/api/export/field.nc?date=${f.effectiveDate}`,
-                                );
-                                if (!response.ok)
-                                  throw Error(
-                                    "NetCDF export failed. Check local replay server.",
-                                  );
-                                download(
-                                  await response.blob(),
-                                  `OceanEmbed-${f.effectiveDate}.nc`,
-                                );
-                              })
-                            }
-                          >
-                            Download NetCDF
-                          </Button>
-                        </article>
-                      </div>
-                      {exportBusy && <p role="status">Preparing export…</p>}
-                      {exportError && <p role="alert">{exportError}</p>}
-                      <p className="muted small">
-                        Selected request: {format(coords[0], 4)}°N,{" "}
-                        {format(coords[1], 4)}°E. Change location in Historical
-                        Replay.
-                      </p>
-                      <p className="notice">
-                        {f.provenance.nominal_zero_m_note}
-                        <br />
-                        {f.provenance.deep_skill_note}
-                      </p>
-                    </section>
-                  ) : (
-                    <section className="panel">
-                      <p>Page not found.</p>
-                      <Button onClick={() => navigate("replay")}>
-                        Open Historical Replay
-                      </Button>
-                    </section>
-                  )}
-                </>
-              )}
-            </>
+                      Download CSV
+                    </Button>
+                  </article>
+                  <article>
+                    <Map />
+                    <h3>Current depth map</h3>
+                    <p>
+                      {f.depths[depth]} m · {asLayer((display === "support" ? "temperature" : display) as MapLayer)} · actual
+                      color scale and attribution.
+                    </p>
+                    <Button
+                      disabled={exportBusy}
+                      onClick={() =>
+                        void exportAction(() =>
+                          mapPng({
+                            field: f,
+                            layer: asLayer((display === "support" ? "temperature" : display) as MapLayer),
+                            depth,
+                            palette,
+                            selection,
+                            scaleMode,
+                          }),
+                        )
+                      }
+                    >
+                      Download PNG
+                    </Button>
+                  </article>
+                  <article>
+                    <Layers3 />
+                    <h3>Complete field</h3>
+                    <p>101 × 241 × 15, all three fields, support masks and provenance.</p>
+                    <Button
+                      disabled={exportBusy}
+                      onClick={() =>
+                        void exportAction(async () => {
+                          const response = await fetch(`/api/export/field.nc?date=${f.effectiveDate}`);
+                          if (!response.ok) throw Error("NetCDF export failed. Check local replay server.");
+                          download(await response.blob(), `OceanEmbed-${f.effectiveDate}.nc`);
+                        })
+                      }
+                    >
+                      Download NetCDF
+                    </Button>
+                  </article>
+                </div>
+                {exportBusy && <p role="status">Preparing export…</p>}
+                {exportError && <p role="alert">{exportError}</p>}
+                <p className="muted small">
+                  Selected request: {format(coords[0], 4)}°N, {format(coords[1], 4)}°E. Change location in Ocean State.
+                </p>
+                <p className="notice">
+                  {f.provenance.nominal_zero_m_note}
+                  <br />
+                  {f.provenance.deep_skill_note}
+                </p>
+              </section>
+            ) : (
+              <p className="empty">{error || "Reconstructing the selected date…"}</p>
+            )
+          ) : (
+            <section className="panel">
+              <p>Page not found.</p>
+              <Button onClick={() => navigate("ocean")}>Open Ocean State</Button>
+            </section>
           )}
           <footer>
-            OceanEmbed{" "}
-            <span>
-              Historical reconstruction · Frozen scientific core · 2024 Argo
-              protected
-            </span>
+            OceanEmbed <span>Frozen scientific core · Historical and latest qualified states · 2024 Argo protected</span>
           </footer>
         </main>
       </div>
-    </div>
-  );
-}
-function Stat({
-  label,
-  value,
-  unit,
-  icon: Icon,
-}: {
-  label: string;
-  value: string;
-  unit: string;
-  icon?: typeof Thermometer;
-}) {
-  return (
-    <div className="stat">
-      <span>
-        {Icon ? <Icon size={13} strokeWidth={2} aria-hidden /> : null}
-        {label}
-      </span>
-      <strong>
-        {value}
-        {value !== "Unavailable" && <small>{unit}</small>}
-      </strong>
-      <div className="stat-rule" />
     </div>
   );
 }

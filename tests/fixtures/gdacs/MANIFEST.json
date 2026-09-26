@@ -1,0 +1,55 @@
+{
+  "recorded_utc": "2026-09-13T19:11:25+00:00",
+  "provider": "GDACS (Global Disaster Alert and Coordination System, EC JRC / UN OCHA)",
+  "purpose": "offline parser and UI fixtures; archived events are HISTORICAL / TEST only",
+  "files": {
+    "current_events4app.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/events/geteventlist/EVENTS4APP",
+      "bytes": 134930,
+      "sha256": "58fb869782fae5fddd05a07d32311d3b731ace950e0e6ce74b82bcc0aeeee80e"
+    },
+    "search_tc_2023-05.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=TC&fromDate=2023-05-01&toDate=2023-05-31&alertlevel=Green;Orange;Red",
+      "bytes": 4549,
+      "sha256": "15ea4e1cddde55e3a0d319fdc07a22146bbe927884f82872754aa810a6132d3c"
+    },
+    "mocha_eventdata.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/events/geteventdata?eventtype=TC&eventid=1000970",
+      "bytes": 20371,
+      "sha256": "475c5da7b18bd70c0238107456982fb5f9191eaf7cea524bb783dcebbdbbb970"
+    },
+    "mocha_geometry_ep6.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/polygons/getgeometry?eventtype=TC&eventid=1000970&episodeid=6",
+      "bytes": 82609,
+      "sha256": "bc809e45e5490b61f4f11f7a9907cb514b8cee27012ed955110a40951549a55a"
+    },
+    "mocha_geometry_ep15.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/polygons/getgeometry?eventtype=TC&eventid=1000970&episodeid=15",
+      "bytes": 120737,
+      "sha256": "778ef9b8ea2206ea90c28b46fb54855e576e46d7d95ada2c79be2c4edd7c493c"
+    },
+    "biparjoy_eventdata.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/events/geteventdata?eventtype=TC&eventid=1000975",
+      "bytes": 32089,
+      "sha256": "64c5c52582ee4ecc5375250c5acb59a7fe907cdf082f75a85f702943cf4c73d6"
+    },
+    "biparjoy_geometry_ep12.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/polygons/getgeometry?eventtype=TC&eventid=1000975&episodeid=12",
+      "bytes": 138876,
+      "sha256": "4977394ec443e3d1c7250ae697457e88f854341e174c2b95a2d57e909efdd7b6"
+    },
+    "current_events4app_2026-09-14.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/events/geteventlist/EVENTS4APP",
+      "recorded_utc": "2026-09-14 (controlled live verification)",
+      "bytes": 143243,
+      "sha256": "cbbccbb53b7e39677b57a927e18b129276132e309ef59a46311a0808a9ac0ac9"
+    },
+    "norbert_geometry_ep16_live.json": {
+      "url": "https://www.gdacs.org/gdacsapi/api/polygons/getgeometry?eventtype=TC&eventid=1001320&episodeid=16",
+      "recorded_utc": "2026-09-14 (controlled live verification)",
+      "purpose": "East Pacific storm whose wind-buffer polygons carry several polygondates; regression for the advisory-time parser",
+      "bytes": 292414,
+      "sha256": "6e9d52adf8a04e05a7eca2064d1530e4406a4f19bd9f2dde38b50172edc37d08"
+    }
+  }
+}

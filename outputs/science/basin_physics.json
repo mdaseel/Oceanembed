@@ -1,0 +1,534 @@
+{
+  "protocol": "outputs/science/PREREGISTRATION.md \u00a74 (same dates and support)",
+  "regions": {
+    "nio": {
+      "mean_profile_l2_c": [
+        28.544,
+        28.485,
+        28.473,
+        28.398,
+        28.138,
+        27.204,
+        25.56,
+        23.341,
+        20.9,
+        18.703,
+        15.793,
+        13.184,
+        11.256,
+        9.79,
+        7.71
+      ],
+      "mean_profile_glorys_c": [
+        28.599,
+        28.533,
+        28.523,
+        28.448,
+        28.24,
+        27.468,
+        25.926,
+        23.67,
+        21.052,
+        18.711,
+        15.736,
+        13.128,
+        11.227,
+        9.786,
+        7.703
+      ],
+      "tchp_l2": {
+        "n": 1063448,
+        "p5": 0.0,
+        "p25": 29.323,
+        "p50": 58.875,
+        "p75": 84.638,
+        "p95": 111.337
+      },
+      "tchp_glorys": {
+        "n": 1060906,
+        "p5": 0.0,
+        "p25": 31.807,
+        "p50": 65.561,
+        "p75": 91.873,
+        "p95": 122.903
+      },
+      "d26_l2": {
+        "n": 969878,
+        "p5": 31.232,
+        "p25": 56.493,
+        "p50": 73.797,
+        "p75": 88.091,
+        "p95": 108.719
+      },
+      "d26_glorys": {
+        "n": 970836,
+        "p5": 30.83,
+        "p25": 60.008,
+        "p50": 78.336,
+        "p75": 92.091,
+        "p95": 111.615
+      },
+      "anomaly_50m_l2": {
+        "n": 1085758,
+        "p5": -1.3,
+        "p25": -0.308,
+        "p50": 0.09,
+        "p75": 0.459,
+        "p95": 1.277
+      },
+      "anomaly_100m_l2": {
+        "n": 1022582,
+        "p5": -2.315,
+        "p25": -0.573,
+        "p50": 0.223,
+        "p75": 1.065,
+        "p95": 2.796
+      },
+      "inversion_frequency_l2": {
+        "0-50 m": {
+          "pairs": 5731261,
+          "inversion_frequency": 0.06395,
+          "strong_inversion_frequency": 0.003925
+        },
+        "50-150 m": {
+          "pairs": 4097748,
+          "inversion_frequency": 0.00725,
+          "strong_inversion_frequency": 0.000571
+        },
+        "150-300 m": {
+          "pairs": 2005997,
+          "inversion_frequency": 4e-05,
+          "strong_inversion_frequency": 0.0
+        },
+        "300-1000 m": {
+          "pairs": 2902545,
+          "inversion_frequency": 1e-05,
+          "strong_inversion_frequency": 0.0
+        }
+      },
+      "inversion_frequency_glorys": {
+        "0-50 m": {
+          "pairs": 5731261,
+          "inversion_frequency": 0.06061,
+          "strong_inversion_frequency": 0.012398
+        },
+        "50-150 m": {
+          "pairs": 4097748,
+          "inversion_frequency": 0.0061,
+          "strong_inversion_frequency": 0.001044
+        },
+        "150-300 m": {
+          "pairs": 2005997,
+          "inversion_frequency": 0.00129,
+          "strong_inversion_frequency": 0.000479
+        },
+        "300-1000 m": {
+          "pairs": 2902545,
+          "inversion_frequency": 0.00131,
+          "strong_inversion_frequency": 0.00045
+        }
+      },
+      "gradient_envelope": {
+        "reference_p1": -0.288262,
+        "reference_p99": 3.6e-05,
+        "fraction_within_reference_envelope": 0.97988,
+        "fraction_steeper_than_reference_p1": 0.0058,
+        "reference_fraction_steeper_than_p1": 0.01,
+        "profiles": 1185504
+      }
+    },
+    "arabian_sea": {
+      "mean_profile_l2_c": [
+        28.153,
+        28.082,
+        28.048,
+        27.921,
+        27.557,
+        26.491,
+        25.072,
+        23.425,
+        21.545,
+        19.672,
+        16.968,
+        14.278,
+        12.167,
+        10.66,
+        8.436
+      ],
+      "mean_profile_glorys_c": [
+        28.138,
+        28.068,
+        28.042,
+        27.916,
+        27.623,
+        26.699,
+        25.249,
+        23.529,
+        21.604,
+        19.717,
+        16.971,
+        14.235,
+        12.145,
+        10.667,
+        8.42
+      ],
+      "tchp_l2": {
+        "n": 508168,
+        "p5": 0.0,
+        "p25": 12.52,
+        "p50": 41.13,
+        "p75": 67.862,
+        "p95": 103.497
+      },
+      "tchp_glorys": {
+        "n": 509049,
+        "p5": 0.0,
+        "p25": 13.321,
+        "p50": 42.592,
+        "p75": 74.741,
+        "p95": 114.446
+      },
+      "d26_l2": {
+        "n": 438050,
+        "p5": 25.273,
+        "p25": 49.045,
+        "p50": 63.72,
+        "p75": 82.889,
+        "p95": 109.62
+      },
+      "d26_glorys": {
+        "n": 439937,
+        "p5": 24.132,
+        "p25": 49.864,
+        "p50": 67.356,
+        "p75": 86.14,
+        "p95": 110.597
+      },
+      "anomaly_50m_l2": {
+        "n": 515213,
+        "p5": -1.12,
+        "p25": -0.329,
+        "p50": 0.052,
+        "p75": 0.407,
+        "p95": 1.229
+      },
+      "anomaly_100m_l2": {
+        "n": 493430,
+        "p5": -1.844,
+        "p25": -0.548,
+        "p50": 0.091,
+        "p75": 0.684,
+        "p95": 1.912
+      },
+      "inversion_frequency_l2": {
+        "0-50 m": {
+          "pairs": 2643375,
+          "inversion_frequency": 0.02779,
+          "strong_inversion_frequency": 8e-06
+        },
+        "50-150 m": {
+          "pairs": 1977165,
+          "inversion_frequency": 0.00692,
+          "strong_inversion_frequency": 0.000346
+        },
+        "150-300 m": {
+          "pairs": 971914,
+          "inversion_frequency": 1e-05,
+          "strong_inversion_frequency": 0.0
+        },
+        "300-1000 m": {
+          "pairs": 1423898,
+          "inversion_frequency": 0.0,
+          "strong_inversion_frequency": 0.0
+        }
+      },
+      "inversion_frequency_glorys": {
+        "0-50 m": {
+          "pairs": 2643375,
+          "inversion_frequency": 0.0219,
+          "strong_inversion_frequency": 0.002415
+        },
+        "50-150 m": {
+          "pairs": 1977165,
+          "inversion_frequency": 0.00219,
+          "strong_inversion_frequency": 0.00012
+        },
+        "150-300 m": {
+          "pairs": 971914,
+          "inversion_frequency": 0.00058,
+          "strong_inversion_frequency": 8.2e-05
+        },
+        "300-1000 m": {
+          "pairs": 1423898,
+          "inversion_frequency": 0.00084,
+          "strong_inversion_frequency": 0.000248
+        }
+      },
+      "gradient_envelope": {
+        "reference_p1": -0.273785,
+        "reference_p99": -0.001253,
+        "fraction_within_reference_envelope": 0.99045,
+        "fraction_steeper_than_reference_p1": 0.00359,
+        "reference_fraction_steeper_than_p1": 0.01,
+        "profiles": 537632
+      }
+    },
+    "bay_of_bengal": {
+      "mean_profile_l2_c": [
+        28.968,
+        28.936,
+        28.96,
+        29.002,
+        28.899,
+        28.095,
+        26.092,
+        23.119,
+        20.028,
+        17.491,
+        14.392,
+        11.853,
+        10.004,
+        8.52,
+        6.648
+      ],
+      "mean_profile_glorys_c": [
+        29.108,
+        29.055,
+        29.077,
+        29.104,
+        29.02,
+        28.397,
+        26.666,
+        23.711,
+        20.26,
+        17.405,
+        14.215,
+        11.756,
+        9.979,
+        8.48,
+        6.623
+      ],
+      "tchp_l2": {
+        "n": 364451,
+        "p5": 27.621,
+        "p25": 56.816,
+        "p50": 75.02,
+        "p75": 91.692,
+        "p95": 115.783
+      },
+      "tchp_glorys": {
+        "n": 361982,
+        "p5": 35.211,
+        "p25": 64.05,
+        "p50": 82.202,
+        "p75": 100.18,
+        "p95": 127.982
+      },
+      "d26_l2": {
+        "n": 357218,
+        "p5": 48.558,
+        "p25": 66.317,
+        "p50": 78.689,
+        "p75": 89.142,
+        "p95": 104.5
+      },
+      "d26_glorys": {
+        "n": 356044,
+        "p5": 53.116,
+        "p25": 72.239,
+        "p50": 83.326,
+        "p75": 93.839,
+        "p95": 109.57
+      },
+      "anomaly_50m_l2": {
+        "n": 377996,
+        "p5": -1.751,
+        "p25": -0.194,
+        "p50": 0.215,
+        "p75": 0.582,
+        "p95": 1.378
+      },
+      "anomaly_100m_l2": {
+        "n": 355153,
+        "p5": -3.335,
+        "p25": -0.648,
+        "p50": 0.619,
+        "p75": 1.778,
+        "p95": 3.343
+      },
+      "inversion_frequency_l2": {
+        "0-50 m": {
+          "pairs": 1962484,
+          "inversion_frequency": 0.12917,
+          "strong_inversion_frequency": 0.011333
+        },
+        "50-150 m": {
+          "pairs": 1424004,
+          "inversion_frequency": 0.00471,
+          "strong_inversion_frequency": 0.000898
+        },
+        "150-300 m": {
+          "pairs": 690643,
+          "inversion_frequency": 0.0,
+          "strong_inversion_frequency": 0.0
+        },
+        "300-1000 m": {
+          "pairs": 975836,
+          "inversion_frequency": 0.0,
+          "strong_inversion_frequency": 0.0
+        }
+      },
+      "inversion_frequency_glorys": {
+        "0-50 m": {
+          "pairs": 1962484,
+          "inversion_frequency": 0.12095,
+          "strong_inversion_frequency": 0.029757
+        },
+        "50-150 m": {
+          "pairs": 1424004,
+          "inversion_frequency": 0.01226,
+          "strong_inversion_frequency": 0.002466
+        },
+        "150-300 m": {
+          "pairs": 690643,
+          "inversion_frequency": 0.0,
+          "strong_inversion_frequency": 0.0
+        },
+        "300-1000 m": {
+          "pairs": 975836,
+          "inversion_frequency": 0.0,
+          "strong_inversion_frequency": 0.0
+        }
+      },
+      "gradient_envelope": {
+        "reference_p1": -0.259983,
+        "reference_p99": 0.017662,
+        "fraction_within_reference_envelope": 0.98952,
+        "fraction_steeper_than_reference_p1": 0.00024,
+        "reference_fraction_steeper_than_p1": 0.01,
+        "profiles": 404655
+      }
+    }
+  },
+  "argo_skill": {
+    "arabian_sea": [
+      {
+        "depth_m": 50,
+        "model": "L0",
+        "n": 3336,
+        "rmse_c": 1.223
+      },
+      {
+        "depth_m": 50,
+        "model": "L2",
+        "n": 3336,
+        "rmse_c": 1.142
+      },
+      {
+        "depth_m": 75,
+        "model": "L0",
+        "n": 3339,
+        "rmse_c": 1.387
+      },
+      {
+        "depth_m": 75,
+        "model": "L2",
+        "n": 3339,
+        "rmse_c": 1.126
+      },
+      {
+        "depth_m": 100,
+        "model": "L0",
+        "n": 3335,
+        "rmse_c": 1.532
+      },
+      {
+        "depth_m": 100,
+        "model": "L2",
+        "n": 3335,
+        "rmse_c": 1.136
+      },
+      {
+        "depth_m": 150,
+        "model": "L0",
+        "n": 3331,
+        "rmse_c": 1.281
+      },
+      {
+        "depth_m": 150,
+        "model": "L2",
+        "n": 3331,
+        "rmse_c": 0.972
+      }
+    ],
+    "bay_of_bengal": [
+      {
+        "depth_m": 50,
+        "model": "L0",
+        "n": 1114,
+        "rmse_c": 1.31
+      },
+      {
+        "depth_m": 50,
+        "model": "L2",
+        "n": 1114,
+        "rmse_c": 0.95
+      },
+      {
+        "depth_m": 75,
+        "model": "L0",
+        "n": 1130,
+        "rmse_c": 1.942
+      },
+      {
+        "depth_m": 75,
+        "model": "L2",
+        "n": 1130,
+        "rmse_c": 1.282
+      },
+      {
+        "depth_m": 100,
+        "model": "L0",
+        "n": 1132,
+        "rmse_c": 2.123
+      },
+      {
+        "depth_m": 100,
+        "model": "L2",
+        "n": 1132,
+        "rmse_c": 1.35
+      },
+      {
+        "depth_m": 150,
+        "model": "L0",
+        "n": 1133,
+        "rmse_c": 1.476
+      },
+      {
+        "depth_m": 150,
+        "model": "L2",
+        "n": 1133,
+        "rmse_c": 1.024
+      }
+    ]
+  },
+  "attribution": null,
+  "caveat": "Differences are descriptive. Where they match known regime contrasts (for example stronger near-surface stratification in the Bay of Bengal) they are described as consistent with those regimes; OceanEmbed does not diagnose barrier-layer thickness.",
+  "depths_m": [
+    0,
+    5,
+    10,
+    20,
+    30,
+    50,
+    75,
+    100,
+    125,
+    150,
+    200,
+    300,
+    500,
+    700,
+    1000
+  ]
+}

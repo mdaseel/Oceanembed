@@ -1,0 +1,8 @@
+Make a precise cleanup of this image. Keep ALL panels, ALL illustrations, ALL wording and the new L0/L1/L2/L3 research comparison exactly unchanged except the explicit items below. Preserve layout and resolution.
+1. ERASE the long black vertical arrow from the offline training panel up into the bottom of Qualified NRT adapters (left x≈145 y640–780). Leave that white space blank.
+2. Reverse ONLY the small arrow between train-only scaling and Qualified NRT adapters (x≈154 y544). It must point UP from NRT adapters into Data harmonisation.
+3. ERASE the bottom dashed outgoing arrow from Frozen checkpoint to Observational validation and its vertical upward branch into disaster-management (near x365–452 y780–860). ERASE the "Frozen model" label on that branch. Training and observational validation are separate cards. Keep arrows GLORYS12V1 → Supervised training → Frozen checkpoint.
+4. Under bottom Frozen checkpoint add small caption "Deployed in backend". No new arrow necessary. This simple caption replaces the deleted misleading routes.
+5. In the top backend, erase dangling dashed arrows and duplicated standalone "Frozen model" text under FastAPI (x350–490 y218–293). Keep cache icon and its existing "Hash-verified model + field cache" label, researcher Request/results arrow, and existing backend-to-engine Run/return field arrow.
+6. In Thermal hotspots input legend change "Low" to "Elevated".
+Everything else must stay the same including research panel accurate wording, L2 green retained and L3 red rejected. Do not add any new connectors. This is tiny arrow cleanup, not redesign.

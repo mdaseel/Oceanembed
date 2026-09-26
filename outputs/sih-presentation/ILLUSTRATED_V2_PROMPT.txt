@@ -1,0 +1,42 @@
+Refine reference image 1, the existing OceanEmbed illustrated TECHNICAL APPROACH slide. Reference image 2 is the user's original style inspiration only (agriculture content MUST NOT appear). Produce ONE polished landscape 16:9 presentation infographic. Preserve image 1's visual language extremely closely: white background, huge bold black title, OceanEmbed wave logo, navy labels, colorful large scientific illustrations and map pictures, thin rounded black outlines, dashed grouped modules, black orthogonal arrows with clear arrowheads, compact captions, navy wave footer. This is an illustrated architecture poster, NOT a text-heavy corporate slide or a plain flowchart. User loves images, technical icons and arrows. Expand content intelligently without reducing illustrations to tiny symbols. Crisp high resolution text and diagram rendering, aim 3840x2160. Keep all content inside safe margins.
+
+CONTENT AND LAYOUT:
+Header OceanEmbed logo left, TECHNICAL APPROACH middle, SIH 2026 | SIH26066 right. Main pipeline remains prominent across center. Retain left input cards, upper harmonisation + server area, large central engine, right outputs, lower training and observational audit. Compress tech stack to a slim logo strip at bottom to free room for a VISUALLY STRONG disaster workflow in lower right. Make spaces work as tightly and handsomely as reference 2.
+
+LEFT, four stacked highly illustrated satellite/ocean map cards under '7 SURFACE CHANNELS', subheading 'Historical / model input family':
+'SST • OSTIA' (1)
+'SSS + SLA • MULTIOBS / DUACS' (2)
+'CURRENTS U/V • OSCAR Final v2' (2)
+'WINDS U/V • CCMP v3.1' (2)
+Their common bus feeds ONLY harmonisation. Seven physical channels, validity mask separately.
+HARMONISATION illustrated 2x2 cards: 'QC + VALIDITY MASK', 'DAILY ALIGNMENT', '0.25° GRID • 101 × 241', 'TRAIN-ONLY SCALING'. Output arrow '7 CHANNELS + VALIDITY MASK' into engine's spatial patch.
+Add compact secondary strip with small satellite/weather icons: 'QUALIFIED NRT INPUT ADAPTERS' / 'Same frozen 7-channel contract'. Connect to same harmonisation/engine route. Tiny caption 'Complete same-date stack • no missing-channel fill'. Historical product names not claimed as NRT products.
+
+TOP BACKEND area: retain server/cloud/storage illustrations, label 'BACKEND / INFERENCE SERVICE'. 'Frozen L2 • Historical replay + qualified NRT', 'FastAPI', 'Hash-verified model / field cache'. Compact dashed subsection labeled clearly 'DEPLOYMENT TARGET': archive cylinders '70+ GB archive' → cloud 'Object storage • chunked Zarr / NetCDF' → service arrow 'Requested dates / chunks only'. API → 'Date-keyed field cache'. This is planned deployment architecture, no provider logos or claims currently hosted. Small frozen model registry icon 'Checkpoint • scalers • hashes'. Do not imply archive all loaded into RAM.
+
+CENTER, largest single architectural group, heading 'OCEANEMBED • SPATIAL SATELLITE EMBEDDING ENGINE':
+Large North Indian Ocean heatmap patch '33 × 33 SPATIAL CONTEXT' → large translucent convolution plates 'DILATED CNN ENCODER' → prominent colored vector '32-D LATENT EMBEDDING' / tiny 'Learned surface-state representation' → connected neuron MLP illustration 'MLP DECODER' → vivid exploded thermal ocean layers '15 DEPTHS • 0–1000 m' / 'ONE SHARED 3D TEMPERATURE FIELD'.
+Separate globe + calendar icons 'GEOSPATIAL + SEASONAL CONTEXT' feed decoder, not satellite input bus. Small '136,335 model parameters'. If legible, exact depth sequence in tiny single caption: '0, 5, 10, 20, 30, 50, 75, 100, 125, 150, 200, 300, 500, 700, 1000 m'. NO invented depths.
+Arrows must accurately connect inputs → encoder → latent → decoder → reconstruction → diagnostics and outputs. Backend serves frozen engine.
+
+BOTTOM LEFT separate GLORYS illustrated globe+thermal layer card 'TRAINING TARGET • GLORYS12V1 TEMPERATURE'. Arrow only to 'SUPERVISED TRAINING' gear → 'FROZEN CHECKPOINT' server/snowflake → UP into engine. Tiny 'Training supervision only'. No GLORYS connection to inference input bus. Small ocean researcher monitor illustration if space.
+Adjacent observational audit group: reconstruction arrow DOWN labeled 'Compare predictions' into 'OBSERVATIONAL VALIDATION'. Illustrate Argo float, profile comparison graph and validation curves. Text 'GLORYS TEST • L0 / L1 / L2', 'ARGO • 5,176 PROFILES / 92 FLOATS', 'RMSE / MAE / BIAS • ANOMALY CORRELATION', 'FLOAT-CLUSTER BOOTSTRAP', '2024 ARGO • PROTECTED FINAL HOLDOUT'. Argo is validation, no feed into encoder.
+
+RIGHT upper compact output illustration cards fed by common reconstructed field:
+'2D MAP + 3D DEPTH VIEW' map+explodedstack;
+'15-DEPTH PROFILE' graph;
+'THERMAL DIAGNOSTICS • TCHP + D26*' heatmap and column;
+'LATEST QUALIFIED OCEAN STATE' thermal map with timestamp icon, 'Same frozen L2'.
+Small seafloor graphic 'PHYSICAL DEPTH SUPPORT • ETOPO 2022' feeding display/diagnostics; 'Masks below local seafloor'. Not a model input.
+Small footnote '*D26: historical replay; withheld as standalone NRT diagnostic'.
+
+LOWER RIGHT big illustrated group 'DISASTER-MANAGEMENT INTELLIGENCE':
+Use colorful ocean maps, cyclone-track markers and report icon rather than wordy boxes. Thermal field → mini map 'THERMAL MONITORING AREAS' with HIGH / ELEVATED patches. Another separate input cyclone icon 'EXTERNAL CYCLONE TRACK • GDACS' → same overlay map. Clearly show both merge at 'TRACK × THERMAL ANALYSIS': line with cyclone markers crossing thermal patches. This external track NEVER feeds the neural network; not generated by OceanEmbed. Output arrow → report illustration 'ANALYST BRIEF / THERMAL SUPPORT WATCH'. Beneath small pictorial metrics captions 'TCHP along track • 50/75/100 m anomaly • strongest thermal segment • intersection distance'. No fake measured numbers.
+Compact secondary historical strip 'MULTI-CYCLONE HISTORICAL REPLAY' with small 4-map sequence 'PRE-EVENT → PASSAGE → COLD WAKE → RECOVERY'. Tiny 'Mocha • Biparjoy • Tauktae • Yaas • Amphan • Fani'. Historical events not labelled live.
+Clearly readable permanent note 'THERMAL SUPPORT ≠ CYCLONE FORECAST'.
+Small export icons 'CSV • NetCDF • PNG / ANALYST BRIEF'.
+
+BOTTOM slim illustrated tech stack panel or band, much smaller than reference 1: recognizable Python/PyTorch icons 'ML'; NumPy/pandas/xarray/NetCDF/Zarr 'DATA'; FastAPI 'API'; React/TypeScript/Three.js/Plotly 'FRONTEND'; pytest/Vitest/Playwright 'TESTS'. Container + cloud icons only under 'DEPLOYMENT TARGET'.
+Navy ocean-wave footer 'FROM SURFACE OBSERVATIONS TO SUBSURFACE OCEAN INTELLIGENCE'.
+
+Strict: maintain big rich imagery, arrow-heavy reference styling, labels instead of paragraphs. No fake performance percentages, no R² claim, no cyclone prediction/intensity claim, no additional model channels, no live IMD claim, no deployed cloud claim. GLORYS training, Argo validation, ETOPO physical validity, external tracks downstream context. Make neural network and disaster maps visually important, not tech logos. Return a complete polished usable presentation image.

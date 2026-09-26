@@ -1,0 +1,85 @@
+﻿forward_field == engine._infer on 2015-01-01 (max |diff| 0.0); 0.03s per day
+  50/2192 (5s)
+  100/2192 (12s)
+  150/2192 (19s)
+  200/2192 (26s)
+  250/2192 (32s)
+  300/2192 (39s)
+  350/2192 (47s)
+  400/2192 (54s)
+  450/2192 (61s)
+  500/2192 (68s)
+  550/2192 (75s)
+  600/2192 (82s)
+  650/2192 (90s)
+  700/2192 (97s)
+  750/2192 (104s)
+  800/2192 (111s)
+  850/2192 (118s)
+  900/2192 (124s)
+  950/2192 (131s)
+  1000/2192 (138s)
+  1050/2192 (145s)
+  1100/2192 (151s)
+  1150/2192 (158s)
+  1200/2192 (164s)
+  1250/2192 (171s)
+  1300/2192 (177s)
+  1350/2192 (184s)
+  1400/2192 (191s)
+  1450/2192 (197s)
+  1500/2192 (204s)
+  1550/2192 (212s)
+  1600/2192 (219s)
+  1650/2192 (226s)
+  1700/2192 (233s)
+  1750/2192 (240s)
+  1800/2192 (246s)
+  1850/2192 (254s)
+  1900/2192 (261s)
+  1950/2192 (268s)
+  2000/2192 (275s)
+  2050/2192 (283s)
+  2100/2192 (290s)
+  2150/2192 (297s)
+  2192/2192 (303s)
+python : C:\Users\Mohamed Aseel\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\lo
+cal-packages\Python313\site-packages\numpy\lib\_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+At line:1 char:445
++ ... HREADS='6'; python -u scripts/science/build_thermal_extreme_baseline. ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Mohame...ice encountered:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  return fnb._ureduce(a,
+  percentile doy 60/366
+  percentile doy 120/366
+  percentile doy 180/366
+  percentile doy 240/366
+  percentile doy 300/366
+  percentile doy 360/366
+{
+  "protocol": "outputs/science/PREREGISTRATION.md \u00a78",
+  "baseline": [
+    "2015-01-01",
+    "2020-12-31"
+  ],
+  "n_days": 2192,
+  "depths_m": [
+    0,
+    50,
+    75,
+    100,
+    125,
+    150
+  ],
+  "percentile": 90,
+  "half_window_days": 5,
+  "smoothing_days": 31,
+  "samples_per_doy_min": 62,
+  "samples_per_doy_max": 66,
+  "l2_state_dict_sha256": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d",
+  "threshold_sha256": "03b3c7ea541e4c2e137e8352b43b726b129fc2857e8b855509f8f3eb25027812",
+  "generated_utc": "2026-09-14T15:49:21.364503+00:00",
+  "source": "frozen-L2 reconstructions via science.frozen.forward_field (verified identical to engine._infer); replay cache not written"
+}

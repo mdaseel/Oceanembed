@@ -1,0 +1,19 @@
+﻿  2021-01-15 (41s)
+  2021-02-15 (78s)
+  2021-03-15 (112s)
+  2021-04-15 (145s)
+  2021-05-15 (177s)
+  2021-06-15 (207s)
+  2021-07-15 (239s)
+  2021-08-15 (275s)
+  2021-09-15 (308s)
+  2021-10-15 (341s)
+  2021-11-15 (373s)
+  2021-12-15 (407s)
+arabian_sea 0 {'SST': np.float64(0.279), 'SSS': np.float64(0.168), 'SLA': np.float64(0.211), 'CU': np.float64(0.088), 'CV': np.float64(0.086), 'WU': np.float64(0.088), 'WV': np.float64(0.081)}
+arabian_sea 100 {'SST': np.float64(0.21), 'SSS': np.float64(0.176), 'SLA': np.float64(0.261), 'CU': np.float64(0.099), 'CV': np.float64(0.085), 'WU': np.float64(0.086), 'WV': np.float64(0.083)}
+arabian_sea 300 {'SST': np.float64(0.205), 'SSS': np.float64(0.17), 'SLA': np.float64(0.256), 'CU': np.float64(0.102), 'CV': np.float64(0.089), 'WU': np.float64(0.09), 'WV': np.float64(0.089)}
+bay_of_bengal 0 {'SST': np.float64(0.26), 'SSS': np.float64(0.193), 'SLA': np.float64(0.216), 'CU': np.float64(0.099), 'CV': np.float64(0.081), 'WU': np.float64(0.066), 'WV': np.float64(0.085)}
+bay_of_bengal 100 {'SST': np.float64(0.174), 'SSS': np.float64(0.209), 'SLA': np.float64(0.271), 'CU': np.float64(0.111), 'CV': np.float64(0.085), 'WU': np.float64(0.065), 'WV': np.float64(0.085)}
+bay_of_bengal 300 {'SST': np.float64(0.169), 'SSS': np.float64(0.223), 'SLA': np.float64(0.269), 'CU': np.float64(0.111), 'CV': np.float64(0.085), 'WU': np.float64(0.062), 'WV': np.float64(0.082)}
+done (407s)

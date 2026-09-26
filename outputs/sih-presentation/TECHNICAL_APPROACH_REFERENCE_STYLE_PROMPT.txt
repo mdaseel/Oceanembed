@@ -1,0 +1,78 @@
+Use case: infographic-diagram.
+Create a polished OceanEmbed TECHNICAL APPROACH infographic for SIH 2026, landscape 16:9, high resolution, exceptionally crisp readable typography.
+Image 1 is the PRIMARY layout/style reference (SolarGrid AI). Image 2 is OceanEmbed brand and project content reference. Recreate Image 1's disciplined illustrated engineering poster style for OceanEmbed: white background, navy headings, thin black rounded cards, dashed group borders, clean orthogonal black arrows, restrained blue highlights, colorful professional technical illustrations. NOT a plain text flowchart. Do NOT copy any solar content. Use the blue wave OceanEmbed logo from Image 2. Avoid crowding and tiny text. Main content must be legible on a projected slide.
+Header: OceanEmbed logo left; centered "TECHNICAL APPROACH" with subtitle "From surface observations to subsurface ocean intelligence"; upper right "SIH 2026 | SIH26066".
+
+Layout modeled on Image 1, but fit OceanEmbed: slim left supporting input/preprocessing column (17% width), large central core engine (59% width), right outputs (21% width). Compact offline evidence strip bottom left/center, prominent logo-rich TECH STACK panel bottom right. Keep headline and footer narrow. Core engine has an upper reconstruction workflow and a larger highlighted lower disaster analysis workflow. Disaster workflow is the visual hero, with a subtle pale coral background, strong red/navy title and large thermal map illustration.
+
+LEFT: compact text cards under "SURFACE INPUTS • 7 CHANNELS":
+"SST • OSTIA"
+"SSS + SLA • MULTIOBS / DUACS"
+"Currents U/V • OSCAR Final v2"
+"Winds U/V • CCMP v3.1"
+No large input images. Down arrow to a compact "DATA HARMONISATION" panel containing small QC/grid/calendar/scaling icons and concise labels:
+"QC + validity mask"
+"Daily alignment"
+"0.25° grid • 101 × 241"
+"Train-only scaling"
+Small separate entry "Qualified NRT adapters • same 7-channel contract" feeds harmonisation, not bypassing it.
+Arrow from harmonisation into 33×33 context input, label "7 channels + mask".
+
+CENTRAL TOP: slim "APPLICATION / INFERENCE SERVICE" strip, with server icon "FastAPI", database icon "Hash-verified model + field cache", and ocean researcher at screen. Researcher has bidirectional arrow to FastAPI labeled "Request / results". API has bidirectional arrow to reconstruction labeled "Run / return field". Include small text "Historical replay + latest qualified state". This is local/backend service; no deployed cloud claims, no Supabase.
+
+CENTRAL UPPER ENGINE panel: title "SPATIAL SATELLITE EMBEDDING ENGINE".
+Five large illustrated modules connected unambiguously left-to-right:
+a geographic patch with focused square "33 × 33 spatial context"
+→ translucent multicolored convolution planes "Dilated CNN"
+→ compact colored vector "32-D embedding"
+→ neural-network nodes "MLP decoder"
+→ high quality exploded thermal North Indian Ocean stack "15 depths • 0–1000 m".
+Small globe + calendar above decoder connects DOWN into decoder, label "Location + season".
+Small caption "Frozen L2 • 136,335 parameters". Under stack: "One shared 3D temperature field".
+Stack is raw predicted field. Separate small side card "ETOPO 2022" with seabed icon and "Physical depth mask • raw field preserved" must feed DISPLAY/DIAGNOSTICS branch, not encoder or decoder. Shared field arrow fans to right outputs and down to thermal diagnostics. No physics solver or new bathymetry model.
+
+CENTRAL LOWER ENGINE, large and visually emphasized:
+"DISASTER-MANAGEMENT INTELLIGENCE"
+Subtitle "Ocean thermal support for cyclone analysis".
+At left two small illustrated inputs stacked:
+"Thermal hotspots • TCHP + anomalies" (red/yellow heat map; incoming arrow from shared field via physical support/diagnostics).
+"External cyclone track • GDACS" (storm track nodes; independent external input).
+Each input has its own arrow into a BIG beautiful central ocean heat map with a cyclone path crossing red thermal hotspots, label "TRACK × THERMAL ANALYSIS".
+Arrow into report/vertical section icon module "ANALYST BRIEF" with short metrics:
+"Peak TCHP along track"
+"100 m temperature anomaly"
+"Strongest thermal segment"
+"Hotspot intersection distance".
+Below this same panel, three clear compact illustrated mode cards:
+"CURRENT CYCLONE WATCH" / "External track + dated ocean field"
+"HISTORICAL REPLAY" / "Pre-event → passage → cold wake → recovery" (miniature thermal maps)
+"SCENARIO MODE" / "User-drawn what-if path" (path editor graphic).
+These are MODES of track analysis, not consecutive stages. Distinct small safety footer within panel "Thermal support ≠ cyclone forecast". Actual heat content, not claimed heat transferred or predicted intensity. No invented performance or live timestamp.
+
+RIGHT "OUTPUTS":
+4 clean illustrated cards with a single neat branch from the shared field/display output bus:
+"2D MAP + 3D DEPTH VIEW" with attractive map/stack screenshots
+"15-DEPTH PROFILE" with a clean schematic temperature-depth curve marked "Illustrative"
+"THERMAL DIAGNOSTICS" with TCHP map and short note "D26: historical only"
+"LATEST QUALIFIED OCEAN STATE" map + clock / "Valid date + source lag".
+Disaster analyst brief also has small export icons "CSV • NetCDF • PNG" within the disaster panel.
+Route arrows so all shared-field outputs truly originate from the shared field, and are not a chain of outputs generating each other.
+
+BOTTOM compact OFFLINE TRAINING + VALIDATION group, approx left 55%:
+two separate small lanes, graphic icons like Image 1:
+"GLORYS12V1 targets → Supervised training → Frozen checkpoint".
+Dashed checkpoint arrow routes UP to frozen model service, label "Offline training only".
+"Observational validation: GLORYS benchmarks • Argo 5,176 profiles / 92 floats".
+Small buoy and comparison chart icon, no fabricated numerical chart. "RMSE / MAE / bias • float-cluster bootstrap". "2024 Argo: protected holdout".
+Validation uses a dashed arrow FROM predictions to validation, never trains from Argo.
+
+BOTTOM RIGHT large blue outlined "TECH STACK" grouped panel, keep recognizable COLOR LOGOS with labels:
+"ML": Python, PyTorch
+"DATA": NumPy, pandas, xarray, NetCDF, Zarr
+"API": FastAPI
+"FRONTEND": React, TypeScript
+"VISUALISATION": Three.js, Plotly
+"TESTS": pytest, Vitest, Playwright
+Small cloud and Docker icons can appear only under "Deployment target (planned)" if space allows; otherwise omit entirely.
+Keep all branding, icon proportions and white-card style close to Image 1. A thin navy footer "NORTH INDIAN OCEAN • HISTORICAL REPLAY + QUALIFIED NRT".
+Make diagrams and maps beautiful but functional. No arrows through text/cards, no unattached arrows, no duplicated paragraphs, no red hand-drawn markup, no watermarks. Ensure typographic hierarchy: engine and disaster analysis largest, support cards compact, technology logos clear. Maintain scientific accuracy and show understandable left-to-right causal flow.

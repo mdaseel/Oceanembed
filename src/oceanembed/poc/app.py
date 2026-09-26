@@ -25,6 +25,10 @@ from ..diagnostics import (CONVENTION, D26Status, DISPLAY_VALID_RULE,
 from ..diagnostics.hazard import (INDICATOR_NAME, NON_PREDICTION_STATEMENT,
                                   PROTOCOL_PATH, TCHP_ERROR_KJ_CM2,
                                   ThermalSupport, categorize, load_thresholds)
+from ..cyclones import gdacs
+from ..events import library as event_library
+from ..events import series as event_series_lib
+from ..events import track_analysis as track_lib
 from ..nrt.latest import LatestRefused
 from ..replay import api as replay_api
 from ..replay.contract import OutsideDomain
@@ -89,7 +93,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000, compresslevel=3)
 #: tens of seconds against a remote provider, and Historical Replay must never
 #: be blocked by it — a slow or dead network cannot be allowed to take the
 #: offline science down with it. These touch no xarray store and no replay cache.
-UNLOCKED_PREFIXES = ("/api/latest",)
+UNLOCKED_PREFIXES = ("/api/latest", "/api/cyclones")
 
 
 @app.middleware("http")
@@ -293,6 +297,20 @@ def event() -> dict:
             "track_available": track is not None}
 
 
+@app.get("/api/basins")
+def basins() -> dict:
+    """The existing named analysis basins, served so the UI keeps no copy of its own.
+
+    These are the rectangular boxes already used by the Phase 6 and Phase 8
+    evaluations (``oceanembed.ml.metrics.BASINS``). A location outside every box
+    is named by its coordinates only; no informal region name is invented.
+    """
+    from ..ml.metrics import BASINS
+    return {"basins": {name: {"lat": list(box["lat"]), "lon": list(box["lon"])}
+                       for name, box in BASINS.items()},
+            "source": "oceanembed.ml.metrics.BASINS"}
+
+
 @app.get("/api/event/series")
 def event_series() -> dict:
     """Cold wake and thermal recovery across the pre-registered window.
@@ -353,6 +371,412 @@ def event_series() -> dict:
         "independence_note": EVENT["independence_note"],
         "series": rows,
     }
+
+
+@app.get("/api/events")
+def events_index() -> dict:
+    """Enabled historical cyclone events, and every candidate with its exclusion reason."""
+    return event_library.list_events()
+
+
+EVENT_TRACK_LABEL = ("Track: external historical observation - IBTrACS v04r01 best track "
+                     "(IMD / RSMC New Delhi agency values)")
+THERMAL_LABEL = "Thermal state: OceanEmbed frozen-L2 reconstruction"
+COMPARE_NOTE = (
+    "Reconstructed ocean changes along each observed-track corridor. These numbers do "
+    "not rank cyclone danger, and OceanEmbed does not explain differences in cyclone "
+    "intensity by itself. External peak wind and pressure are IMD / RSMC New Delhi "
+    "agency values carried by IBTrACS.")
+EVENT_LIMITATIONS = [
+    "OceanEmbed reconstructs subsurface temperature from surface satellite inputs; it "
+    "does not forecast cyclone genesis, track, intensity or landfall.",
+    "Corridor values average cells within 1.5 degrees of the observed best track.",
+    "TCHP reconstruction error is comparable to a thermal-support category width at a "
+    "single cell (Phase 7C).",
+    "Changes between dates are differences between independent daily "
+    "reconstructions; they may be consistent with cyclone-associated cooling or "
+    "mixing, but OceanEmbed does not establish their cause.",
+    "No recovery category, severity rank or probability is produced.",
+]
+_EVENT_BUNDLES: dict = {}
+_BUNDLE_ORDER: list = []
+
+
+def _event_or_404(event_id: str) -> dict:
+    try:
+        return event_library.get_event(event_id)
+    except event_library.EventNotFound as exc:
+        raise HTTPException(404, f"No enabled event {event_id!r}") from exc
+
+
+def _resolve_segment(ev: dict, name: str) -> str:
+    wanted = name.strip().upper()
+    for seg in ev["segments"]:
+        if seg["label"].upper() == wanted or \
+                seg["label"].split("/")[0].strip().upper() == wanted:
+            return seg["label"]
+    raise HTTPException(422, f"event has no segment {name!r}")
+
+
+def _event_bundle(event_id: str) -> dict:
+    """Each window date replayed once: series rows and per-segment composites."""
+    if event_id in _EVENT_BUNDLES:
+        return _EVENT_BUNDLES[event_id]
+    ev = _event_or_404(event_id)
+    engine = replay_api.engine()
+    corridor = event_series_lib.corridor_mask(ev["track"]["points"], engine.lat, engine.lon)
+    accumulators = {seg["label"]: track_lib.CompositeAccumulator() for seg in ev["segments"]}
+    rows = []
+    for stamp in pd.date_range(ev["window_start"], ev["window_end"], freq="D"):
+        day = str(stamp.date())
+        ctx = track_lib.field_context(get_view(day))
+        rows.append(event_series_lib.series_row(ctx, corridor))
+        for seg in ev["segments"]:
+            if seg["start"] <= day <= seg["end"]:
+                accumulators[seg["label"]].add(ctx)
+    bundle = {"rows": rows, "corridor_cells": int(corridor.sum()),
+              "composites": {k: a.result() for k, a in accumulators.items()}}
+    _EVENT_BUNDLES[event_id] = bundle
+    _BUNDLE_ORDER.append(event_id)
+    while len(_BUNDLE_ORDER) > 4:
+        _EVENT_BUNDLES.pop(_BUNDLE_ORDER.pop(0), None)
+    return bundle
+
+
+def _event_points(ev: dict) -> list[dict]:
+    return [{"lat": p["lat"], "lon": p["lon"], "time": p["time"], "point_type": "observed"}
+            for p in ev["track"]["points"]]
+
+
+def _event_date(ev: dict, date: str) -> str:
+    if not (ev["window_start"] <= date <= ev["window_end"]):
+        raise HTTPException(422, f"{date} is outside the {ev['name']} replay window")
+    return date
+
+
+def _basin_name(lat: float, lon: float) -> str | None:
+    from ..ml.metrics import BASINS
+    for name, box in BASINS.items():
+        if box["lat"][0] <= lat <= box["lat"][1] and box["lon"][0] <= lon <= box["lon"][1]:
+            return name.replace("_", " ").title().replace(" Of ", " of ")
+    return None
+
+
+@app.get("/api/events/compare")
+def events_compare(ids: str) -> dict:
+    chosen = [i for i in dict.fromkeys(x.strip() for x in ids.split(",")) if i]
+    if not 2 <= len(chosen) <= 4:
+        raise HTTPException(422, "Compare two to four enabled events")
+    water = local_water_depth(strict=False)
+    out = []
+    for event_id in chosen:
+        ev = _event_or_404(event_id)
+        bundle = _event_bundle(event_id)
+        change = track_lib.difference(
+            bundle["composites"][ev["segments"][0]["label"]],
+            bundle["composites"][_resolve_segment(ev, "WAKE")], water)
+        out.append({
+            "event_id": event_id, "name": ev["name"], "basin": ev["basin"],
+            "season": ev["season"], "split": ev["split"], "in_sample": ev["in_sample"],
+            "window": [ev["window_start"], ev["window_end"]],
+            "metrics": event_series_lib.event_metrics(bundle["rows"], ev["segments"]),
+            "pre_to_wake_footprint": change["footprint"],
+            "external_metadata": ev["external_metadata"],
+            "track_source": ev["track"]["dataset"]})
+    return {"events": out, "note": COMPARE_NOTE,
+            "corridor_deg": event_series_lib.CORRIDOR_DEG}
+
+
+@app.get("/api/events/{event_id}")
+def event_detail(event_id: str) -> dict:
+    return _event_or_404(event_id)
+
+
+@app.get("/api/events/{event_id}/series")
+def event_detail_series(event_id: str) -> dict:
+    ev = _event_or_404(event_id)
+    bundle = _event_bundle(event_id)
+    return {"event": ev["name"], "event_id": event_id,
+            "window": [ev["window_start"], ev["window_end"]],
+            "corridor_deg": event_series_lib.CORRIDOR_DEG,
+            "corridor_cells": bundle["corridor_cells"],
+            "corridor_note": "cells within 1.5 degrees of any observed track point; the "
+                             "track is static context and never enters inference",
+            "independence_note": ev["independence_note"],
+            "series": bundle["rows"],
+            "metrics": event_series_lib.event_metrics(bundle["rows"], ev["segments"])}
+
+
+@app.get("/api/events/{event_id}/track-analysis")
+def event_track_analysis(event_id: str, date: str) -> dict:
+    ev = _event_or_404(event_id)
+    ctx = track_lib.field_context(get_view(_event_date(ev, date)))
+    return {**track_lib.analyze(ctx, _event_points(ev)), "event_id": event_id,
+            "field_source": "historical replay_field",
+            "labels": {"track": EVENT_TRACK_LABEL, "thermal_state": THERMAL_LABEL}}
+
+
+@app.get("/api/events/{event_id}/section")
+def event_section(event_id: str, date: str, mode: str = "temperature") -> dict:
+    ev = _event_or_404(event_id)
+    ctx = track_lib.field_context(get_view(_event_date(ev, date)))
+    try:
+        payload = track_lib.section(ctx, _event_points(ev), mode)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return {**payload, "event_id": event_id,
+            "labels": {"track": EVENT_TRACK_LABEL, "thermal_state": THERMAL_LABEL}}
+
+
+@app.get("/api/events/{event_id}/difference")
+def event_difference(event_id: str, to_segment: str = "Wake",
+                     from_segment: str = "Pre-event", depth: int = 100,
+                     tchp_grid: bool = False) -> dict:
+    ev = _event_or_404(event_id)
+    a, b = _resolve_segment(ev, from_segment), _resolve_segment(ev, to_segment)
+    bundle = _event_bundle(event_id)
+    try:
+        change = track_lib.difference(bundle["composites"][a], bundle["composites"][b],
+                                      local_water_depth(strict=False), depth, tchp_grid)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return {**change, "event_id": event_id, "from_segment": a, "to_segment": b,
+            "label": "Change between frozen-segment composites of independent daily "
+                     "reconstructions.",
+            "caution": "A cooling pattern may be consistent with cyclone-associated "
+                       "mixing; OceanEmbed does not establish its cause."}
+
+
+@app.get("/api/events/{event_id}/brief")
+def event_brief(event_id: str) -> dict:
+    ev = _event_or_404(event_id)
+    bundle = _event_bundle(event_id)
+    metrics = event_series_lib.event_metrics(bundle["rows"], ev["segments"])
+    water = local_water_depth(strict=False)
+    pre = bundle["composites"][ev["segments"][0]["label"]]
+    to_wake = track_lib.difference(pre, bundle["composites"][_resolve_segment(ev, "WAKE")], water)
+    to_recovery = track_lib.difference(
+        pre, bundle["composites"][_resolve_segment(ev, "RECOVERY")], water)
+    region = to_wake["footprint"]["tchp"]["min"]
+    sentences = []
+    if metrics["pre_event_tchp"] is not None:
+        sentences.append(f"Before the event, corridor TCHP averaged "
+                         f"{metrics['pre_event_tchp']:.1f} kJ/cm2.")
+    if metrics["tchp_change"] is not None and metrics["wake_min_tchp"]:
+        verb = "fell" if metrics["tchp_change"] < 0 else "did not fall"
+        sentences.append(
+            f"In the wake segment corridor TCHP {verb} to a minimum of "
+            f"{metrics['wake_min_tchp']['value']:.1f} kJ/cm2 on "
+            f"{metrics['wake_min_tchp']['date']} ({metrics['tchp_change']:+.1f} kJ/cm2).")
+    if metrics["final_vs_pre_tchp"] is not None and metrics["final"]:
+        sentences.append(
+            f"By {metrics['final']['date']} TCHP was {abs(metrics['final_vs_pre_tchp']):.1f} "
+            f"kJ/cm2 {'below' if metrics['final_vs_pre_tchp'] < 0 else 'above'} the "
+            f"pre-event mean.")
+    return {
+        "title": "CYCLONE OCEAN RESPONSE BRIEF", "event_id": event_id, "event": ev["name"],
+        "basin": ev["basin"], "event_dates": [ev["window_start"], ev["window_end"]],
+        "peak": ev["peak"], "landfall": ev["landfall"], "segments": ev["segments"],
+        "track_source": EVENT_TRACK_LABEL, "external_metadata": ev["external_metadata"],
+        "metrics": metrics,
+        "strongest_subsurface_cooling_c": {
+            "0": to_wake["footprint"]["temperature"]["0"]["min"],
+            "100": to_wake["footprint"]["temperature"]["100"]["min"]},
+        "strongest_affected_thermal_region": (
+            {**region, "basin": _basin_name(region["lat"], region["lon"]),
+             "quantity": "largest TCHP decrease, Pre-event to Wake composite"}
+            if region else None),
+        "pre_to_wake_footprint": to_wake["footprint"],
+        "pre_to_recovery_footprint": to_recovery["footprint"],
+        "interpretation": sentences,
+        "limitations": EVENT_LIMITATIONS + [ev["split_note"]],
+        "provenance": {
+            "model": "L2 Spatial Satellite Embedding Engine (frozen)",
+            "l2_state_dict_sha256": replay_api.engine().l2_state_dict_sha256,
+            "l2_encoder_sha256": replay_api.engine().l2_encoder_sha256,
+            "split": ev["split"], "in_sample": ev["in_sample"],
+            "phase_rule": ev["selection"], "independence_note": ev["independence_note"],
+            "track_citation": ev["track"]["citation"]},
+        "non_prediction": NON_PREDICTION_STATEMENT,
+    }
+
+
+@app.get("/api/events/{event_id}/stress-test")
+def event_stress_test(event_id: str, mode: str = "temperature") -> dict:
+    """The event's OBSERVED geometry, unmoved, sampled on the historical and the
+    latest qualified field. Replayed historical geometry, not a forecast."""
+    from ..science import coastal, stress_test
+    ev = _event_or_404(event_id)
+    points = _event_points(ev)
+    historical_ctx = track_lib.field_context(get_view(ev["peak"]))
+    historical = track_lib.analyze(historical_ctx, points)
+    result, summary = _qualified_latest_field(replay_api.engine())
+    base = {"label": stress_test.LABEL, "note": stress_test.NOTE, "event_id": event_id,
+            "event": ev["name"], "geometry": {"source": EVENT_TRACK_LABEL, "points": points,
+                                              "translated": False, "retimed": False},
+            "historical": {"date": ev["peak"], "analysis": historical,
+                           "section": track_lib.section(historical_ctx, points, mode),
+                           "field": "historical replay_field on the event peak date"}}
+    try:
+        base["coastal_approach"] = coastal.track_coastal_approach(historical["samples"])
+    except coastal.CoastalContextUnavailable:
+        base["coastal_approach"] = None
+    if result is None:
+        return {**base, "latest": None, "comparison": None, "latest_state": LATEST_UNAVAILABLE}
+    latest_ctx = track_lib.field_context(result.view, _withheld(summary))
+    latest = track_lib.analyze(latest_ctx, points)
+    assert stress_test.same_geometry(historical["samples"], latest["samples"])
+    return {**base,
+            "latest": {"date": result.view.date, "analysis": latest,
+                       "section": track_lib.section(latest_ctx, points, mode),
+                       "withheld": list(latest_ctx.withheld),
+                       "reconstruction_lag_hours": result.meta.get("reconstruction_lag_hours"),
+                       "field": "latest qualified OceanEmbed field"},
+            "comparison": stress_test.compare(historical, latest)}
+
+
+def _advisory_points(adv: dict) -> list[dict]:
+    return [{"lat": p["lat"], "lon": p["lon"], "valid_time": p["valid_time"],
+             "point_type": p["point_type"]}
+            for p in adv["observed_points"] + adv["forecast_points"]]
+
+
+def _qualified_latest_field(engine):
+    """The newest immutable qualified field on disk, or the last snapshot, or None."""
+    from ..nrt import latest as LQ
+    summary = LQ.qualification_summary()
+    if not summary["qualified"]:
+        return None, summary
+    root = LQ.DAILY_CACHE_DIR
+    days = sorted((d.name for d in root.iterdir() if d.is_dir()), reverse=True) \
+        if root.is_dir() else []
+    for day in days:
+        result = LQ.load_daily(engine, day)
+        if result is not None:
+            return result, summary
+    return LQ.load_snapshot(engine), summary
+
+
+def _withheld(summary: dict) -> tuple:
+    return tuple(k for k in ("d26", "tchp") if summary.get(f"{k}_category") != "QUALIFIED")
+
+
+def _hours_between(advisory_iso: str, valid_date: str) -> float:
+    advisory = pd.Timestamp(advisory_iso).tz_localize(None) \
+        if pd.Timestamp(advisory_iso).tzinfo is None else \
+        pd.Timestamp(advisory_iso).tz_convert(None)
+    return round((advisory - pd.Timestamp(valid_date)).total_seconds() / 3600, 1)
+
+
+LATEST_UNAVAILABLE = ("Latest OceanEmbed reconstruction unavailable. Historical Event "
+                      "Intelligence remains available.")
+
+
+@app.get("/api/cyclones/current")
+async def cyclones_current():
+    """Active North Indian Ocean cyclones according to GDACS (external context only)."""
+    result = await run_in_threadpool(gdacs.current_cyclones, gdacs.fetch_json, gdacs.CACHE_FILE)
+    return JSONResponse(result)
+
+
+@app.get("/api/cyclones/current/thermal-analysis")
+async def cyclones_current_thermal(index: int = 0, mode: str = "temperature"):
+    current = await run_in_threadpool(gdacs.current_cyclones, gdacs.fetch_json, gdacs.CACHE_FILE)
+    advisories = current.get("advisories") or []
+    if not advisories:
+        return JSONResponse({**current, "advisory": None, "analysis": None, "section": None})
+    if not 0 <= index < len(advisories):
+        raise HTTPException(422, "no advisory at that index")
+    adv = advisories[index]
+    engine = replay_api.engine()
+    async with _engine_lock():
+        result, summary = await run_in_threadpool(_qualified_latest_field, engine)
+        if result is None:
+            return JSONResponse({**current, "advisory": adv, "analysis": None,
+                                 "section": None, "latest_state": LATEST_UNAVAILABLE})
+        ctx = await run_in_threadpool(track_lib.field_context, result.view, _withheld(summary))
+    points = _advisory_points(adv)
+    try:
+        section_payload = track_lib.section(ctx, points, mode)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return JSONResponse({
+        **current, "advisory": adv,
+        "analysis": track_lib.analyze(ctx, points), "section": section_payload,
+        "thermal_field": {
+            "source": "latest qualified OceanEmbed field", "valid_date": result.view.date,
+            "served_from": result.view.provenance.get("inference_source"),
+            "retrieval_time_utc": result.meta.get("retrieval_time_utc"),
+            "reconstruction_lag_hours": result.meta.get("reconstruction_lag_hours"),
+            "advisory_minus_valid_hours": _hours_between(adv["advisory_issued_at"],
+                                                         result.view.date),
+            "withheld": list(ctx.withheld)},
+        "labels": {"track": adv["provenance_label"],
+                   "thermal_state": "Thermal state: latest qualified OceanEmbed reconstruction"}})
+
+
+@app.get("/api/cyclones/archived-test")
+async def cyclones_archived_test(mode: str = "temperature"):
+    """An archived GDACS advisory, labelled HISTORICAL / TEST EVENT, never live."""
+    payload = gdacs.archived_test_advisory()
+    adv = payload["advisories"][0]
+    date = adv["advisory_issued_at"][:10]
+    points = _advisory_points(adv)
+    async with _engine_lock():
+        view = await run_in_threadpool(get_view, date)
+        ctx = await run_in_threadpool(track_lib.field_context, view)
+    try:
+        section_payload = track_lib.section(ctx, points, mode)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return JSONResponse({
+        **payload, "advisory": adv,
+        "analysis": track_lib.analyze(ctx, points), "section": section_payload,
+        "thermal_field": {
+            "source": "historical replay_field", "valid_date": date,
+            "advisory_minus_valid_hours": _hours_between(adv["advisory_issued_at"], date),
+            "withheld": []},
+        "labels": {"track": f"HISTORICAL / TEST EVENT · {adv['provenance_label']}",
+                   "thermal_state": f"Thermal state: OceanEmbed historical reconstruction "
+                                    f"for {date}, the archived advisory date"}})
+
+
+SCENARIO_BADGE = "USER-DRAWN SCENARIO - NOT AN OFFICIAL FORECAST"
+
+
+@app.post("/api/scenario/analysis")
+def scenario_analysis(body: dict) -> dict:
+    """Thermal conditions along a user-drawn path. Not a forecast of anything."""
+    source = body.get("field", "historical")
+    mode = body.get("mode", "temperature")
+    points = [{"lat": p.get("lat"), "lon": p.get("lon")} for p in (body.get("points") or [])
+              if isinstance(p, dict)]
+    if source == "historical":
+        date = body.get("date")
+        if not date:
+            raise HTTPException(422, "a historical scenario needs a date")
+        view, withheld = get_view(str(date)), ()
+        field_meta = {"source": "historical replay_field", "valid_date": view.date}
+    elif source == "latest":
+        result, summary = _qualified_latest_field(replay_api.engine())
+        if result is None:
+            raise HTTPException(503, LATEST_UNAVAILABLE)
+        view, withheld = result.view, _withheld(summary)
+        field_meta = {"source": "latest qualified OceanEmbed field",
+                      "valid_date": view.date,
+                      "reconstruction_lag_hours": result.meta.get("reconstruction_lag_hours")}
+    else:
+        raise HTTPException(422, "field must be 'historical' or 'latest'")
+    ctx = track_lib.field_context(view, withheld)
+    try:
+        analysis = track_lib.analyze(ctx, points)
+        section_payload = track_lib.section(ctx, points, mode)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return {"badge": SCENARIO_BADGE, "analysis": analysis, "section": section_payload,
+            "thermal_field": {**field_meta, "withheld": list(withheld)},
+            "labels": {"path": "Path: user-drawn scenario - not an observed or forecast track",
+                       "thermal_state": THERMAL_LABEL}}
 
 
 @app.get("/api/latest/cached")
@@ -741,6 +1165,10 @@ def netcdf(date: str):
 
 # All original Phase 7A endpoints remain available, unchanged.
 app.include_router(replay_api.app.router, prefix="/api")
+# Model Science and disaster-context endpoints (science package); registered before
+# the static mount so the SPA fallback can never shadow them.
+from ..science.api import router as science_router  # noqa: E402
+app.include_router(science_router)
 DIST = REPO_ROOT / "web/dist"
 if DIST.is_dir():
     app.mount("/assets", StaticFiles(directory=DIST / "assets"), name="assets")

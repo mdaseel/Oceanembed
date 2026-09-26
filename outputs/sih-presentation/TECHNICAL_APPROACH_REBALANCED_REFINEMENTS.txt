@@ -1,0 +1,18 @@
+Correct a few arrows/text in THIS slide, preserve the overall image exactly. Do NOT redesign, move panels, shrink central illustrations, or change highlighted TECH STACK.
+
+Fixes:
+A. Remove rightward blue connector from left input collection bus into QUALIFIED NRT ADAPTERS. Add short UP arrow from NRT strip into QC/daily/grid harmonisation cards. Historical products and NRT are alternatives feeding harmonisation. No historical→NRT arrow.
+B. Remove blue rightward arrow from supervised-training group's right edge into OBSERVATIONAL VALIDATION. Training should go only to model (existing upward Provide trained model route keep). Validation should receive only the existing downward Compare predictions arrow from engine.
+C. Reverse the blue connection at ETOPO card left edge. It must point LEFT from ETOPO INTO the field output/support junction. ETOPO is a supporting input, not generated data. Do not retain original rightward arrow. Keep label Physical depth support.
+D. Add clean short downward connection from THERMAL DIAGNOSTICS toward disaster group's thermal-monitoring map. Route in unused white gutter immediately left of right output cards and then in white strip above disaster panel, ending at upper edge of thermal monitoring card. Clearly label 'Thermal diagnostics'. No arrow from ETOPO to disaster.
+E. Remove '(near real-time)' from latest-qualified-state card, keep 'Valid date + source lag'.
+F. Remove 'Scenario: user-drawn path • not a forecast' caption from GDACS cyclone map, because it incorrectly labels external track as user-drawn. Instead put that caption below historical replay strip as a separate small Scenario Mode note with tiny drawn-path icon if space, otherwise omit. GDACS map stays externally sourced.
+G. Fix TECH STACK category labels: Python+PyTorch 'ML / SCIENCE'; NumPy+pandas+xarray+NetCDF+Zarr 'DATA'; FastAPI 'API'; React+TypeScript+Three.js+Plotly 'FRONTEND'; pytest+Vitest+Playwright 'TESTS'; containers/cloud 'DEPLOYMENT TARGET'. Retain their vibrant large logos and blue highlighted panel.
+H. Make harmonisation scientific outgoing blue arrow terminate just inside engine input edge by spatial map, not above title: run down white gutter at left of engine, then right into 33×33 spatial context map. Label 7 channels+validity mask remains above.
+All other text and images exactly as source. Complete high quality slide.
+
+Keep all image exactly, make 3 tiny corrections only:
+1 Restore missing historical input-to-harmonisation arrow: draw a short BLUE horizontal right-pointing arrow from the existing input bus at x232,y207 into DATA HARMONISATION outer border at x254,y207. Only a 22-pixel length connector, no other changes. This is essential: historical inputs currently disconnected from preprocessing.
+2 In bottom tech stack panel, change only headings: above Python/PyTorch change 'TECH STACK' to 'ML / SCIENCE'; above NumPy/pandas/xarray/NetCDF/Zarr change 'ML / SCIENCE' to 'DATA'. Add TECH STACK as a modest overall label on the blue outline of whole tech panel if space. Preserve all logos/wordmarks, all neighboring labels. In last tech cell replace malformed lower line with 'PLANNED', keeping 'DEPLOYMENT TARGET' as heading.
+3 Existing line down from output junction at x1310 routes left along y607 to x1127 above disaster panel. Put a clear DOWN arrowhead at x1127,y626, where it enters disaster panel, and a tiny label 'Thermal diagnostics' on the white horizontal line gap y612. Do not move panel title. Do not connect external GDACS track into model.
+Do not edit any other pixels or text. Same complete 16:9 slide.

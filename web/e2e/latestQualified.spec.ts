@@ -30,6 +30,13 @@ async function cachedPayload(page: Page) {
   return p;
 }
 
+/** The latest qualified state is a source of the Ocean State workspace. */
+async function openLatestState(page: Page) {
+  await page.goto("/");
+  await page.getByRole("link", { name: "Ocean State", exact: true }).click();
+  await page.getByTestId("source-latest").click();
+}
+
 async function serveLive(page: Page, body: unknown) {
   await page.route("**/api/latest/qualified", (r: Route) =>
     r.fulfill({ json: body, headers: { "content-type": "application/json" } }),
@@ -43,8 +50,7 @@ test("the tab name and every qualified claim come from the decision artifact", a
   expect(q.qualified).toBe(true);
   const cached = await cachedPayload(page);
   await serveLive(page, { ...cached, state: "LATEST_QUALIFIED", label: null, live_attempt: null });
-  await page.goto("/");
-  await page.getByRole("link", { name: q.tab_name }).click();
+  await openLatestState(page);
 
   await expect(page.getByTestId("qualification-banner")).toContainText(q.banner);
   await expect(page.getByTestId("qualification-banner")).toContainText(
@@ -82,8 +88,7 @@ test("the latest field is drawn by the SAME map, 3D renderer and profile, unchan
   const q = await (await page.request.get("/api/latest/qualification")).json();
   const cached = await cachedPayload(page);
   await serveLive(page, { ...cached, state: "LATEST_QUALIFIED", label: null, live_attempt: null });
-  await page.goto("/");
-  await page.getByRole("link", { name: q.tab_name }).click();
+  await openLatestState(page);
 
   // The historical 2D map component renders the latest field.
   await expect(page.getByTestId("field-map")).toBeVisible();
@@ -120,8 +125,7 @@ test("a failed live attempt shows the snapshot labelled NOT CURRENT", async ({ p
     ...cached,
     live_attempt: { attempted: true, reasons: ["L1: current_u not retrieved (UNREACHABLE)"] },
   });
-  await page.goto("/");
-  await page.getByRole("link", { name: q.tab_name }).click();
+  await openLatestState(page);
   await expect(page.getByTestId("snapshot-label")).toContainText("NOT CURRENT");
   await expect(page.getByTestId("live-attempt")).toContainText("no inference was run");
   await expect(page.getByTestId("field-map")).toBeVisible();
@@ -142,8 +146,7 @@ test("with nothing available the unavailable state is informative, never blank",
   await page.route("**/api/latest/qualified/cached", (r) =>
     r.fulfill({ json: none, headers: { "content-type": "application/json" } }));
   await serveLive(page, none);
-  await page.goto("/");
-  await page.getByRole("link", { name: q.tab_name }).click();
+  await openLatestState(page);
   await expect(page.getByTestId("unavailable-label")).toContainText("CURRENTLY UNAVAILABLE");
   await expect(page.getByTestId("latest-sources")).toContainText("No qualified reconstruction yet");
   await expect(page.getByTestId("field-map")).toHaveCount(0);
@@ -220,18 +223,18 @@ test("the recent-states selector lists a 7-day window and marks the newest", asy
                           is_newest: true, newest_qualified_date: "2026-09-06",
                           live_attempt: null,
                           field: { ...cached.field, date: "2026-09-06" } });
-  await page.goto("/");
-  await page.getByRole("link", { name: q.tab_name }).click();
+  await openLatestState(page);
 
-  await expect(page.getByTestId("recent-states")).toBeVisible();
-  for (const d of dates) await expect(page.getByTestId(`day-${d}`)).toBeVisible();
-  await expect(page.getByTestId("newest-date")).toHaveText("2026-09-06");
-  await expect(page.getByTestId("day-2026-09-06")).toHaveAttribute("data-status", "AVAILABLE");
-  // an unavailable day stays visible, is disabled, and says what is missing
-  const gap = page.getByTestId("day-2026-09-02");
-  await expect(gap).toHaveAttribute("data-status", "UNAVAILABLE");
-  await expect(gap).toBeDisabled();
-  await expect(page.getByTestId("why-2026-09-02")).toContainText("currents_nrt");
+  // One recent-states control: the Ocean State playback timeline.
+  await expect(page.getByTestId("nrt-playback")).toBeVisible();
+  for (const d of dates) await expect(page.getByTestId(`nrt-day-${d}`)).toBeVisible();
+  await expect(page.getByTestId("newest-qualified-state")).toContainText("2026-09-06");
+  await expect(page.getByTestId("nrt-day-2026-09-06")).not.toHaveAttribute("data-state", "UNAVAILABLE");
+  // an unavailable day stays visible, is never a frame, and says what is missing
+  const gap = page.getByTestId("nrt-day-2026-09-02");
+  await expect(gap).toHaveAttribute("data-state", "UNAVAILABLE");
+  await expect(gap).toHaveAttribute("aria-disabled", "true");
+  await expect(gap).toHaveAttribute("title", /currents_nrt/);
 });
 
 test("choosing another day re-renders that day's field, and cannot be faked for an unavailable day", async ({
@@ -261,11 +264,10 @@ test("choosing another day re-renders that day's field, and cannot be faked for 
                           is_newest: true, newest_qualified_date: "2026-09-06",
                           live_attempt: null,
                           field: { ...cached.field, date: "2026-09-06" } });
-  await page.goto("/");
-  await page.getByRole("link", { name: q.tab_name }).click();
+  await openLatestState(page);
   await expect(page.getByTestId("effective-date")).toContainText("2026-09-06");
 
-  await page.getByTestId("day-2026-09-04").click();
+  await page.getByTestId("nrt-day-2026-09-04").click();
   await expect(page.getByTestId("effective-date")).toContainText("2026-09-04");
   // A qualified older state must never read as "Unavailable" (live UI defect,
   // found 2026-09-12): the state tile has a label for every served state.
@@ -275,7 +277,7 @@ test("choosing another day re-renders that day's field, and cannot be faked for 
   await expect(page.getByTestId("latest-state")).not.toContainText("Unavailable");
   await expect(page.getByTestId("effective-date")).toContainText("not the newest state");
   await expect(page.getByTestId("newest-qualified-state")).toContainText("2026-09-06");
-  await expect(page.getByTestId("day-2026-09-04")).toHaveAttribute("data-selected", "true");
+  await expect(page.getByTestId("nrt-day-2026-09-04")).toHaveAttribute("data-state", "SELECTED");
   // the shared renderer and profile still draw the selected day
   await expect(page.getByTestId("field-map")).toBeVisible();
   // the profile lives in the same collapsible panel as in Historical Replay
@@ -284,7 +286,7 @@ test("choosing another day re-renders that day's field, and cannot be faked for 
   await expect(page.getByTestId("depth-renderer")).toBeVisible();
 
   // an unavailable day never triggers a request, so no inference can happen
-  await page.getByTestId("day-2026-09-02").click({ force: true }).catch(() => {});
+  await page.getByTestId("nrt-day-2026-09-02").click({ force: true }).catch(() => {});
   expect(asked).not.toContain("2026-09-02");
   // lag and the non-"now" wording remain for the selected day
   await expect(page.getByTestId("timeliness-note")).toContainText("reconstruction lag");

@@ -1,0 +1,804 @@
+{
+  "schema": 1,
+  "event_id": "fani-2019",
+  "display_name": "Cyclone Fani (2019)",
+  "name": "Fani",
+  "season": 2019,
+  "sid": [
+    "2019116N02090"
+  ],
+  "basin": "Bay of Bengal",
+  "subbasin_codes": [
+    "BB"
+  ],
+  "replay_start": "2019-04-22",
+  "replay_end": "2019-05-11",
+  "formation": "2019-04-26",
+  "peak": "2019-05-02",
+  "landfall": "2019-05-03",
+  "peak_time": "2019-05-02 09:00:00",
+  "landfall_time": "2019-05-03 06:00:00",
+  "segments": [
+    {
+      "label": "Pre-event",
+      "start": "2019-04-22",
+      "end": "2019-04-25"
+    },
+    {
+      "label": "Approach / intensification",
+      "start": "2019-04-26",
+      "end": "2019-05-01"
+    },
+    {
+      "label": "Event",
+      "start": "2019-05-02",
+      "end": "2019-05-03"
+    },
+    {
+      "label": "Wake",
+      "start": "2019-05-04",
+      "end": "2019-05-07"
+    },
+    {
+      "label": "Recovery",
+      "start": "2019-05-08",
+      "end": "2019-05-11"
+    }
+  ],
+  "phase_rule": "outputs/events/EVENT_LIBRARY_RULE.md",
+  "frozen": false,
+  "split": "train",
+  "in_sample": true,
+  "split_note": "Training-period dates: this reconstruction is IN-SAMPLE. The frozen L2 saw these days when it was fitted.",
+  "external_metadata": {
+    "intensity_source": "IMD / RSMC New Delhi agency columns via IBTrACS (3-minute sustained wind)",
+    "peak_imd_wind_kt": 115.0,
+    "peak_imd_wind_time": "2019-05-02 09:00:00",
+    "min_imd_pressure_hpa": 932.0,
+    "jtwc_peak_wind_kt_1min": 150.0,
+    "first_landfall_fix_time": "2019-05-03 06:00:00"
+  },
+  "track_fixes_inside_domain": 59,
+  "track_fixes_total": 71,
+  "availability": {
+    "days": 20,
+    "missing_dates": [],
+    "zero_input_dates": [],
+    "valid_cells_min": 11122,
+    "valid_cells_median": 11136,
+    "valid_cells_max": 11136,
+    "checked": "surface_input_valid counts in the frozen model-ready store; no inference"
+  },
+  "enabled": true,
+  "exclusion_reasons": [],
+  "track": {
+    "schema": 1,
+    "event": "Cyclone Fani (2019)",
+    "basin": "North Indian (Bay of Bengal)",
+    "dataset": "IBTrACS v04r01, North Indian basin",
+    "agency": "IMD / RSMC New Delhi, via IBTrACS",
+    "provider": "NOAA National Centers for Environmental Information",
+    "source_url": "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.NI.list.v04r01.csv",
+    "source_sha256": "1e892624f97f5481cddf6b8e9e65be2925fa0a3336f399f5b9fd87fbb463fb78",
+    "citation": "Knapp, K. R., M. C. Kruk, D. H. Levinson, H. J. Diamond and C. J. Neumann (2010), The International Best Track Archive for Climate Stewardship (IBTrACS): Unifying tropical cyclone best track data, Bull. Amer. Meteor. Soc., 91, 363-376. Data: IBTrACS Project v04r01, NOAA NCEI, doi:10.25921/82ty-9e16.",
+    "licence": "US Government work, public domain; NOAA/NCEI attribution retained",
+    "role": "static geographic context; not a model input, not an OceanEmbed output, and never used in inference, diagnostics or masks",
+    "n_points": 71,
+    "first_time": "2019-04-25 18:00:00",
+    "last_time": "2019-05-04 12:00:00",
+    "peak_imd_wind_kt": 115.0,
+    "min_imd_pressure_hpa": 932.0,
+    "points": [
+      {
+        "time": "2019-04-25 18:00:00",
+        "lat": 1.9,
+        "lon": 90.2,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 627.0
+      },
+      {
+        "time": "2019-04-25 21:00:00",
+        "lat": 2.1,
+        "lon": 90.1,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 636.0
+      },
+      {
+        "time": "2019-04-26 00:00:00",
+        "lat": 2.2,
+        "lon": 90.0,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 646.0
+      },
+      {
+        "time": "2019-04-26 03:00:00",
+        "lat": 2.3,
+        "lon": 89.8,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 668.0
+      },
+      {
+        "time": "2019-04-26 06:00:00",
+        "lat": 2.5,
+        "lon": 89.7,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 678.0
+      },
+      {
+        "time": "2019-04-26 09:00:00",
+        "lat": 2.8,
+        "lon": 89.8,
+        "imd_wind_kt": null,
+        "imd_pressure_hpa": null,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 661.0
+      },
+      {
+        "time": "2019-04-26 12:00:00",
+        "lat": 3.2,
+        "lon": 89.8,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 998.0,
+        "usa_wind_kt": 25.0,
+        "nature": "TS",
+        "dist2land_km": 643.0
+      },
+      {
+        "time": "2019-04-26 15:00:00",
+        "lat": 3.5,
+        "lon": 89.7,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 998.0,
+        "usa_wind_kt": 28.0,
+        "nature": "TS",
+        "dist2land_km": 642.0
+      },
+      {
+        "time": "2019-04-26 18:00:00",
+        "lat": 3.8,
+        "lon": 89.5,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 998.0,
+        "usa_wind_kt": 30.0,
+        "nature": "TS",
+        "dist2land_km": 654.0
+      },
+      {
+        "time": "2019-04-26 21:00:00",
+        "lat": 4.2,
+        "lon": 89.4,
+        "imd_wind_kt": 28.0,
+        "imd_pressure_hpa": 998.0,
+        "usa_wind_kt": 33.0,
+        "nature": "TS",
+        "dist2land_km": 655.0
+      },
+      {
+        "time": "2019-04-27 00:00:00",
+        "lat": 4.6,
+        "lon": 89.4,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 997.0,
+        "usa_wind_kt": 35.0,
+        "nature": "TS",
+        "dist2land_km": 647.0
+      },
+      {
+        "time": "2019-04-27 03:00:00",
+        "lat": 4.9,
+        "lon": 89.4,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 996.0,
+        "usa_wind_kt": 40.0,
+        "nature": "TS",
+        "dist2land_km": 644.0
+      },
+      {
+        "time": "2019-04-27 06:00:00",
+        "lat": 5.1,
+        "lon": 89.4,
+        "imd_wind_kt": 35.0,
+        "imd_pressure_hpa": 995.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 642.0
+      },
+      {
+        "time": "2019-04-27 09:00:00",
+        "lat": 5.5,
+        "lon": 89.3,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 994.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 653.0
+      },
+      {
+        "time": "2019-04-27 12:00:00",
+        "lat": 6.0,
+        "lon": 89.2,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 665.0
+      },
+      {
+        "time": "2019-04-27 15:00:00",
+        "lat": 6.4,
+        "lon": 88.9,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 703.0
+      },
+      {
+        "time": "2019-04-27 18:00:00",
+        "lat": 6.6,
+        "lon": 88.5,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 730.0
+      },
+      {
+        "time": "2019-04-27 21:00:00",
+        "lat": 6.8,
+        "lon": 88.2,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 696.0
+      },
+      {
+        "time": "2019-04-28 00:00:00",
+        "lat": 7.1,
+        "lon": 88.1,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 684.0
+      },
+      {
+        "time": "2019-04-28 03:00:00",
+        "lat": 7.2,
+        "lon": 88.1,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 685.0
+      },
+      {
+        "time": "2019-04-28 06:00:00",
+        "lat": 7.4,
+        "lon": 88.1,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 686.0
+      },
+      {
+        "time": "2019-04-28 09:00:00",
+        "lat": 7.6,
+        "lon": 87.9,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 665.0
+      },
+      {
+        "time": "2019-04-28 12:00:00",
+        "lat": 8.0,
+        "lon": 87.6,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 638.0
+      },
+      {
+        "time": "2019-04-28 15:00:00",
+        "lat": 8.1,
+        "lon": 87.5,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 630.0
+      },
+      {
+        "time": "2019-04-28 18:00:00",
+        "lat": 8.2,
+        "lon": 87.5,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 631.0
+      },
+      {
+        "time": "2019-04-28 21:00:00",
+        "lat": 8.4,
+        "lon": 87.4,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 623.0
+      },
+      {
+        "time": "2019-04-29 00:00:00",
+        "lat": 8.6,
+        "lon": 87.4,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 45.0,
+        "nature": "TS",
+        "dist2land_km": 627.0
+      },
+      {
+        "time": "2019-04-29 03:00:00",
+        "lat": 8.8,
+        "lon": 87.2,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 48.0,
+        "nature": "TS",
+        "dist2land_km": 609.0
+      },
+      {
+        "time": "2019-04-29 06:00:00",
+        "lat": 9.3,
+        "lon": 87.2,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 50.0,
+        "nature": "TS",
+        "dist2land_km": 624.0
+      },
+      {
+        "time": "2019-04-29 09:00:00",
+        "lat": 9.8,
+        "lon": 87.1,
+        "imd_wind_kt": 45.0,
+        "imd_pressure_hpa": 992.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 632.0
+      },
+      {
+        "time": "2019-04-29 12:00:00",
+        "lat": 10.2,
+        "lon": 87.1,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 986.0,
+        "usa_wind_kt": 60.0,
+        "nature": "TS",
+        "dist2land_km": 651.0
+      },
+      {
+        "time": "2019-04-29 15:00:00",
+        "lat": 10.5,
+        "lon": 86.9,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 986.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 645.0
+      },
+      {
+        "time": "2019-04-29 18:00:00",
+        "lat": 10.9,
+        "lon": 86.8,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 986.0,
+        "usa_wind_kt": 70.0,
+        "nature": "TS",
+        "dist2land_km": 655.0
+      },
+      {
+        "time": "2019-04-29 21:00:00",
+        "lat": 11.3,
+        "lon": 86.6,
+        "imd_wind_kt": 65.0,
+        "imd_pressure_hpa": 982.0,
+        "usa_wind_kt": 78.0,
+        "nature": "TS",
+        "dist2land_km": 656.0
+      },
+      {
+        "time": "2019-04-30 00:00:00",
+        "lat": 11.8,
+        "lon": 86.5,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 85.0,
+        "nature": "TS",
+        "dist2land_km": 676.0
+      },
+      {
+        "time": "2019-04-30 03:00:00",
+        "lat": 12.3,
+        "lon": 86.2,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 974.0,
+        "usa_wind_kt": 88.0,
+        "nature": "TS",
+        "dist2land_km": 638.0
+      },
+      {
+        "time": "2019-04-30 06:00:00",
+        "lat": 12.7,
+        "lon": 85.8,
+        "imd_wind_kt": 80.0,
+        "imd_pressure_hpa": 970.0,
+        "usa_wind_kt": 90.0,
+        "nature": "TS",
+        "dist2land_km": 576.0
+      },
+      {
+        "time": "2019-04-30 09:00:00",
+        "lat": 13.0,
+        "lon": 85.3,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 966.0,
+        "usa_wind_kt": 93.0,
+        "nature": "TS",
+        "dist2land_km": 516.0
+      },
+      {
+        "time": "2019-04-30 12:00:00",
+        "lat": 13.3,
+        "lon": 84.8,
+        "imd_wind_kt": 90.0,
+        "imd_pressure_hpa": 962.0,
+        "usa_wind_kt": 95.0,
+        "nature": "TS",
+        "dist2land_km": 456.0
+      },
+      {
+        "time": "2019-04-30 15:00:00",
+        "lat": 13.4,
+        "lon": 84.6,
+        "imd_wind_kt": 95.0,
+        "imd_pressure_hpa": 957.0,
+        "usa_wind_kt": 100.0,
+        "nature": "TS",
+        "dist2land_km": 435.0
+      },
+      {
+        "time": "2019-04-30 18:00:00",
+        "lat": 13.5,
+        "lon": 84.4,
+        "imd_wind_kt": 95.0,
+        "imd_pressure_hpa": 957.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 413.0
+      },
+      {
+        "time": "2019-04-30 21:00:00",
+        "lat": 13.6,
+        "lon": 84.2,
+        "imd_wind_kt": 95.0,
+        "imd_pressure_hpa": 957.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 383.0
+      },
+      {
+        "time": "2019-05-01 00:00:00",
+        "lat": 13.9,
+        "lon": 84.1,
+        "imd_wind_kt": 95.0,
+        "imd_pressure_hpa": 957.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 358.0
+      },
+      {
+        "time": "2019-05-01 03:00:00",
+        "lat": 14.1,
+        "lon": 84.0,
+        "imd_wind_kt": 95.0,
+        "imd_pressure_hpa": 957.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 334.0
+      },
+      {
+        "time": "2019-05-01 06:00:00",
+        "lat": 14.2,
+        "lon": 84.0,
+        "imd_wind_kt": 95.0,
+        "imd_pressure_hpa": 957.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 324.0
+      },
+      {
+        "time": "2019-05-01 09:00:00",
+        "lat": 14.5,
+        "lon": 84.1,
+        "imd_wind_kt": 95.0,
+        "imd_pressure_hpa": 955.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 304.0
+      },
+      {
+        "time": "2019-05-01 12:00:00",
+        "lat": 14.9,
+        "lon": 84.1,
+        "imd_wind_kt": 100.0,
+        "imd_pressure_hpa": 950.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 278.0
+      },
+      {
+        "time": "2019-05-01 15:00:00",
+        "lat": 15.0,
+        "lon": 84.2,
+        "imd_wind_kt": 100.0,
+        "imd_pressure_hpa": 950.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 270.0
+      },
+      {
+        "time": "2019-05-01 18:00:00",
+        "lat": 15.2,
+        "lon": 84.2,
+        "imd_wind_kt": 100.0,
+        "imd_pressure_hpa": 950.0,
+        "usa_wind_kt": 105.0,
+        "nature": "TS",
+        "dist2land_km": 256.0
+      },
+      {
+        "time": "2019-05-01 21:00:00",
+        "lat": 15.5,
+        "lon": 84.3,
+        "imd_wind_kt": 100.0,
+        "imd_pressure_hpa": 950.0,
+        "usa_wind_kt": 108.0,
+        "nature": "TS",
+        "dist2land_km": 246.0
+      },
+      {
+        "time": "2019-05-02 00:00:00",
+        "lat": 15.9,
+        "lon": 84.6,
+        "imd_wind_kt": 105.0,
+        "imd_pressure_hpa": 945.0,
+        "usa_wind_kt": 110.0,
+        "nature": "TS",
+        "dist2land_km": 241.0
+      },
+      {
+        "time": "2019-05-02 03:00:00",
+        "lat": 16.2,
+        "lon": 84.7,
+        "imd_wind_kt": 105.0,
+        "imd_pressure_hpa": 945.0,
+        "usa_wind_kt": 115.0,
+        "nature": "TS",
+        "dist2land_km": 223.0
+      },
+      {
+        "time": "2019-05-02 06:00:00",
+        "lat": 16.8,
+        "lon": 84.8,
+        "imd_wind_kt": 110.0,
+        "imd_pressure_hpa": 940.0,
+        "usa_wind_kt": 120.0,
+        "nature": "TS",
+        "dist2land_km": 183.0
+      },
+      {
+        "time": "2019-05-02 09:00:00",
+        "lat": 17.2,
+        "lon": 84.8,
+        "imd_wind_kt": 115.0,
+        "imd_pressure_hpa": 932.0,
+        "usa_wind_kt": 135.0,
+        "nature": "TS",
+        "dist2land_km": 143.0
+      },
+      {
+        "time": "2019-05-02 12:00:00",
+        "lat": 17.6,
+        "lon": 84.8,
+        "imd_wind_kt": 115.0,
+        "imd_pressure_hpa": 932.0,
+        "usa_wind_kt": 150.0,
+        "nature": "TS",
+        "dist2land_km": 107.0
+      },
+      {
+        "time": "2019-05-02 15:00:00",
+        "lat": 17.9,
+        "lon": 84.9,
+        "imd_wind_kt": 115.0,
+        "imd_pressure_hpa": 934.0,
+        "usa_wind_kt": 148.0,
+        "nature": "TS",
+        "dist2land_km": 92.0
+      },
+      {
+        "time": "2019-05-02 18:00:00",
+        "lat": 18.3,
+        "lon": 85.0,
+        "imd_wind_kt": 115.0,
+        "imd_pressure_hpa": 934.0,
+        "usa_wind_kt": 145.0,
+        "nature": "TS",
+        "dist2land_km": 69.0
+      },
+      {
+        "time": "2019-05-02 21:00:00",
+        "lat": 18.6,
+        "lon": 85.2,
+        "imd_wind_kt": 115.0,
+        "imd_pressure_hpa": 934.0,
+        "usa_wind_kt": 140.0,
+        "nature": "TS",
+        "dist2land_km": 67.0
+      },
+      {
+        "time": "2019-05-03 00:00:00",
+        "lat": 19.1,
+        "lon": 85.5,
+        "imd_wind_kt": 105.0,
+        "imd_pressure_hpa": 945.0,
+        "usa_wind_kt": 135.0,
+        "nature": "TS",
+        "dist2land_km": 54.0
+      },
+      {
+        "time": "2019-05-03 03:00:00",
+        "lat": 19.6,
+        "lon": 85.7,
+        "imd_wind_kt": 100.0,
+        "imd_pressure_hpa": 952.0,
+        "usa_wind_kt": 125.0,
+        "nature": "TS",
+        "dist2land_km": 22.0
+      },
+      {
+        "time": "2019-05-03 06:00:00",
+        "lat": 20.2,
+        "lon": 85.9,
+        "imd_wind_kt": 85.0,
+        "imd_pressure_hpa": 966.0,
+        "usa_wind_kt": 115.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-03 09:00:00",
+        "lat": 20.7,
+        "lon": 86.1,
+        "imd_wind_kt": 75.0,
+        "imd_pressure_hpa": 970.0,
+        "usa_wind_kt": 95.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-03 12:00:00",
+        "lat": 21.2,
+        "lon": 86.5,
+        "imd_wind_kt": 70.0,
+        "imd_pressure_hpa": 976.0,
+        "usa_wind_kt": 75.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-03 15:00:00",
+        "lat": 21.6,
+        "lon": 86.9,
+        "imd_wind_kt": 60.0,
+        "imd_pressure_hpa": 980.0,
+        "usa_wind_kt": 65.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-03 18:00:00",
+        "lat": 22.1,
+        "lon": 87.4,
+        "imd_wind_kt": 55.0,
+        "imd_pressure_hpa": 984.0,
+        "usa_wind_kt": 55.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-03 21:00:00",
+        "lat": 22.6,
+        "lon": 88.1,
+        "imd_wind_kt": 50.0,
+        "imd_pressure_hpa": 986.0,
+        "usa_wind_kt": 48.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-04 00:00:00",
+        "lat": 23.2,
+        "lon": 88.5,
+        "imd_wind_kt": 40.0,
+        "imd_pressure_hpa": 994.0,
+        "usa_wind_kt": 40.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-04 03:00:00",
+        "lat": 23.7,
+        "lon": 89.0,
+        "imd_wind_kt": 30.0,
+        "imd_pressure_hpa": 996.0,
+        "usa_wind_kt": 35.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-04 06:00:00",
+        "lat": 24.4,
+        "lon": 89.5,
+        "imd_wind_kt": 25.0,
+        "imd_pressure_hpa": 998.0,
+        "usa_wind_kt": 30.0,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-04 09:00:00",
+        "lat": 24.8,
+        "lon": 89.9,
+        "imd_wind_kt": 23.0,
+        "imd_pressure_hpa": 999.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      },
+      {
+        "time": "2019-05-04 12:00:00",
+        "lat": 25.2,
+        "lon": 90.7,
+        "imd_wind_kt": 20.0,
+        "imd_pressure_hpa": 1000.0,
+        "usa_wind_kt": null,
+        "nature": "TS",
+        "dist2land_km": 0.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "split": "validation",
+  "dates": [
+    "2021-01-01",
+    "2021-12-31"
+  ],
+  "n_days": 365,
+  "n_cells": 11136,
+  "models": [
+    {
+      "label": "FROZEN_L2",
+      "kept_channels": null,
+      "sha": "b715bb2bff32d5e4a1e696b5350e29c3971fbd1cfd5d4b3f5c68bebe51ae728d"
+    },
+    {
+      "label": "D_CONTROL_ALL",
+      "kept_channels": null,
+      "sha": "6c41703c452e7be3bec548bbfb0283161eecb73d15cf4eda29fddca98e58d19f"
+    },
+    {
+      "label": "SST_ONLY",
+      "kept_channels": [
+        "sst"
+      ],
+      "sha": "1e6ea30f78373393a71ae05926885b5de69fa0769a016bd5150bed39272878e8"
+    }
+  ],
+  "runtime_seconds": 81.07556629180908,
+  "note": "physical temperature space; identical population; test split never opened; no Argo read"
+}
