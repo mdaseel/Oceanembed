@@ -144,10 +144,14 @@ export default function LatestQualified({
   );
 
   const refresh = useCallback(() => {
+    setBusy(true);
     getJson<AvailableDates>("/api/latest/available-dates?refresh=true")
-      .then((w) => live.current && setWindow7(w))
-      .catch(() => {});
-    load();
+      .then((w) => {
+        if (w.error) throw Error(w.error);
+        if (live.current) setWindow7(w);
+      })
+      .catch((e) => live.current && setError(String(e)))
+      .finally(() => live.current && load());
   }, [load]);
 
   useEffect(() => {

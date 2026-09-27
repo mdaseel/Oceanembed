@@ -1013,6 +1013,15 @@
   color: #9bf0f7;
   margin-right: 4px;
 }
+.info-tip-body.info-tip-floating {
+  position: fixed;
+  bottom: auto;
+  transform: none;
+  max-width: calc(100vw - 24px);
+  visibility: visible;
+  opacity: 1;
+  z-index: 100;
+}
 .info-tip:hover .info-tip-body,
 .info-tip:focus-within .info-tip-body {
   visibility: visible;

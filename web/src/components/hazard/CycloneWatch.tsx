@@ -21,6 +21,7 @@ export function CycloneWatch({
   latestValidDate,
   latestLagHours,
   monitoring,
+  previewRequest = 0,
 }: {
   onContext: (context: CycloneAnalysis | null) => void;
   onStatus?: (status: CycloneState | null) => void;
@@ -28,6 +29,7 @@ export function CycloneWatch({
   latestValidDate: string | null;
   latestLagHours: number | null;
   monitoring: MonitoringResult | null;
+  previewRequest?: number;
 }) {
   const [status, setStatus] = useState<CycloneState | null>(null);
   const [analysis, setAnalysis] = useState<CycloneAnalysis | null>(null);
@@ -72,6 +74,12 @@ export function CycloneWatch({
 
   const active = status?.state === "ACTIVE_NORTH_INDIAN_CYCLONE";
   useEffect(() => {
+    if (previewRequest > 0) {
+      setTest(true);
+      load("test");
+    }
+  }, [previewRequest, load]);
+  useEffect(() => {
     if (active) {
       setTest(false);
       load("active");
@@ -98,6 +106,7 @@ export function CycloneWatch({
               type="button"
               className="btn"
               data-testid="archived-test-toggle"
+              disabled={busy}
               onClick={() => {
                 if (test) {
                   setTest(false);

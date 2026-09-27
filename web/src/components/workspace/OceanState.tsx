@@ -40,6 +40,7 @@ import { ExtremeOverlay, ThermalExtremesPanel } from "./ThermalExtremes";
 import "../hazard/hazard.css";
 import "../hazard/expansion.css";
 import "./workspace.css";
+import "./refinement.css";
 
 const MultiDate = lazy(() => import("../MultiDate"));
 
@@ -155,6 +156,8 @@ export default function OceanState(props: OceanStateProps) {
   const [tray, setTray] = useState("profile");
   const [cyclone, setCyclone] = useState<CycloneAnalysis | null>(null);
   const [cycloneStatus, setCycloneStatus] = useState<CycloneState | null>(null);
+  const [previewRequest, setPreviewRequest] = useState(0);
+  const [trayReveal, setTrayReveal] = useState(0);
   const [testField, setTestField] = useState<ReplayData | null>(null);
   const [extremeGrid, setExtremeGrid] = useState<number[][] | null>(null);
   const [nrtPlaying, setNrtPlaying] = useState(false);
@@ -170,6 +173,7 @@ export default function OceanState(props: OceanStateProps) {
   useEffect(() => {
     if (!latest) {
       setCyclone(null);
+      setPreviewRequest(0);
       setNrtPlaying(false);
     }
     if (latest) setExtremeGrid(null);
@@ -291,7 +295,7 @@ export default function OceanState(props: OceanStateProps) {
   }) | null;
   const m = (payload?.meta ?? {}) as Record<string, number | string | undefined>;
   const lagHours = typeof m.reconstruction_lag_hours === "number" ? m.reconstruction_lag_hours : null;
-  const latestUnavailable = latest && (!q?.qualified || (nrt.initialised && !nrt.data && !nrt.busy));
+  const latestUnavailable = latest && (!q?.qualified || (!nrt.data && (!!nrt.notice || (nrt.initialised && !nrt.busy))));
   const d26Withheld = withheld.includes("d26") || (!!q && q.d26_category !== "QUALIFIED");
   const adv = latest ? cyclone?.advisory : null;
 
@@ -562,8 +566,8 @@ export default function OceanState(props: OceanStateProps) {
               Open Historical Event Intelligence
             </button>
             {q?.qualified && (
-              <button type="button" className="btn" onClick={nrt.refresh}>
-                Retry
+              <button type="button" className="btn" onClick={nrt.refresh} disabled={nrt.busy}>
+                {nrt.busy ? "Checking providers…" : "Retry"}
               </button>
             )}
           </div>
@@ -707,6 +711,7 @@ export default function OceanState(props: OceanStateProps) {
                 render: () => (
                   <div className="ws">
                     <CycloneWatch
+                      previewRequest={previewRequest}
                       onContext={setCyclone}
                       onStatus={onStatus}
                       onSelectPoint={onSelect}
@@ -776,13 +781,30 @@ export default function OceanState(props: OceanStateProps) {
     <div className="ws" data-testid="ocean-state" data-source={source}>
       {header}
       {latest && q && (
-        <p className="notice ws-banner" data-testid="qualification-banner">
-          <strong>{q.banner}</strong> — the frozen L2 driven by the complete near-real-time input stack ({q.policy?.name}),
-          qualified under the pre-registered Phase 8B protocol. Plain “QUALIFIED” is not reachable in this phase:{" "}
-          {q.qualified_unreachable_reason}
-        </p>
+        <details className="notice ws-banner qualification-summary" data-testid="qualification-banner">
+          <summary><strong>{q.banner.replaceAll("_", " ")}</strong><span>Complete seven-channel reconstruction · view qualification details</span></summary>
+          <p>The frozen L2 uses the complete near-real-time input stack ({q.policy?.name}), qualified under the pre-registered Phase 8B protocol. {q.qualified_unreachable_reason}</p>
+        </details>
       )}
       {controls}
+      {latest && q?.qualified && (
+        <section className="source-freshness" data-testid="source-freshness" aria-label="Input availability">
+          <div className="freshness-heading">
+            <div><span className="eyebrow">INPUT AVAILABILITY</span><h2>{nrt.refreshing ? "Checking the source catalogues…" : "One date, seven complete inputs"}</h2></div>
+            <span className="ws-note" role="status">{nrt.checkedAt ? `Last checked ${new Date(nrt.checkedAt).toLocaleString()}` : "Checking availability"}</span>
+          </div>
+          <div className="source-freshness-grid">
+            {Object.entries(nrt.window7?.per_product_newest ?? {}).map(([key, date]) => {
+              const labels: Record<string, string> = { sst_nrt: "SST", sss_nrt_multiobs: "Salinity", sla_nrt: "Sea level", currents_nrt: "Currents · OSCAR", wind_nrt: "Wind" };
+              const newest = nrt.window7?.newest_qualified_date;
+              const limiting = !!date && date === newest && Object.values(nrt.window7?.per_product_newest ?? {}).some((d) => !!d && d > date);
+              return <div key={key} className={`source-date${limiting ? " limiting" : ""}`} data-testid={`source-date-${key}`}><span>{labels[key] ?? key}</span><strong>{date ?? "Unavailable"}</strong>{limiting && <small>Limits the common date</small>}</div>;
+            })}
+          </div>
+          <p className="ws-note">The date advances when every qualified source supplies a newer common day. Refresh checks the providers; it never carries missing inputs forward.</p>
+          {nrt.windowError && <p className="notice" role="alert">Availability check incomplete: {nrt.windowError}. The displayed field retains its original valid date.</p>}
+        </section>
+      )}
       {isTest && !showingTest && (
         <p className="muted small" role="status">
           Loading the historical reconstruction for the archived test event…
@@ -917,11 +939,28 @@ export default function OceanState(props: OceanStateProps) {
                 </Section>
               )}
               {latest && (
-                <Section title="External cyclone context" badge={cycloneStatus ? (cycloneStatus.state === "ACTIVE_NORTH_INDIAN_CYCLONE" ? "ACTIVE" : "NONE") : undefined}>
+                <Section title="External cyclone context" defaultOpen badge={isTest ? "TEST" : cycloneStatus ? (cycloneStatus.state === "ACTIVE_NORTH_INDIAN_CYCLONE" ? "ACTIVE" : cycloneStatus.state === "NO_ACTIVE_NORTH_INDIAN_CYCLONE" ? "NONE" : "UNAVAILABLE") : "CHECKING"}>
                   <p className="ws-note" data-testid="inspector-cyclone">
                     {cycloneStatus?.message ?? "Checking the connected external source…"} Track and thermal analysis are in the
                     Cyclone context tab below.
                   </p>
+                  <div className="cyclone-preview-entry">
+                    <div className="cyclone-preview-card" data-testid="cyclone-preview-card">
+                      <div className="cyclone-preview-art" aria-hidden="true">
+                        <span className="preview-coast" />
+                        <span className="preview-track" />
+                        <span className="preview-storm">✦</span>
+                      </div>
+                      <div className="cyclone-preview-copy">
+                        <span className="eyebrow">HISTORICAL / TEST PREVIEW</span>
+                        <strong>Mocha-23 · track × thermal analysis</strong>
+                        <p>Explore how an external GDACS track is compared with an OceanEmbed thermal field.</p>
+                      </div>
+                    </div>
+                    <button type="button" className="btn" data-testid="open-cyclone-context" onClick={() => { setTray("cyclone"); setTrayReveal((n) => n + 1); }}>Open cyclone context</button>
+                    <button type="button" className="btn" data-testid="preview-cyclone" onClick={() => { setTray("cyclone"); setTrayReveal((n) => n + 1); setPreviewRequest((n) => n + 1); }}>Preview archived cyclone</button>
+                    <p className="ws-note">Explore the track and thermal analysis with a historical test event. This is not a live cyclone.</p>
+                  </div>
                 </Section>
               )}
               {selection.row >= 0 && (
@@ -961,7 +1000,7 @@ export default function OceanState(props: OceanStateProps) {
               {latest && q && <Section title="Qualification & sources">{qualificationDetails}</Section>}
             </Inspector>
           </div>
-          <Tray tabs={trayTabs} active={tray} onActive={setTray} />
+          <Tray tabs={trayTabs} active={tray} onActive={setTray} revealKey={trayReveal} />
         </>
       )}
     </div>

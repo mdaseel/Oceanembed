@@ -952,7 +952,13 @@ async def latest_available_dates(days: int = 7, refresh: bool = False):
     if refresh:
         LQ.refresh_discovery()
     try:
-        window = await run_in_threadpool(LQ.available_window, days)
+        if refresh:
+            # A user refresh must bypass the persisted fast path as well as
+            # memory. Clearing memory alone reloaded the same disk discovery.
+            dates, errors = await run_in_threadpool(LQ.channel_dates, allow_persisted=False)
+            window = LQ.available_window(days, dates, errors)
+        else:
+            window = await run_in_threadpool(LQ.available_window, days)
     except Exception as exc:  # noqa: BLE001 - discovery failure is not a crash
         return JSONResponse({"qualification": summary, "days": [],
                              "newest_qualified_date": None,
@@ -996,7 +1002,7 @@ async def latest_qualified(date: str | None = None, refresh: bool = False):
     # and the retrieval itself still verifies that each channel really carries
     # that date (assemble -> NOT_ON_COMMON_DATE) before any inference runs.
     try:
-        dates, errors = await run_in_threadpool(LQ.channel_dates)
+        dates, errors = await run_in_threadpool(LQ.channel_dates, allow_persisted=not refresh)
     except Exception as exc:  # noqa: BLE001
         dates, errors = {}, {"discovery": f"{type(exc).__name__}: {exc}"}
     newest, _ = LQ.resolve_common_date(dates, errors)

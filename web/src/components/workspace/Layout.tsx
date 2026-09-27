@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /**
  * Shared workspace primitives: one inspector made of collapsible sections, and
@@ -77,17 +77,26 @@ export function Tray({
   active,
   onActive,
   testid = "analysis-tray",
+  revealKey = 0,
 }: {
   tabs: TrayTab[];
   active: string;
   onActive: (id: string) => void;
   testid?: string;
+  revealKey?: number;
 }) {
   const [collapsed, setCollapsed] = useState(false);
+  const root = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!revealKey) return;
+    setCollapsed(false);
+    root.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
+  }, [revealKey]);
   const current = tabs.find((t) => t.id === active) ?? tabs[0];
   return (
     <section
       className="panel ws-tray"
+      ref={root}
       data-testid={testid}
       data-active={current?.id}
       data-collapsed={collapsed ? "true" : "false"}

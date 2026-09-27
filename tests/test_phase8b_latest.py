@@ -609,6 +609,28 @@ def _fail(monkeypatch, canonical):
 
 
 class TestApi:
+    def test_manual_window_refresh_bypasses_persisted_discovery(self, client, monkeypatch):
+        calls = []
+        def discover(*args, allow_persisted=True):
+            calls.append(allow_persisted)
+            return dates_for(DAY2 if allow_persisted else DAY), {}
+        monkeypatch.setattr(LQ, "channel_dates", discover)
+        window = client.get("/api/latest/available-dates?refresh=true").json()
+        assert calls == [False]
+        assert window["newest_qualified_date"] == str(DAY.date())
+
+    def test_manual_field_refresh_bypasses_persisted_discovery(self, client, monkeypatch):
+        calls = []
+        def discover(*args, allow_persisted=True):
+            calls.append(allow_persisted)
+            return dates_for(DAY2 if allow_persisted else DAY), {}
+        monkeypatch.setattr(LQ, "channel_dates", discover)
+        # Refuse a date outside the intersection without running inference.
+        p = client.get("/api/latest/qualified?refresh=true&date=2024-12-01").json()
+        assert calls == [False]
+        assert p["newest_qualified_date"] == str(DAY.date())
+        assert p["field"] is None
+
     def test_qualification_drives_the_tab_name(self, client):
         q = client.get("/api/latest/qualification").json()
         assert q["qualified"] is True

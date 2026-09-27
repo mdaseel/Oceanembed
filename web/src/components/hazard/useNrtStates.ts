@@ -21,6 +21,10 @@ export interface NrtWindow {
   days: DayState[];
   sources?: NrtSource[];
   per_product_newest?: Record<string, string | null>;
+  discovery_errors?: Record<string, string>;
+  discovery_refreshing?: boolean;
+  discovery_age_seconds?: number;
+  error?: string;
 }
 export interface NrtPayload {
   state: string;
@@ -56,6 +60,8 @@ export function useNrtStates(enabled: boolean) {
   }>({ payload: null, data: null });
   const [notice, setNotice] = useState<NrtPayload | null>(null);
   const [busy, setBusy] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [checkedAt, setCheckedAt] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [initialised, setInitialised] = useState(false);
   const [summaries, setSummaries] = useState<Record<string, DaySummary>>({});
@@ -106,10 +112,10 @@ export function useNrtStates(enabled: boolean) {
       setBusy(true);
       setError("");
       try {
-        const p = await getJson<NrtPayload>(url);
+        const p = await getJson<NrtPayload>(url, AbortSignal.timeout(120_000));
         if (live.current && mine === token.current) adopt(p, expected);
       } catch (e) {
-        if (live.current && mine === token.current) setError((e as Error).message);
+        if (live.current && mine === token.current) setError((e as Error).name === "TimeoutError" ? "The reconstruction request timed out. The previous dated field remains available; try refreshing again." : (e as Error).message);
       } finally {
         if (live.current && mine === token.current) setBusy(false);
       }
@@ -126,21 +132,35 @@ export function useNrtStates(enabled: boolean) {
   const refreshWindow = useCallback((refresh = false) => {
     return getJson<NrtWindow>(
       `/api/latest/available-dates${refresh ? "?refresh=true" : ""}`,
+      AbortSignal.timeout(60_000),
     )
       .then((w) => {
         if (!live.current) return;
+        if (w.error) throw Error(w.error);
         setWindow7(w);
-        setWindowError("");
+        setWindowError(Object.entries(w.discovery_errors ?? {}).map(([key, message]) => `${key}: ${message}`).join(" · "));
+        if (!w.discovery_refreshing) setCheckedAt(new Date().toISOString());
       })
-      .catch((e) => live.current && setWindowError((e as Error).message));
+      .catch((e) => live.current && setWindowError((e as Error).name === "TimeoutError" ? "Source discovery timed out. Previous availability is retained; try again when the providers respond." : (e as Error).message));
   }, []);
+
+  const refresh = useCallback(async () => {
+    setRefreshing(true);
+    // Resolve current provider dates before loading the newest field. Parallel
+    // requests could previously load yesterday's cached discovery first.
+    try {
+      await refreshWindow(true);
+      if (live.current) await loadNewest();
+    } finally {
+      if (live.current) setRefreshing(false);
+    }
+  }, [refreshWindow, loadNewest]);
 
   useEffect(() => {
     if (!enabled || started.current) return;
     started.current = true;
     // Ask the server to pre-produce the recent states; it returns at once.
     getJson("/api/latest/prewarm").catch(() => {});
-    void refreshWindow();
     const mine = ++token.current;
     setBusy(true);
     getJson<NrtPayload>("/api/latest/qualified/cached")
@@ -151,10 +171,10 @@ export function useNrtStates(enabled: boolean) {
       .finally(() => {
         if (!live.current) return;
         if (mine === token.current)
-          void loadNewest().finally(() => live.current && setInitialised(true));
+          void refresh().finally(() => live.current && setInitialised(true));
         else setInitialised(true);
       });
-  }, [enabled, adopt, loadNewest, refreshWindow]);
+  }, [enabled, adopt, refresh, refreshWindow]);
 
   /** Per-day summaries for a change between REAL qualified states. */
   const ensureSummaries = useCallback(
@@ -181,18 +201,15 @@ export function useNrtStates(enabled: boolean) {
     [remember],
   );
 
-  const refresh = useCallback(() => {
-    void refreshWindow(true);
-    void loadNewest();
-  }, [refreshWindow, loadNewest]);
-
   return {
     window7,
     windowError,
     payload: current.payload,
     data: current.data,
     notice,
-    busy,
+    busy: busy || refreshing,
+    refreshing,
+    checkedAt,
     error,
     initialised,
     summaries,

@@ -1,14 +1,19 @@
 {
   "state": "NO_ACTIVE_NORTH_INDIAN_CYCLONE",
   "provider": "GDACS (Global Disaster Alert and Coordination System, EC JRC / UN OCHA)",
-  "retrieved_at": "2026-09-15T09:11:11+00:00",
-  "checked_at": "2026-09-15T09:11:11+00:00",
+  "retrieved_at": "2026-09-27T10:15:23+00:00",
+  "checked_at": "2026-09-27T10:15:23+00:00",
   "cached": false,
-  "tc_events_checked": 2,
-  "current_tc_events": 2,
+  "tc_events_checked": 7,
+  "current_tc_events": 7,
   "current_outside_north_indian": [
-    "NORBERT-26",
-    "FIFTEEN-E-26"
+    "NOLO-26",
+    "FAY-26",
+    "ODALYS-26",
+    "POLO-26",
+    "EIGHTEEN-E-26",
+    "SURIGAE-26",
+    "GONZALO-26"
   ],
   "advisories": [],
   "message": "No active North Indian Ocean cyclone reported by connected source (GDACS).",

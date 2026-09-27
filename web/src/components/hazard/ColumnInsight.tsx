@@ -83,7 +83,7 @@ export function ColumnInsight({
           <p className="empty">Select a location inside the domain.</p>
         ) : (
           <>
-            <table className="level-table">
+            <div className="table-scroll"><table className="level-table">
               <thead>
                 <tr>
                   <th>Depth</th>
@@ -110,7 +110,7 @@ export function ColumnInsight({
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
             <ul className="structure-notes" data-testid="structure-notes">
               {statements.map((s) => (
                 <li key={s}>{s}</li>
